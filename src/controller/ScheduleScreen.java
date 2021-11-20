@@ -1,0 +1,192 @@
+//STILL NEED WORK
+package controller;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import model.Appointment;
+import model.Messages;
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+import model.Customer; //CanDelete?
+
+public class ScheduleScreen implements Initializable {
+    @FXML
+    private TableView<Appointment> appointmentTableView;
+    @FXML
+    private TableColumn<Appointment, Integer> appointmentIDColumn;
+    @FXML
+    private TableColumn<Appointment, String> titleColumn;
+    @FXML
+    private TableColumn<Appointment, String> descriptionColumn;
+    @FXML
+    private TableColumn<Appointment, String> locationColumn;
+    @FXML
+    private TableColumn<Appointment, String> contactColumn;
+    @FXML
+    private TableColumn<Appointment, String> typeColumn;
+    @FXML
+    private TableColumn<Appointment, String> startColumn;
+    @FXML
+    private TableColumn<Appointment, String> endColumn;
+    @FXML
+    private TableColumn<Appointment, String> customerColumn;
+    @FXML
+    private RadioButton radioButtonMonth;//CanDelete?
+    @FXML
+    private RadioButton radioButtonWeek;//CanDelete?
+    @FXML
+    private RadioButton radioButtonAll;//CanDelete?
+    public static boolean canDeleteAppointment = false;
+    public static int selectedAppointmentID;
+    public static int deleteCandidateId;
+    public static int confirmDeleteId;
+    public static boolean isWeek = false;
+    public static boolean isMonth = true;
+    public static boolean isAll = false;
+    public static Appointment selectedAppointment;
+    public static Appointment newSelectedAppointment;
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+    public static int updateAppointmentID;
+    public static int deleteAppointmentID = 0;//CanDelete?
+
+    public void radioButtonMonth(ActionEvent event) throws IOException {
+        appointmentTableView.setItems(Appointment.getMonthlyAppointments());
+        isMonth = true;
+        isWeek = false;
+        isAll = false;
+    }
+
+    public void radioButtonWeek(ActionEvent event) throws IOException {
+        appointmentTableView.setItems(Appointment.getWeeklyAppointments());
+        isMonth = false;
+        isWeek = true;
+        isAll = false;
+
+    }
+
+    public void radioButtonAll(ActionEvent event) throws IOException {
+        appointmentTableView.setItems(Appointment.getAllAppointments());
+        isMonth = false;
+        isWeek = false;
+        isAll = true;
+
+    }
+
+
+    public void customerButton(ActionEvent event) throws IOException {
+
+        root = FXMLLoader.load(getClass().getResource( "/view/CustomerScreen.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void newButton(ActionEvent event) throws IOException {
+
+        Appointment.appointmentUpdate = false;
+        root = FXMLLoader.load(getClass().getResource( "/view/AppointmentUpdateForm2.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void updateButton(ActionEvent event) throws IOException, SQLException {
+
+        Appointment.appointmentUpdate = true;
+        AppointmentUpdateForm2.update = true;
+        Appointment selectedAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
+        selectedAppointmentID = selectedAppointment.getAppointmentId();
+        Appointment.updateAppointmentID = selectedAppointmentID;
+        AppointmentUpdateForm2.selectedAppointment = Appointment.getSelectedAppointment();
+
+        //AppointmentUpdateForm.updateAppointmentID = selectedAppointmentID;
+
+        root = FXMLLoader.load(getClass().getResource("/view/AppointmentUpdateForm2.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    /*
+
+        if (selectedAppointmentId == selectedAppointmentCells.getAppointmentID()){
+            Appointment.appointmentUpdate = true;
+            System.out.println(updateAppointmentId);
+            root = FXMLLoader.load(getClass().getResource( "/view/AppointmentUpdateForm.fxml"));
+            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+        else {
+        }
+    }
+
+     */
+
+    public void deleteButton(ActionEvent event) throws IOException, SQLException {
+
+        if(canDeleteAppointment == false){
+            Appointment selectedAppointmentCells = appointmentTableView.getSelectionModel().getSelectedItem();
+            selectedAppointmentID = selectedAppointmentCells.getAppointmentId();
+            deleteCandidateId = selectedAppointmentID;
+            canDeleteAppointment = true;
+            Messages.messageTwo();
+
+        }else{
+            Appointment selectedAppointmentCells = appointmentTableView.getSelectionModel().getSelectedItem();
+            selectedAppointmentID = selectedAppointmentCells.getAppointmentId();
+            confirmDeleteId = selectedAppointmentID;
+            if (deleteCandidateId==confirmDeleteId){
+                Appointment.deleteAppointment();
+                Messages.messageThree();
+                canDeleteAppointment = false;
+                deleteCandidateId = 0;
+                if (isMonth == true){
+                    appointmentTableView.setItems(Appointment.getMonthlyAppointments());
+                }else{
+                    appointmentTableView.setItems(Appointment.getWeeklyAppointments());
+                }
+            }else{
+                deleteCandidateId = confirmDeleteId;
+                Messages.messageTwo();
+            }
+
+        }
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+            appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+            titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+            descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+            locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
+            contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
+            typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+            startColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
+            endColumn.setCellValueFactory(new PropertyValueFactory<>("end"));
+            customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+            appointmentTableView.setItems(Appointment.getMonthlyAppointments());
+
+    }
+}
+//Delete Fully Works

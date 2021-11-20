@@ -1,0 +1,128 @@
+LOGIN SCREEN//Still needs work!!!!!!!!!! -- Finish Below First
+
+?- Fix bug where toCustomerScreen doesn't take date into account for 15 minute appointment check.
+
+CUSTOMER UPDATE FORM //done with bugs
+
+#- On load //done
+#    - if customerUpdate == true
+#        - Prepared select statement to get country id and country from countries
+#        - prepared select statement: SELECT * FROM customers WHERE Customer_ID = ?
+#            - set ? to selectedCustomerID
+#            - output to selectedCustomer
+#        - set textfields and combo boxes from selecteedCustomer
+
+#    - if customerUpdate == false
+#        - Prepared select statement to get country id and country from countries
+#        - Set division ID to "Select Country First"
+
+#- On selectDivisionComboBox //Done
+#    - Set selectedCountryID from CountryComboBox
+?    - Prepared select statement to get FirstLevelDivision id and FirstLevelDivision from FirstLevelDivision using selectedCountryID as ?
+//above has bug when changing country
+
+#- Submit //Done
+#    - if customerUpdate == false
+#        - Create new customer newCustomer using output of text fields and combo box
+#        - Prepared Statement: INSERT INTO customers ?
+#                Make all ? the output of newCustomer
+#        -load CustomerScreen
+#    - if customerUpdate == true
+#        - Create new customer updateCustomer using output of text fields and combo box
+#        - Prepared Statement:UPDATE Customers
+#                             SET all fields(Column_Name = 'data',...)
+#                             WHERE CustomerID = ?;(selectedCustomerID)
+#        -load CustomerScreen
+
+#- Reset //Done
+#    - Repeat On Load
+
+CUSTOMER SCREEN //Still needs work!!!!!!!!!!Finish appointment first
+
+#- On load
+#    - Prepared statement select * FROM Customers
+#- TableView //Done
+#    - selectedCustomerDeletable = false  ! //handle this with a x == x checking current customer selected aggainst customer selected at time the delete button was last pressed
+#    - set selectedCustomerID from selected customer
+#- Schedule//Done
+#    - load ScheduleScreen
+#- New //Done
+#    - Set customerUpdate = false  !
+#    - load CustomerUpdateForm
+#- Update //Done
+#    - set selectedCustomerID  !
+#    - customerUpdate = true  !
+#    - load CustomerUpdateForm
+- Delete (check to see if an error is required for no customer selected) //Still needs work, finish appointment first!!!!!!!!!!
+    If selectedCustomerDeletable = false
+        - prepared statement to check for appointments assigned to selected customer; Error if appointments assigned  !
+        - selectedCustomerDeletable = true  !
+        - message: press delete to delete customer ?  !
+    If selectedCustomerDeletable = true
+        - prepared statement to delete selected customer  !
+
+
+
+SCHEDULE SCREEN //Still needs work!!!!!!!!!!Fully annotated
+
+- On load //Still needs work!!!!!!!!!!
+    - Make radio buttion selection mutually exclusive with month as default
+        - If week radio button is selected
+            - Prepared statement select * FROM Appointments Where Start is between ? and ?
+        - If month radio button is selected
+            - Prepared statement select * FROM Appointments Where Start is between ? and ?
+- TableView //Still needs work!!!!!!!!!!
+    - On select
+        - selectedAppointmentDeletable = false  !
+        - set selectedAppointmentID from selected appointment  !
+- Customer
+    - load CustomerScreen
+- New //Still needs work!!!!!!!!!!
+    - appointmentUpdate = false  !
+    - load AppointmentUpdateForm
+- Update //Still needs work!!!!!!!!!!
+    - set selectedAppointmentID  !
+    - appointmentUpdate = true  !
+    - load AppointmentUpdateForm
+- Delete (check to see if an error is required for no appointment selected) //Still needs work!!!!!!!!!!
+    If selectedAppointmentDeletable = false
+        - selectedAppointmentDeletable = true  !
+        - message: press delete to delete appointment ?  !
+    If selectedAppointmentDeletable = true
+        - prepared statement to delete selected appointment  !
+
+
+APPOINTMENT UPDATE FORM //Still needs work!!!!!!!!!!Fully annotated
+
+- On Load //Still needs work!!!!!!!!!!
+    - if appointmentUpdate == true //Still needs work!!!!!!!!!!
+        - Prepared select statement to get Contact ID and Contact from contacts to populate contactComboBox
+        - Prepared select statement to get Customer ID and Customer from customers to populate customerComboBox
+        - Prepared select statement to get User ID and User from users to populate userComboBox
+        - Create 5min appointment time cycler for startTimeComboBox
+        - Create 5min appointment time cycler for endTimeComboBox
+        - prepared select statement: SELECT * FROM appointments WHERE Appointment_ID = ?
+            - set ? to selectedAppointmentID
+            - output to selectedAppointment
+        - set textfields and combo boxes from selecteedAppointment
+    - if appointmentUpdate == false //Still needs work!!!!!!!!!!
+        - Prepared select statement to get Contact ID and Contact from contacts to populate contactComboBox
+        - Prepared select statement to get Customer ID and Customer from customers to populate customerComboBox
+        - Prepared select statement to get User ID and User from users to populate userComboBox
+        - Create 5min appointment time cycler for startTimeComboBox
+        - Create 5min appointment time cycler for endTimeComboBox
+- Submit //Still needs work!!!!!!!!!!
+    - if appointmentUpdate == false //Still needs work!!!!!!!!!!
+        - Create new Appointment newAppointment using output of textfields and combo boxes
+        - Prepared Statement: INSERT INTO appointments ?
+                Make all ? the output of newAppointment
+        -load ScheduleScreen
+    - if appointmentUpdate == true //Still needs work!!!!!!!!!!
+        - Create new appointment updateAppointment using output of text fields and combo box
+        - Prepared Statement:UPDATE Appointments
+                             SET all fields(Column_Name = 'data',...)
+                             WHERE AppointmentID = ?;(selectedAppointmentID)
+        -load AppointmentScreen
+- Reset //Still needs work!!!!!!!!!!
+    - Repeat On Load
+

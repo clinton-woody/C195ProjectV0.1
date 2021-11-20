@@ -1,0 +1,246 @@
+//Tested good from main; need to drop results in tableview
+
+ObservableList<model.Customer> customerObservableList = FXCollections.observableArrayList();
+
+
+
+        String populateCustomerTableView = "SELECT * " +
+                                           "FROM customers";
+        DBQuery.setPreparedStatement(JDBC.conn, populateCustomerTableView); // Create PreparedStatement
+        PreparedStatement ps1 = DBQuery.getPreparedStatement();
+        ps1.execute (); //Execute PreparedStatement
+        ResultSet rs1 = ps1.getResultSet();
+
+        while(rs1.next())
+        {
+            int customerID = rs1.getInt("Customer_ID");
+            String customerName = rs1.getString("Customer_Name");
+            String address = rs1.getString("Address");
+            String postalCode = rs1.getString("Postal_Code");
+            String phone = rs1.getString("Phone");
+            Timestamp createDate = rs1.getTimestamp("Create_Date");
+            String createdBy = rs1.getString("Created_By");
+            Timestamp lastUpdate = rs1.getTimestamp("Last_Update");
+            String lastUpdatedBy = rs1.getString("Last_Updated_By");
+            int divisionID = rs1.getInt("Division_ID");
+
+            System.out.println(customerID + " | " + customerName  + " | " + address  + " | " + postalCode  + " | " + phone + " | " + createDate  + " | " + createdBy  + " | " + lastUpdate + " | " + lastUpdatedBy  + " | " + divisionID);
+        }
+
+        // Create PreparedStatementPreparedStatement
+        String customerGrab = "SELECT * " +
+                "FROM customers ";
+        try {
+            setPreparedStatement(Interface.JDBC.conn, customerGrab);
+            PreparedStatement psC = DBQuery.getPreparedStatement();
+        try {
+            ResultSet rsC = psC.getResultSet();
+            while (rsC.next())
+                try {
+                    {
+                        int customerID = rsC.getInt("Customer_ID");
+                        String customerName = rsC.getString("Customer_Name");
+                        String address = rsC.getString("Address");
+                        String postalCode = rsC.getString("Postal_Code");
+                        String phone = rsC.getString("Phone");
+                        Timestamp createDate = rsC.getString("Create_Date");
+                        String createdBy = rsC.getString("Created_By");
+                        Timestamp lastUpdate = rsC.getString("Last_Update");
+                        String lastUpdatedBy = rsC.getString("Last_Updated_By");
+                        int divisionID = rsC.getInt("Division_ID");
+                    } catch(SQLException throwables){
+                        throwables.printStackTrace();
+                    }
+
+
+
+
+
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+        } finally {
+
+
+    //*****************************
+    //********Obsolete Code********
+    //*****************************
+
+
+    /*
+    public static void SQLInsert (String insert) throws SQLException {
+        String test = "INSERT INTO countries (country, create_Date, created_By, last_Updated_By) VALUES('test', '2020-02-22 00:00:00', 'test', 'test')";
+        statement.execute(test);
+        //This is bad, need to rethink it
+    }
+
+    public static void SQLDelete (String delete)
+    {
+        //Need to generate feedback for what record was deleted.  This needs to be flexible enough to
+        // delete appointments as well as customers
+    }
+
+    public static void SQLSelect (String select)
+    {
+        //This will be used to populate the tableview as well as the forms.  When populating the table
+        //view it will be a SELECT * from CUSTOMER or APPOINTMENT.  When populating the forms it will be a SELECT
+        //<Primary Key> FROM CUSTOMER or APPOINTMENT.  Must create code to take the output and populate the
+        //tableview or text field respectively.
+    }
+
+    public static void SQLUpdate (String update)
+    {
+        //This must update the field based on the primary key on the form
+    }
+
+
+Need to create the methods to create SQL statements that this will send to the DB.
+Currently plan to house them in this class to cut down on the amount of classes I will need.
+Will put the initial tableview build here and specify the columns needed for each tableview
+from within the appropriate controller.
+*/
+
+
+/*
+
+
+        // Create PreparedStatementPreparedStatement
+        String customerGrab = "SELECT * " +
+                "FROM customers ";
+        try {
+            setPreparedStatement(Interface.JDBC.conn, customerGrab);
+            PreparedStatement psC = DBQuery.getPreparedStatement();
+        try {
+            ResultSet rsC = psC.getResultSet();
+            while (rsC.next()){
+
+                try {
+
+                        int customerID = rsC.getInt("Customer_ID");
+                        String customerName = rsC.getString("Customer_Name");
+                        String address = rsC.getString("Address");
+                        String postalCode = rsC.getString("Postal_Code");
+                        String phone = rsC.getString("Phone");
+                        Timestamp createDate = rsC.getString("Create_Date");
+                        String createdBy = rsC.getString("Created_By");
+                        Timestamp lastUpdate = rsC.getString("Last_Update");
+                        String lastUpdatedBy = rsC.getString("Last_Updated_By");
+                        int divisionID = rsC.getInt("Division_ID");
+                    } catch(SQLException throwables){
+                        throwables.printStackTrace();
+                    }
+
+
+
+
+
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+        } finally {
+
+ */
+
+/*
+
+    //Gets list of customers to be placed in table view
+    public static ObservableList <Customer> customerList(){
+        ObservableList <Customer> customers = FXCollections.observableArrayList();
+        //customers.add(new Customer(1, "noDB", "noDB", "noDB", "noDB", "noDB", "noDB", "noDB",  "noDB", 1 )); //resultset should dump in here
+        // Create PreparedStatementPreparedStatement
+        try{
+            String customerGrab = "SELECT * " +
+                                  "FROM customers ";
+            DBQuery.setPreparedStatement(Interface.JDBC.conn, customerGrab);
+            PreparedStatement psC = DBQuery.getPreparedStatement();
+            psC.execute (); //Execute PreparedStatement
+            ResultSet rsC = psC.getResultSet();
+            while (rsC.next()) {//need to iterate new variables to update each row
+                int customerID = rsC.getInt("Customer_ID");
+                String customerName = rsC.getString("Customer_Name");
+                String address = rsC.getString("Address");
+                String postalCode = rsC.getString("Postal_Code");
+                String phone = rsC.getString("Phone");
+                String createDate = rsC.getString("Create_Date");
+                String createdBy = rsC.getString("Created_By");
+                String lastUpdated = rsC.getString("Last_Update");
+                String lastUpdatedBy = rsC.getString("Last_Updated_By");
+                int divisionID = rsC.getInt("Division_ID");
+                customers.add(new Customer(customerID, customerName, address, postalCode, phone, createDate, createdBy, lastUpdated, lastUpdatedBy, divisionID));//Not outputting to TableView
+            }
+
+            //customers.add(new Customer(customerID, customerName, address, postalCode, phone, createDate, createdBy, lastUpdated, lastUpdatedBy, divisionID));//Not outputting to TableView
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Error on Building Data");
+        }
+
+        return customers;
+    }
+
+ */
+
+     /* Commented is outdated
+     public static ObservableList<Customer> getCustomers(){
+         return customers;
+     }
+     */
+
+
+    /*
+
+     */
+
+ /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Creating a TableView is a multi-step process, and also depends on the underlying data model needing to be represented.
+For this example we'll use an ObservableList<Person>, as it is the simplest way of showing data in a TableView.
+The Person class will consist of a first name and last name properties. That is:
+
+ public class Person {
+     private StringProperty firstName;
+     public void setFirstName(String value) { firstNameProperty().set(value); }
+     public String getFirstName() { return firstNameProperty().get(); }
+     public StringProperty firstNameProperty() {
+         if (firstName == null) firstName = new SimpleStringProperty(this, "firstName");
+         return firstName;
+     }
+
+     private StringProperty lastName;
+     public void setLastName(String value) { lastNameProperty().set(value); }
+     public String getLastName() { return lastNameProperty().get(); }
+     public StringProperty lastNameProperty() {
+         if (lastName == null) lastName = new SimpleStringProperty(this, "lastName");
+         return lastName;
+     }
+
+     public Person(String firstName, String lastName) {
+         setFirstName(firstName);
+         setLastName(lastName);
+     }
+ }
+The data we will use for this example is:
+
+ List<Person> members = List.of(
+     new Person("William", "Reed"),
+     new Person("James", "Michaelson"),
+     new Person("Julius", "Dean"));
+Firstly, we need to create a data model. As mentioned, for this example, we'll be using an ObservableList<Person>:
+
+ ObservableList<Person> teamMembers = FXCollections.observableArrayList(members);
+Then we create a TableView instance:
+
+ TableView<Person> table = new TableView<>();
+ table.setItems(teamMembers);
+With the items set as such, TableView will automatically update whenever the teamMembers list changes. If the items list is available before the TableView is instantiated, it is possible to pass it directly into the constructor:
+
+ TableView<Person> table = new TableView<>(teamMembers);
+At this point we now have a TableView hooked up to observe the teamMembers observableList. The missing ingredient now is the means of splitting out the data contained within the model and representing it in one or more TableColumn instances. To create a two-column TableView to show the firstName and lastName properties, we extend the last code sample as follows:
+
+ TableColumn<Person, String> firstNameCol = new TableColumn<>("First Name");
+ firstNameCol.setCellValueFactory(new PropertyValueFactory<>(members.get(0).firstNameProperty().getName())));
+ TableColumn<Person, String> lastNameCol = new TableColumn<>("Last Name");
+ lastNameCol.setCellValueFactory(new PropertyValueFactory<>(members.get(0).lastNameProperty().getName())));
+
+ table.getColumns().setAll(firstNameCol, lastNameCol);
+///////////////////////////////////////////////////////////////////////////////////////////

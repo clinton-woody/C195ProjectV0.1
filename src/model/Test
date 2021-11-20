@@ -1,0 +1,18 @@
+/**Javadoc comments*/
+
+intelliJ -> tools (top of screen) -> generate javadoc -> output to created directory
+
+before class or method headers
+
+/**This is where the class function is explained*/
+Class declaration()
+
+create javadoc folder on desktop
+
+in folder after creation theres an index.html file
+
+method doc comments
+
+@param theParameter description
+
+@return description

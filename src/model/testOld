@@ -1,0 +1,65 @@
+
+    static ObservableList <Customer> customerList(){
+
+        int tempCustomerID = Customer.customerID;
+        String tempCustomerName = Customer.customerName;
+        String tempAddress = Customer.address;
+        String tempPostalCode = Customer.postalCode;
+        String tempPhone = Customer.phone;
+        String tempCreateDate = Customer.createDate;
+        String tempCreatedBy = Customer.createdBy;
+        String tempLastUpdated = Customer.lastUpdated;
+        String tempLastUpdatedBy = Customer.lastUpdatedBy;
+        int tempDivisionID = Customer.divisionID;
+
+        ObservableList<model.Customer> customers = FXCollections.observableArrayList();
+        try {
+            PreparedStatement psC = DBQuery.getPreparedStatement();
+            String customerGrab = "SELECT * " +
+                                  "FROM customers";
+            DBQuery.setPreparedStatement(Interface.JDBC.conn, customerGrab);
+            psC.execute(); //Execute PreparedStatement
+            ResultSet rsC = psC.getResultSet();
+            while (rsC.next()) {//need to iterate new variables to update each row
+                tempCustomerID = rsC.getInt("Customer_ID");
+                tempCustomerName = rsC.getString("Customer_Name");
+                tempAddress = rsC.getString("Address");
+                tempPostalCode = rsC.getString("Postal_Code");
+                tempPhone = rsC.getString("Phone");
+                tempCreateDate = rsC.getString("Create_Date");
+                tempCreatedBy = rsC.getString("Created_By");
+                tempLastUpdated = rsC.getString("Last_Update");
+                tempLastUpdatedBy = rsC.getString("Last_Updated_By");
+                tempDivisionID = rsC.getInt("Division_ID");
+                customers.add(new Customer(tempCustomerID, tempCustomerName, tempAddress, tempPostalCode, tempPhone, tempCreateDate, tempCreatedBy, tempLastUpdated, tempLastUpdatedBy, tempDivisionID));//Not outputting to TableView
+
+            }
+        } catch (SQLException sqlE) {
+            System.out.println("SQL Statement Error");
+            sqlE.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("There was an error");
+        }
+
+        return customers;
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        customerTableView.setItems(CustomerScreen.customerList());
+        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        postalCodeColumn.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        createDateColumn.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        createdByColumn.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        lastUpdatedColumn.setCellValueFactory(new PropertyValueFactory<>("lastUpdated"));
+        lastUpdatedByColumn.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
+        divisionIDColumn.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
+
+
+
+    }
