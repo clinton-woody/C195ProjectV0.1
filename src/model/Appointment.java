@@ -128,8 +128,8 @@ public class Appointment {
             psIA.setString(2, AppointmentUpdateForm2.description);
             psIA.setString(3, AppointmentUpdateForm2.location);
             psIA.setString(4, AppointmentUpdateForm2.type);
-            psIA.setString(5, AppointmentUpdateForm2.parsedStart);
-            psIA.setString(6, AppointmentUpdateForm2.parsedEnd);
+            psIA.setString(5, AppointmentUpdateForm2.parsedStartTime);
+            psIA.setString(6, AppointmentUpdateForm2.parsedEndTime);
             psIA.setTimestamp(7, DateTimeConverter.easternDateTimeStamp() );
             psIA.setString(8, User.currentUser);
             psIA.setTimestamp(9, DateTimeConverter.easternDateTimeStamp() );

@@ -17,14 +17,12 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.Appointment;
-import model.Contact;
-import model.Customer;
-import model.User;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -69,8 +67,10 @@ public class AppointmentUpdateForm2 implements Initializable {
     public static String newEndHour;
     public static String newEndMinute;
     public static String date;
-    public static String parsedStart;
-    public static String parsedEnd;
+    public static String parsedStartTime;
+    public static String parsedEndTime;
+    public static String parsedStartDateTime;
+    public static String parsedEndDateTime;
     public static String appointmentId;
     public static String type;
     public static String title;
@@ -84,6 +84,10 @@ public class AppointmentUpdateForm2 implements Initializable {
     public static String dbTitle;
     public static String dbLocation;
     public static String dbDescription;
+    public static String stichStartHr;
+    public static String stichStartMn;
+    public static String stichEndHr;
+    public static String stichEndMn;
     public static String dbParsedStart;
     public static String dbParsedEnd;
     public static String dbContactId;
@@ -96,6 +100,8 @@ public class AppointmentUpdateForm2 implements Initializable {
     public static boolean endFlag = false;
     public static boolean dateFlag = false;
     public static boolean update = false;
+    public static boolean isValid = true;
+    public final String ZEROSEC = "00";
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -112,14 +118,74 @@ public class AppointmentUpdateForm2 implements Initializable {
 
 
 
+
     public void submitButton(ActionEvent event) throws IOException, SQLException {
+        //stichStartHr = comboBoxStartTimeHour.getItems().toString();
+        //stichStartMn = comboBoxStartTimeMinute.getItems().toString();
+        //stichEndHr = comboBoxEndTimeHour.getItems().toString();
+        //stichEndMn = comboBoxEndTimeMinute.getItems().toString();
+        parsedStartTime = stichStartHr + stichStartMn + ZEROSEC;
+        parsedEndTime = stichEndHr + stichEndMn + ZEROSEC;
+        System.out.println(parsedStartTime);
+        System.out.println(parsedEndTime);
+        parsedStartDateTime = date + " " + parsedStartTime; //need to make this a timestamp
+        parsedEndDateTime = date + " " + parsedEndTime; //need to make this a timestamp
+        System.out.println(parsedStartDateTime);
+        System.out.println(parsedEndDateTime);
+        Timestamp startCandidate = Timestamp.valueOf(parsedStartDateTime);
+        Timestamp endCandidate = Timestamp.valueOf(parsedEndDateTime);
+        isValid = DateTimeHandler.validTime(startCandidate, endCandidate, customerId);
+        System.out.println(isValid);
+
+        /*
+        If update is true
+
+        If update is false
+            dbTitle = textFieldTitle.getText();
+            dbDescription = textFieldDescription.getText();
+            dbLocation = textFieldLocation.getText();
+            dbType = textFieldType.getText();
+            stichStartHr = comboBoxStartTimeHours.getItems();
+            stichStartMn = comboBoxStartTimeMinute.getItems();
+            stichEndHr = comboBoxEndTimeHours.getItems();
+            stichEndMn = comboBoxEndTimeMinute.getItems();
+
+
+
+
+
+             //
+             Timestamp start, Timestamp end, int customerId, int userId, int contactId
+
+                        dbName = textFieldCustomerName.getText();
+            dbAddress = textFieldAddress.getText();
+            dbPostalCode = textFieldPostalCode.getText();
+            dbPhone = textFieldPhoneNumber.getText();
+            canInsert = Customer.canInsert();
+
+            if (canInsert == true){
+                Customer.insertCustomer();
+                Customer.customerUpdate = false;
+                canInsert = false;
+                root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+            else
+            {
+                Messages.errorSix();
+
+            }
+
+
+         */
         if (update == false){
             title = textFieldTitle.getText();
             description = textFieldDescription.getText();
             location = textFieldLocation.getText();
             type = textFieldType.getText();
-            //parsedStart = date + " " + newStartTime;
-            //parsedEnd = date + " " + newEndTime;
             Appointment.insertAppointment();
 
             root = FXMLLoader.load(getClass().getResource( "/view/ScheduleScreen.fxml"));
@@ -153,106 +219,130 @@ public class AppointmentUpdateForm2 implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         comboBoxContact.setItems(Contact.getAllContacts());
-        comboBoxContact.valueProperty().addListener(new ChangeListener<Contact>() {
-            @Override
-            public void changed(ObservableValue<? extends Contact> observableValue, Contact contact, Contact t1) {
-                newContactId = t1.getContactId();
-                contactFlag = true;
-            }
+        comboBoxContact.valueProperty().addListener((observableValue, contact, t1) -> {
+            newContactId = t1.getContactId();
+            //contactFlag = true;
         });
 
         comboBoxUser.setItems(User.getAllUsers());
-        comboBoxUser.valueProperty().addListener(new ChangeListener<User>() {
-             @Override
-             public void changed(ObservableValue<? extends User> observableValue, User user, User t1) {
-                 newUserId = t1.getId();
-                 userFlag = true;
-             }
+        comboBoxUser.valueProperty().addListener((observableValue, user, t1) -> {
+            newUserId = t1.getId();
+            //userFlag = true;
         });
 
         comboBoxCustomer.setItems(Customer.getAllCustomers());
-        comboBoxCustomer.valueProperty().addListener(new ChangeListener<Customer>(){
+        comboBoxCustomer.valueProperty().addListener(new ChangeListener<Customer>() {
             @Override
             public void changed(ObservableValue<? extends Customer> observableValue, Customer customer, Customer t1) {
                 newCustomerId = t1.getCustomerID();
-                customerFlag = true;
+                //customerFlag = true;
             }
         });
 
         comboBoxStartTimeHour.setItems(startHourList);//8am to 955pm
-        comboBoxStartTimeHour.valueProperty().addListener(new ChangeListener<String>(){
+        comboBoxStartTimeHour.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                newStartHour = t1;
-                System.out.println(newStartHour);
-                startFlag = true;
+                stichStartHr = t1 + ":";
+                System.out.println(stichStartHr);
+                //startFlag = true;
             }
         });
 
         comboBoxStartTimeMinute.setItems(startMinuteList);//8am to 955pm
-        comboBoxStartTimeMinute.valueProperty().addListener(new ChangeListener<String>(){
+        comboBoxStartTimeMinute.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                newStartMinute = t1;
-                System.out.println(newStartMinute);
-                startFlag = true;
+                stichStartMn = t1 + ":";
+                System.out.println(stichStartMn);
+                //startFlag = true;
             }
         });
 
         comboBoxEndTimeHour.setItems(endHourList);//805am to 1000pm, Create exception not allowing an appointment end time before the start time
-        comboBoxEndTimeHour.valueProperty().addListener(new ChangeListener<String>(){
+        comboBoxEndTimeHour.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                newEndHour = t1;
-                System.out.println(newEndHour);
-                endFlag = true;
+                stichEndHr = t1 + ":";
+                System.out.println(stichEndHr);
+                //endFlag = true;
             }
         });
 
         comboBoxEndTimeMinute.setItems(endMinuteList);//805am to 1000pm, Create exception not allowing an appointment end time before the start time
-        comboBoxEndTimeMinute.valueProperty().addListener(new ChangeListener<String>(){
+        comboBoxEndTimeMinute.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                newEndMinute = t1;
-                System.out.println(newEndMinute);
-                endFlag = true;
+                stichEndMn = t1 + ":";
+                System.out.println(stichEndMn);
+                //endFlag = true;
             }
         });
+    /*
+        comboBoxEndTimeHour.setItems(endHourList);//805am to 1000pm, Create exception not allowing an appointment end time before the start time
+        comboBoxEndTimeHour.valueProperty().addListener(new ChangeListener<ObservableValue<String>>() {
+            @Override
+            public void changed(ObservableValue<? extends ObservableValue<String>> observableValue, ObservableValue<String> stringObservableValue, ObservableValue<String> t1) {
+                stichEndHr = t1.toString();
+                System.out.println(newEndHour);
+            }
+
+            });
+            */
+
+
+/*
+        comboBoxEndTimeMinute.setItems(endMinuteList);
+        comboBoxEndTimeMinute.valueProperty().addListener(new ChangeListener<ObservableList>() {
+            @Override
+            public void changed(ObservableValue<? extends ObservableList> observableValue, ObservableList s1, ObservableList t1) {
+                stichEndMn = t1.toString();
+                //System.out.println(newEndMinute);
+                //endFlag = true;
+            }
+        });
+        */
+
 
         datePickerDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
             @Override
             public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
                 date = t1.toString();
-                dateFlag = true;
+                //dateFlag = true;
             }
         });
 
+
+
         if (update == true){//new
             labelAppointment.setText("APPOINTMENT UPDATE FORM");
-            //selectedAppointment = ScheduleScreen.selectedAppointment;//Good
-            //appointmentId = String.valueOf(selectedAppointment.getAppointmentId());
             appointmentId = String.valueOf(selectedAppointment.getAppointmentId());
             description = selectedAppointment.getDescription();
             title = selectedAppointment.getTitle();
             type = selectedAppointment.getType();
             location = selectedAppointment.getLocation();
             LocalDate date = LocalDate.parse(selectedAppointment.getStart().toString().substring(0, 4) + "-" + selectedAppointment.getStart().toString().substring(5,7) + "-" + selectedAppointment.getStart().toString().substring(8, 10));
-            String start = selectedAppointment.getStart().toString().substring(11, 19);//   //
-            String end = selectedAppointment.getEnd().toString().substring(11, 19);
+            String startHr = selectedAppointment.getStart().toString().substring(11, 13);
+            String startMn = selectedAppointment.getStart().toString().substring(14, 16);
+            String endHr = selectedAppointment.getEnd().toString().substring(11, 13);
+            String endMn = selectedAppointment.getEnd().toString().substring(14, 16);
             textFieldAppointmentId.setText(appointmentId); //Appointment ID
             textFieldDescription.setText(description); //Description
             textFieldTitle.setText(title); //Title
             textFieldType.setText(type); //Type
             textFieldLocation.setText(location); //Location
             datePickerDate.setValue(date); //Date
-
+            comboBoxStartTimeHour.setValue(startHr);
+            comboBoxStartTimeMinute.setValue(startMn);
+            comboBoxEndTimeHour.setValue(endHr);
+            comboBoxEndTimeMinute.setValue(endMn);
             contactId = selectedAppointment.getContactId();
             int contactIndex = Contact.getContactIds().indexOf(contactId);
             userId = selectedAppointment.getUserId();
-            int userIndex = User.getUserIds().indexOf(userId);//problem here, null
+            int userIndex = User.getUserIds().indexOf(userId);
             customerId = selectedAppointment.getCustomerId();
             int customerIndex = Customer.getCustomerIds().indexOf(customerId);
-            comboBoxContact.getSelectionModel().select(contactIndex);//get all ID as list, get index of selected id, set combobox to that index
+            comboBoxContact.getSelectionModel().select(contactIndex);
             comboBoxCustomer.getSelectionModel().select(customerIndex);
             comboBoxUser.getSelectionModel().select(userIndex);
         }else{
