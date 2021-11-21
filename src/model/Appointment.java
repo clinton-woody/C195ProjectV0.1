@@ -72,52 +72,6 @@ public class Appointment {
         setContactId(contactId);
     }
 
-
-    public static ObservableList<Appointment> getWeeklyAppointments(){
-        try{
-            DateTimeConverter.currentWeekParser();
-            System.out.println("Begin currentWeekParser()");
-            String weeklyAppointmentGrab = "SELECT appointments.Appointment_ID, appointments.Title, appointments.Description," +
-                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name" +
-                                     " FROM appointments" +
-                                     " JOIN contacts ON appointments.Contact_ID=contacts.Contact_ID" +
-                                     " JOIN customers ON appointments.Customer_ID=customers.Customer_ID" +
-                                     " WHERE appointments.Start BETWEEN ? AND ?" +
-                                     " ORDER BY appointments.Start desc";
-            DBQuery.setPreparedStatement(Interface.JDBC.conn, weeklyAppointmentGrab);
-            PreparedStatement psMA = DBQuery.getPreparedStatement();
-            psMA.setString(1, DateTimeConverter.currentSunString);
-            psMA.setString(2, DateTimeConverter.nextSunString);
-            psMA.execute(); //Execute PreparedStatement
-            ResultSet rsA = psMA.getResultSet();
-            ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
-            while (rsA.next()) {
-                System.out.println(DateTimeConverter.currentSunString);
-                System.out.println(DateTimeConverter.nextSunString);
-                Appointment nextAppointment = new Appointment(
-                        rsA.getInt("Appointment_ID"),
-                        rsA.getString("Title"),
-                        rsA.getString("Description"),
-                        rsA.getString("Location"),
-                        rsA.getString("Contact_Name"),
-                        rsA.getString("Type"),
-                        rsA.getTimestamp("Start"),
-                        rsA.getTimestamp("End"),
-                        rsA.getString("Customer_Name"));
-                appointmentList.add(nextAppointment);
-                System.out.println(DateTimeConverter.currentSunString);
-                System.out.println(DateTimeConverter.nextSunString);
-            }
-            System.out.println("End currentWeekParser()");
-            System.out.println(appointmentList);
-            return appointmentList;
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error on Building Data");
-            return null;
-        }
-    }
-
     public static void insertAppointment() throws SQLException{
         try{
             String insert = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) " +
@@ -128,8 +82,8 @@ public class Appointment {
             psIA.setString(2, AppointmentUpdateForm2.description);
             psIA.setString(3, AppointmentUpdateForm2.location);
             psIA.setString(4, AppointmentUpdateForm2.type);
-            psIA.setString(5, AppointmentUpdateForm2.parsedStartTime);
-            psIA.setString(6, AppointmentUpdateForm2.parsedEndTime);
+            psIA.setTimestamp(5, AppointmentUpdateForm2.candidateStart);
+            psIA.setTimestamp(6, AppointmentUpdateForm2.candidateEnd);
             psIA.setTimestamp(7, DateTimeConverter.easternDateTimeStamp() );
             psIA.setString(8, User.currentUser);
             psIA.setTimestamp(9, DateTimeConverter.easternDateTimeStamp() );
@@ -222,6 +176,51 @@ public class Appointment {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error on Building Data");
+            return null;
+        }
+    }
+
+    public static ObservableList<Appointment> getWeeklyAppointments(){
+        try{
+            DateTimeConverter.currentWeekParser();
+            //System.out.println("Begin currentWeekParser()");
+            String weeklyAppointmentGrab = "SELECT appointments.Appointment_ID, appointments.Title, appointments.Description," +
+                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name" +
+                    " FROM appointments" +
+                    " JOIN contacts ON appointments.Contact_ID=contacts.Contact_ID" +
+                    " JOIN customers ON appointments.Customer_ID=customers.Customer_ID" +
+                    " WHERE appointments.Start BETWEEN ? AND ?" +
+                    " ORDER BY appointments.Start desc";
+            DBQuery.setPreparedStatement(Interface.JDBC.conn, weeklyAppointmentGrab);
+            PreparedStatement psMA = DBQuery.getPreparedStatement();
+            psMA.setString(1, DateTimeConverter.currentSunString);
+            psMA.setString(2, DateTimeConverter.nextSunString);
+            psMA.execute(); //Execute PreparedStatement
+            ResultSet rsA = psMA.getResultSet();
+            ObservableList<Appointment> appointmentList = FXCollections.observableArrayList();
+            while (rsA.next()) {
+                //System.out.println(DateTimeConverter.currentSunString);
+                //System.out.println(DateTimeConverter.nextSunString);
+                Appointment nextAppointment = new Appointment(
+                        rsA.getInt("Appointment_ID"),
+                        rsA.getString("Title"),
+                        rsA.getString("Description"),
+                        rsA.getString("Location"),
+                        rsA.getString("Contact_Name"),
+                        rsA.getString("Type"),
+                        rsA.getTimestamp("Start"),
+                        rsA.getTimestamp("End"),
+                        rsA.getString("Customer_Name"));
+                appointmentList.add(nextAppointment);
+                //System.out.println(DateTimeConverter.currentSunString);
+                //System.out.println(DateTimeConverter.nextSunString);
+            }
+            //System.out.println("End currentWeekParser()");
+            //System.out.println(appointmentList);
+            return appointmentList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            //System.out.println("Error on Building Data");
             return null;
         }
     }

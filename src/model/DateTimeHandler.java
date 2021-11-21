@@ -16,14 +16,15 @@ public class DateTimeHandler {
     public static boolean within15 = false;
     public static boolean overlap = false;
     public static boolean validTime = true;
+    public static boolean startEndMismatch = false;
 
     public static boolean within15(Timestamp apptTime) {
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(now);
+        //System.out.println(now);
         LocalDateTime now15 = now.plusMinutes(15);
-        System.out.println(now15);
+        //System.out.println(now15);
         LocalDateTime aTime = apptTime.toLocalDateTime();
-        System.out.println(aTime);
+        //System.out.println(aTime);
         if (now.isEqual(aTime) || now.isBefore(aTime)) {
             if (now15.isEqual(aTime) || now15.isAfter(aTime)) {
                 within15 = true;
@@ -32,20 +33,25 @@ public class DateTimeHandler {
         } else {
             within15 = false;
         }
-        System.out.println(within15);
+        //System.out.println(within15);
         return within15;
 
     }
 
-    public static boolean validTime(Timestamp candidateStart, Timestamp candidateEnd, int customerId) {//Doesn't return correctly, thinking of moving variables to class level
+    public static boolean validTime(Timestamp candidateStart, Timestamp candidateEnd, int customerId, String appointmentId) {
+        overlap = false;
+        validTime = true;
 
         try {
             String validTimeQuery = "SELECT Start, End " +
                                     "FROM appointments " +
-                                    "WHERE Customer_ID = ?";
+                                    "WHERE Customer_ID = ? " +
+                                    "AND Appointment_Id <> ?";
+
             DBQuery.setPreparedStatement(Interface.JDBC.conn, validTimeQuery);
             PreparedStatement psVT = DBQuery.getPreparedStatement();
             psVT.setInt(1, customerId);
+            psVT.setString(2 ,appointmentId);
             psVT.execute();
             ResultSet rsVT = psVT.getResultSet();
             while (rsVT.next()) {
@@ -53,6 +59,7 @@ public class DateTimeHandler {
                 Timestamp apptStart;
                 apptStart = rsVT.getTimestamp("Start");
                 apptEnd = rsVT.getTimestamp("End");
+                //System.out.println("Beginning Overlap: " + overlap);
                 boolean isValid = overlapChecker(apptStart, apptEnd, candidateStart, candidateEnd);
                 validTime = isValid;
             }
@@ -66,25 +73,28 @@ public class DateTimeHandler {
         LocalDateTime aEnd = apptEnd.toLocalDateTime();
         LocalDateTime cStart = candidateStart.toLocalDateTime();
         LocalDateTime cEnd = candidateEnd.toLocalDateTime();
-        overlap = false;
-        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd)) || ((cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd)))){
-            overlap = true;
+        //System.out.println(aStart);
+        //System.out.println(aEnd);
+        //System.out.println(cStart);
+        //System.out.println(cEnd);
+        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd)) || ((cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd)) || ((cStart.isBefore(aStart)) && cEnd.isAfter(aEnd)))){
+                overlap = true;
         }
-        if (overlap = true){
+        if (overlap == true){
             validTime = false;
         }
-        System.out.println("Overlap: " + overlap);
-
+        //System.out.println("End Overlap: " + overlap);//Testing only
         return validTime;
     }
 
-
+    public static boolean startEndMismatch (Timestamp candidateStart, Timestamp candidateEnd){
+        startEndMismatch = false;
+        LocalDateTime cStart = candidateStart.toLocalDateTime();
+        LocalDateTime cEnd = candidateEnd.toLocalDateTime();
+        if ((cStart.isEqual(cEnd)) || (cStart.isAfter(cEnd))) {
+            startEndMismatch = true;
+        }
+        return startEndMismatch;
+    }
 
 }
-/*
-                            Timestamp apptTime = rs2.getTimestamp("Start");
-                            //Timestamp convApptTime = apptTime.valueOf(apptTime.toLocalDateTime().plusMinutes(15));
-                            LocalDateTime now = LocalDateTime.now();
-                            Timestamp localTime = Timestamp.valueOf(now);
-                            Timestamp localTime15 = localTime.valueOf(localTime.toLocalDateTime().plusMinutes(15));
- */

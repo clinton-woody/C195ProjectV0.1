@@ -93,7 +93,7 @@ public class Customer {
 
     public static Customer getSelectedCustomer() throws SQLException {
         try {
-            System.out.println(updateCustomerId);
+            //System.out.println(updateCustomerId);
             String selectedCustomerGrab = "SELECT * " +
                                           "FROM customers " +
                                           "WHERE Customer_ID = ?";
@@ -127,7 +127,7 @@ public class Customer {
 
     public static void insertCustomer() throws SQLException {
         try {
-            System.out.println(CustomerUpdateForm.dbName +  CustomerUpdateForm.dbAddress +  CustomerUpdateForm.dbPostalCode +  CustomerUpdateForm.dbPhone  + CustomerUpdateForm.dbDivisionInt);
+            //System.out.println(CustomerUpdateForm.dbName +  CustomerUpdateForm.dbAddress +  CustomerUpdateForm.dbPostalCode +  CustomerUpdateForm.dbPhone  + CustomerUpdateForm.dbDivisionInt);
             String insertCustomer = "INSERT INTO customers ( Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_Id) " +
                                     "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
             DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer);
@@ -182,14 +182,14 @@ public class Customer {
 
         if (CustomerUpdateForm.dbName == null || CustomerUpdateForm.dbAddress == null || CustomerUpdateForm.dbPostalCode == null || CustomerUpdateForm.dbPhone == null || CustomerUpdateForm.dbDivisionInt == 0 || CustomerUpdateForm.selectedDivision == null) {
             canInsert = false;
-            System.out.println("Working");
+            //System.out.println("Working");
         }
         else if (CustomerUpdateForm.dbName.isEmpty() || CustomerUpdateForm.dbAddress.isEmpty() || CustomerUpdateForm.dbPostalCode.isEmpty() || CustomerUpdateForm.dbPhone.isEmpty()) {
 
         }
         else{
             canInsert = true;
-            System.out.println("Working");
+            //System.out.println("Working");
         }
         return canInsert;
 
@@ -197,7 +197,7 @@ public class Customer {
 
     public static List getCustomerIds() {
         try {
-            String idGrab = "SELECT Customer_ID FROM Customers";
+            String idGrab = "SELECT Customer_ID FROM Customers ORDER BY Customer_ID ASC";
             DBQuery.setPreparedStatement(Interface.JDBC.conn, idGrab);
             PreparedStatement psCI = DBQuery.getPreparedStatement();
             psCI.execute(); //Execute PreparedStatement

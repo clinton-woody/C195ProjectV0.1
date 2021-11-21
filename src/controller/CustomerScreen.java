@@ -108,12 +108,12 @@ public class CustomerScreen implements Initializable {
             deleteCandidateId = selectedCustomerCells.getCustomerID();
             Appointment.hasAppointment();
             if(hasAppointment == true){
-                System.out.println(hasAppointment);
-                System.out.println("hasAppointment works");
+                //System.out.println(hasAppointment);
+                //System.out.println("hasAppointment works");
                 canDeleteCustomer = false;
                 Messages.messageSix();
                 hasAppointment = false;
-                System.out.println(hasAppointment);
+                //System.out.println(hasAppointment);
             }
             else{
                 canDeleteCustomer = true;

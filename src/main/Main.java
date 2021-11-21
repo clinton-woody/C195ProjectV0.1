@@ -10,6 +10,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.DateTimeConverter;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.time.ZoneId;
@@ -31,7 +33,7 @@ public class Main extends Application {
         public void start(Stage stage) throws Exception {
         //Zone.setDefault(TimeZone.getTimeZone("CST"));     //Used to switch timezone for testing purposes
         //Local.setDefault(new Locale("fr"));     //Used to switch locale for testing purposes
-        System.out.println(java.util.TimeZone.getDefault().getID());
+        ///System.out.println(java.util.TimeZone.getDefault().getID());
         Parent root = FXMLLoader.load(getClass().getResource( "/view/LoginScreen.fxml"));
         stage.setTitle("C195");
         stage.setScene(new Scene(root,  240,  255));
@@ -45,6 +47,7 @@ public class Main extends Application {
         //Locale.setDefault(new Locale("fr"));//Only used to test language detection.
         Interface.JDBC.openConnection();
         launch(args);
+        //DateTimeConverter.currentWeekParser();
         Interface.JDBC.closeConnection();
     }
 }

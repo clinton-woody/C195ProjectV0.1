@@ -18,6 +18,7 @@ import model.Messages;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ResourceBundle;
 import model.Customer; //CanDelete?
 
@@ -37,9 +38,9 @@ public class ScheduleScreen implements Initializable {
     @FXML
     private TableColumn<Appointment, String> typeColumn;
     @FXML
-    private TableColumn<Appointment, String> startColumn;
+    private TableColumn<Appointment, String> startColumn;//datetime from string
     @FXML
-    private TableColumn<Appointment, String> endColumn;
+    private TableColumn<Appointment, String> endColumn;//datetime from string
     @FXML
     private TableColumn<Appointment, String> customerColumn;
     @FXML
@@ -62,30 +63,6 @@ public class ScheduleScreen implements Initializable {
     private Parent root;
     public static int updateAppointmentID;
     public static int deleteAppointmentID = 0;//CanDelete?
-
-    public void radioButtonMonth(ActionEvent event) throws IOException {
-        appointmentTableView.setItems(Appointment.getMonthlyAppointments());
-        isMonth = true;
-        isWeek = false;
-        isAll = false;
-    }
-
-    public void radioButtonWeek(ActionEvent event) throws IOException {
-        appointmentTableView.setItems(Appointment.getWeeklyAppointments());
-        isMonth = false;
-        isWeek = true;
-        isAll = false;
-
-    }
-
-    public void radioButtonAll(ActionEvent event) throws IOException {
-        appointmentTableView.setItems(Appointment.getAllAppointments());
-        isMonth = false;
-        isWeek = false;
-        isAll = true;
-
-    }
-
 
     public void customerButton(ActionEvent event) throws IOException {
 
@@ -122,24 +99,10 @@ public class ScheduleScreen implements Initializable {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
     }
 
-    /*
 
-        if (selectedAppointmentId == selectedAppointmentCells.getAppointmentID()){
-            Appointment.appointmentUpdate = true;
-            System.out.println(updateAppointmentId);
-            root = FXMLLoader.load(getClass().getResource( "/view/AppointmentUpdateForm.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        }
-        else {
-        }
-    }
-
-     */
 
     public void deleteButton(ActionEvent event) throws IOException, SQLException {
 
@@ -161,8 +124,10 @@ public class ScheduleScreen implements Initializable {
                 deleteCandidateId = 0;
                 if (isMonth == true){
                     appointmentTableView.setItems(Appointment.getMonthlyAppointments());
-                }else{
+                }else if(isWeek == true){
                     appointmentTableView.setItems(Appointment.getWeeklyAppointments());
+                }else{
+                    appointmentTableView.setItems(Appointment.getAllAppointments());
                 }
             }else{
                 deleteCandidateId = confirmDeleteId;
@@ -170,6 +135,30 @@ public class ScheduleScreen implements Initializable {
             }
 
         }
+
+    }
+
+
+    public void radioButtonMonth(ActionEvent event) throws IOException {
+        appointmentTableView.setItems(Appointment.getMonthlyAppointments());//Works
+        isMonth = true;
+        isWeek = false;
+        isAll = false;
+    }
+
+    public void radioButtonWeek(ActionEvent event) throws IOException {
+        appointmentTableView.setItems(Appointment.getWeeklyAppointments());//no work
+        isMonth = false;
+        isWeek = true;
+        isAll = false;
+
+    }
+
+    public void radioButtonAll(ActionEvent event) throws IOException {
+        appointmentTableView.setItems(Appointment.getAllAppointments());//no work throws DAY_OF_MONTH error
+        isMonth = false;
+        isWeek = false;
+        isAll = true;
 
     }
 

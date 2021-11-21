@@ -54,6 +54,7 @@ public class DateTimeConverter {
         currentSunString = currentSun.format(formatter) + ZEROTIME;
  //       nextSunTS = Timestamp.valueOf(nextSunString);
  //       currentSunTS = Timestamp.valueOf(currentSunString);
+        System.out.println(currentSun);
         return currentSun;
 
     }

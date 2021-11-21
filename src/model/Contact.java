@@ -60,7 +60,7 @@ public class Contact {
                         rsCo.getString("Contact_Name"));
                 allContacts.add(nextContact);
             }
-            System.out.println(allContacts);
+            //System.out.println(allContacts);
             return allContacts;
 
         } catch (Exception e) {

@@ -1,6 +1,7 @@
 //STILL NEED WORK
 package controller;
 
+import Interface.DBQuery;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -55,44 +57,11 @@ public class AppointmentUpdateForm2 implements Initializable {
     public TextField textFieldType;
     @FXML
     public static Appointment selectedAppointment;
+    @FXML
     public DatePicker datePickerDate;
-    public static int newContactId;
-    public static int newUserId;
-    public static int newCustomerId;
-    public static int contactId;
-    public static int userId;
-    public static int customerId;
-    public static String newStartHour;
-    public static String newStartMinute;
-    public static String newEndHour;
-    public static String newEndMinute;
-    public static String date;
-    public static String parsedStartTime;
-    public static String parsedEndTime;
-    public static String parsedStartDateTime;
-    public static String parsedEndDateTime;
-    public static String appointmentId;
-    public static String type;
-    public static String title;
-    public static String description;
-    public static String location;
-    public static User user;
-    public static Customer customer;
-    public static Contact contact;
-    public static String updateAppointmentID;//going to need to run a query for a different type of appointment that matches the DB
-    public static String dbType;
-    public static String dbTitle;
-    public static String dbLocation;
-    public static String dbDescription;
-    public static String stichStartHr;
-    public static String stichStartMn;
-    public static String stichEndHr;
-    public static String stichEndMn;
-    public static String dbParsedStart;
-    public static String dbParsedEnd;
-    public static String dbContactId;
-    public static String dbCustomerId;
-    public static String dbUserId;
+    /*
+    FLAGS
+     */
     public static boolean contactFlag = false;
     public static boolean userFlag = false;
     public static boolean customerFlag = false;
@@ -101,7 +70,71 @@ public class AppointmentUpdateForm2 implements Initializable {
     public static boolean dateFlag = false;
     public static boolean update = false;
     public static boolean isValid = true;
-    public final String ZEROSEC = "00";
+    public static boolean startEndMismatch = false;
+    /*
+    INITIAL VARIABLES
+     */
+    public static String appointmentId;
+    public static String type;
+    public static String title;
+    public static String description;
+    public static String location;
+    public static LocalDate date;
+    public static int contactId;
+    public static int userId;
+    public static int customerId;
+    public static final String ZEROSEC = "00";
+    public static String startHr;
+    public static String startMn;
+    public static String endHr;
+    public static String endMn;
+//    public static Timestamp initialStart = Timestamp.valueOf(date.toString() + " " + startHr + startMn + ZEROSEC);
+//    public static Timestamp initialEnd = Timestamp.valueOf(date.toString() + " " + endHr + endMn + ZEROSEC);
+
+
+    /*
+    UPDATED VARIABLES
+     */
+    public static String dbType;
+    public static String dbTitle;
+    public static String dbLocation;
+    public static String dbDescription;
+    public static LocalDate dbDate;
+    public static String dbDateString;
+    public static int dbContactId;
+    public static int dbUserId;
+    public static int dbCustomerId;
+    public static String dbStartHr;
+    public static String dbStartMn;
+    public static String dbEndHr;
+    public static String dbEndMn;
+    public static Timestamp dbStart;
+    public static Timestamp dbEnd;
+
+    public static int newContactId;
+    public static int newUserId;
+    public static int newCustomerId;
+
+    public static String dateString;
+    public static String parsedStartTime;
+    public static String parsedEndTime;
+    public static String parsedStartDateTime;
+    public static String parsedEndDateTime;
+    public static Timestamp candidateStart;
+    public static Timestamp candidateEnd;
+    public static User user;
+    public static Customer customer;
+    public static Contact contact;
+    public static String updateAppointmentID;
+
+    public static String stichStartHr;
+    public static String stichStartMn;
+    public static String stichEndHr;
+    public static String stichEndMn;
+    public static String dbParsedStart;
+    public static String dbParsedEnd;
+
+
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -116,92 +149,227 @@ public class AppointmentUpdateForm2 implements Initializable {
     ObservableList<String> startMinuteList = minuteList;
     ObservableList<String> endMinuteList = minuteList;
 
-
-
-
     public void submitButton(ActionEvent event) throws IOException, SQLException {
-        //stichStartHr = comboBoxStartTimeHour.getItems().toString();
-        //stichStartMn = comboBoxStartTimeMinute.getItems().toString();
-        //stichEndHr = comboBoxEndTimeHour.getItems().toString();
-        //stichEndMn = comboBoxEndTimeMinute.getItems().toString();
         parsedStartTime = stichStartHr + stichStartMn + ZEROSEC;
         parsedEndTime = stichEndHr + stichEndMn + ZEROSEC;
-        System.out.println(parsedStartTime);
-        System.out.println(parsedEndTime);
+        //System.out.println(parsedStartTime);//Testing only
+        //System.out.println(parsedEndTime);//Testing only
         parsedStartDateTime = date + " " + parsedStartTime; //need to make this a timestamp
         parsedEndDateTime = date + " " + parsedEndTime; //need to make this a timestamp
-        System.out.println(parsedStartDateTime);
-        System.out.println(parsedEndDateTime);
-        Timestamp startCandidate = Timestamp.valueOf(parsedStartDateTime);
-        Timestamp endCandidate = Timestamp.valueOf(parsedEndDateTime);
-        isValid = DateTimeHandler.validTime(startCandidate, endCandidate, customerId);
-        System.out.println(isValid);
+        //System.out.println(parsedStartDateTime);//Testing only
+        //System.out.println(parsedEndDateTime);//Testing only
+        candidateStart = Timestamp.valueOf(parsedStartDateTime);
+        candidateEnd = Timestamp.valueOf(parsedEndDateTime);
+        isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);
+        startEndMismatch = DateTimeHandler.startEndMismatch(candidateStart, candidateEnd);
+        //System.out.println(isValid);//Testing only
+        //System.out.println("startEndMismatch == " + startEndMismatch);//Testing only
+        if(isValid == true && startEndMismatch == false){
+            if(update == true){
+                //
+                dbTitle = textFieldTitle.getText();
+                dbDescription = textFieldDescription.getText();
+                dbLocation = textFieldLocation.getText();
+                dbType = textFieldType.getText();
+                dbContactId = newContactId;
+                dbUserId = newUserId;
+                dbCustomerId = newCustomerId;
+                dbStart = Timestamp.valueOf(dateString + " " + stichStartHr + stichStartMn + ZEROSEC);
+                dbEnd = Timestamp.valueOf(dateString + " " + stichEndHr + stichEndMn + ZEROSEC);
 
-        /*
-        If update is true
+                System.out.println(dbCustomerId + "" + customerId);
+                //System.out.println(appointmentId);//null
+                if(dbTitle != title){
+                    try {
+                        String insertTitle = "UPDATE appointments " + //AAD
+                                             "SET Title = ? " + //AAD
+                                             "WHERE Appointment_ID = ?"; //AAD
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertTitle); //AAD
+                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                        psTU.setString(1, dbTitle); //AAD
+                        psTU.setString(2, appointmentId); //AAD
+                        psTU.execute(); //AAD
+                        } catch (Exception e) {
+                            e.printStackTrace(); //AAD
+                            System.out.println("Check your SQL statement or variables");
+                        }
+                        Customer.customerUpdated();
+                        Appointment.appointmentUpdate = false;
 
-        If update is false
-            dbTitle = textFieldTitle.getText();
-            dbDescription = textFieldDescription.getText();
-            dbLocation = textFieldLocation.getText();
-            dbType = textFieldType.getText();
-            stichStartHr = comboBoxStartTimeHours.getItems();
-            stichStartMn = comboBoxStartTimeMinute.getItems();
-            stichEndHr = comboBoxEndTimeHours.getItems();
-            stichEndMn = comboBoxEndTimeMinute.getItems();
 
 
+                }
+                if(dbDescription != description){
 
+                    try {
+                        String insertDescription = "UPDATE appointments " + //AAD
+                                "SET Description = ? " + //AAD
+                                "WHERE Appointment_ID = ?"; //AAD
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertDescription); //AAD
+                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                        psTU.setString(1, dbDescription); //AAD
+                        psTU.setString(2, appointmentId); //AAD
+                        psTU.execute(); //AAD
+                    } catch (Exception e) {
+                        e.printStackTrace(); //AAD
+                        System.out.println("Check your SQL statement or variables");
+                    }
+                    Customer.customerUpdated();
+                    Appointment.appointmentUpdate = false;
 
+                }
 
-             //
-             Timestamp start, Timestamp end, int customerId, int userId, int contactId
+                if(dbLocation != location){
+                    try{
+                        String insertLocation = "UPDATE appointments " + //AAD
+                                                "SET Location = ? " + //AAD
+                                                "WHERE Appointment_ID = ?"; //AAD
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertLocation); //AAD
+                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                        psTU.setString(1, dbLocation); //AAD
+                        psTU.setString(2, appointmentId); //AAD
+                        psTU.execute(); //AAD
+                    } catch (Exception e) {
+                        e.printStackTrace(); //AAD
+                        System.out.println("Check your SQL statement or variables");
+                    }
+                    Customer.customerUpdated();
+                    Appointment.appointmentUpdate = false;
+                }
 
-                        dbName = textFieldCustomerName.getText();
-            dbAddress = textFieldAddress.getText();
-            dbPostalCode = textFieldPostalCode.getText();
-            dbPhone = textFieldPhoneNumber.getText();
-            canInsert = Customer.canInsert();
+                if(dbType != type){
+                    try{
+                        String insertType = "UPDATE appointments " + //AAD
+                                "SET Type = ? " + //AAD
+                                "WHERE Appointment_ID = ?"; //AAD
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertType); //AAD
+                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                        psTU.setString(1, dbType); //AAD
+                        psTU.setString(2, appointmentId); //AAD
+                        psTU.execute(); //AAD
+                    } catch (Exception e) {
+                        e.printStackTrace(); //AAD
+                        System.out.println("Check your SQL statement or variables");
+                    }
+                    Customer.customerUpdated();
+                    Appointment.appointmentUpdate = false;
+                }
 
-            if (canInsert == true){
-                Customer.insertCustomer();
-                Customer.customerUpdate = false;
-                canInsert = false;
-                root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
-                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                System.out.println(dbStart);
+                try{//update start date
+                    String insertStart = "UPDATE appointments " +
+                                         "SET Start = ? " +
+                                         "WHERE Appointment_ID = ?";
+                    DBQuery.setPreparedStatement(Interface.JDBC.conn, insertStart); //AAD
+                    PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
+                    psSU.setTimestamp(1, dbStart); //AAD
+                    psSU.setString(2, appointmentId); //AAD
+                    psSU.execute(); //AAD
+                }catch (Exception e){
+
+                }
+
+                System.out.println(dbEnd);
+                try{//update end date
+                    String insertEnd = "UPDATE appointments " +
+                            "SET End = ? " +
+                            "WHERE Appointment_ID = ?";
+                    DBQuery.setPreparedStatement(Interface.JDBC.conn, insertEnd); //AAD
+                    PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
+                    psSU.setTimestamp(1, dbEnd); //AAD
+                    psSU.setString(2, appointmentId); //AAD
+                    psSU.execute(); //AAD
+
+                }catch (Exception e){
+
+                }
+                if(dbContactId != contactId){//not working
+                    try{
+                        String insertContact = "UPDATE appointments " + //AAD
+                                "SET Contact_ID = ? " + //AAD
+                                "WHERE Appointment_ID = ?"; //AAD
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertContact); //AAD
+                        PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
+                        psCU.setInt(1, dbContactId); //AAD
+                        psCU.setString(2, appointmentId); //AAD
+                        psCU.execute(); //AAD
+                    } catch (Exception e) {
+                        e.printStackTrace(); //AAD
+                        System.out.println("Check your SQL statement or variables");
+                    }
+                    Customer.customerUpdated();
+                    Appointment.appointmentUpdate = false;
+                }
+                if(dbUserId != userId){//not working
+                    try{
+                        String insertUser = "UPDATE appointments " + //AAD
+                                "SET User_ID = ? " + //AAD
+                                "WHERE Appointment_ID = ?"; //AAD
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertUser); //AAD
+                        PreparedStatement psUU = DBQuery.getPreparedStatement(); //AAD
+                        psUU.setInt(1, dbUserId); //AAD
+                        psUU.setString(2, appointmentId); //AAD
+                        psUU.execute(); //AAD
+                    } catch (Exception e) {
+                        e.printStackTrace(); //AAD
+                        System.out.println("Check your SQL statement or variables");
+                    }
+                    Customer.customerUpdated();
+                    Appointment.appointmentUpdate = false;
+                }
+                if(dbCustomerId != customerId){//not working
+                    try{
+                        String insertCustomer = "UPDATE appointments " + //AAD
+                                "SET Customer_ID = ? " + //AAD
+                                "WHERE Appointment_ID = ?"; //AAD
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAD
+                        PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
+                        psCU.setInt(1, dbCustomerId); //AAD
+                        psCU.setString(2, appointmentId); //AAD
+                        psCU.execute(); //AAD
+                    } catch (Exception e) {
+                        e.printStackTrace(); //AAD
+                        System.out.println("Check your SQL statement or variables");
+                    }
+                    Customer.customerUpdated();
+                    Appointment.appointmentUpdate = false;
+                }
+
+                isValid = true;
+                update = false;
+                startEndMismatch = false;
+                root = FXMLLoader.load(getClass().getResource( "/view/ScheduleScreen.fxml"));
+                stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+
+            }
+            else{
+                title = textFieldTitle.getText();
+                description = textFieldDescription.getText();
+                location = textFieldLocation.getText();
+                type = textFieldType.getText();
+                Appointment.insertAppointment();
+                isValid = true;
+                update = false;
+                startEndMismatch = false;
+                root = FXMLLoader.load(getClass().getResource( "/view/ScheduleScreen.fxml"));
+                stage = (Stage)((Node)event.getSource()).getScene().getWindow();
                 scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
             }
-            else
-            {
-                Messages.errorSix();
-
-            }
 
 
-         */
-        if (update == false){
-            title = textFieldTitle.getText();
-            description = textFieldDescription.getText();
-            location = textFieldLocation.getText();
-            type = textFieldType.getText();
-            Appointment.insertAppointment();
-
-            root = FXMLLoader.load(getClass().getResource( "/view/ScheduleScreen.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        }else{
-        //
         }
-
-        root = FXMLLoader.load(getClass().getResource( "/view/ScheduleScreen.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        else if(isValid == true && startEndMismatch == true){
+            Messages.errorSeven();
+        }
+        else {
+            Messages.errorEight();
+        }
+        isValid = true;
 
     }
 
@@ -240,79 +408,37 @@ public class AppointmentUpdateForm2 implements Initializable {
         });
 
         comboBoxStartTimeHour.setItems(startHourList);//8am to 955pm
-        comboBoxStartTimeHour.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                stichStartHr = t1 + ":";
-                System.out.println(stichStartHr);
-                //startFlag = true;
-            }
+        comboBoxStartTimeHour.valueProperty().addListener((observableValue, s, t1) -> {
+            stichStartHr = t1 + ":";
+            //System.out.println(stichStartHr);
+            //startFlag = true;
         });
 
         comboBoxStartTimeMinute.setItems(startMinuteList);//8am to 955pm
-        comboBoxStartTimeMinute.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                stichStartMn = t1 + ":";
-                System.out.println(stichStartMn);
-                //startFlag = true;
-            }
+        comboBoxStartTimeMinute.valueProperty().addListener((observableValue, s, t1) -> {
+            stichStartMn = t1 + ":";
+            //System.out.println(stichStartMn);
+            //startFlag = true;
         });
 
         comboBoxEndTimeHour.setItems(endHourList);//805am to 1000pm, Create exception not allowing an appointment end time before the start time
-        comboBoxEndTimeHour.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                stichEndHr = t1 + ":";
-                System.out.println(stichEndHr);
-                //endFlag = true;
-            }
+        comboBoxEndTimeHour.valueProperty().addListener((observableValue, s, t1) -> {
+            stichEndHr = t1 + ":";
+            //System.out.println(stichEndHr);
+            //endFlag = true;
         });
 
         comboBoxEndTimeMinute.setItems(endMinuteList);//805am to 1000pm, Create exception not allowing an appointment end time before the start time
-        comboBoxEndTimeMinute.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                stichEndMn = t1 + ":";
-                System.out.println(stichEndMn);
-                //endFlag = true;
-            }
-        });
-    /*
-        comboBoxEndTimeHour.setItems(endHourList);//805am to 1000pm, Create exception not allowing an appointment end time before the start time
-        comboBoxEndTimeHour.valueProperty().addListener(new ChangeListener<ObservableValue<String>>() {
-            @Override
-            public void changed(ObservableValue<? extends ObservableValue<String>> observableValue, ObservableValue<String> stringObservableValue, ObservableValue<String> t1) {
-                stichEndHr = t1.toString();
-                System.out.println(newEndHour);
-            }
-
-            });
-            */
-
-
-/*
-        comboBoxEndTimeMinute.setItems(endMinuteList);
-        comboBoxEndTimeMinute.valueProperty().addListener(new ChangeListener<ObservableList>() {
-            @Override
-            public void changed(ObservableValue<? extends ObservableList> observableValue, ObservableList s1, ObservableList t1) {
-                stichEndMn = t1.toString();
-                //System.out.println(newEndMinute);
-                //endFlag = true;
-            }
-        });
-        */
-
-
-        datePickerDate.valueProperty().addListener(new ChangeListener<LocalDate>() {
-            @Override
-            public void changed(ObservableValue<? extends LocalDate> observableValue, LocalDate localDate, LocalDate t1) {
-                date = t1.toString();
-                //dateFlag = true;
-            }
+        comboBoxEndTimeMinute.valueProperty().addListener((observableValue, s, t1) -> {
+            stichEndMn = t1 + ":";
+            //System.out.println(stichEndMn);
+            //endFlag = true;
         });
 
-
+        datePickerDate.valueProperty().addListener((observableValue, localDate, t1) -> {
+            dateString = t1.toString();
+            //dateFlag = true;
+        });
 
         if (update == true){//new
             labelAppointment.setText("APPOINTMENT UPDATE FORM");
@@ -321,11 +447,22 @@ public class AppointmentUpdateForm2 implements Initializable {
             title = selectedAppointment.getTitle();
             type = selectedAppointment.getType();
             location = selectedAppointment.getLocation();
-            LocalDate date = LocalDate.parse(selectedAppointment.getStart().toString().substring(0, 4) + "-" + selectedAppointment.getStart().toString().substring(5,7) + "-" + selectedAppointment.getStart().toString().substring(8, 10));
-            String startHr = selectedAppointment.getStart().toString().substring(11, 13);
-            String startMn = selectedAppointment.getStart().toString().substring(14, 16);
-            String endHr = selectedAppointment.getEnd().toString().substring(11, 13);
-            String endMn = selectedAppointment.getEnd().toString().substring(14, 16);
+            date = LocalDate.parse(selectedAppointment.getStart().toString().substring(0, 4) + "-" + selectedAppointment.getStart().toString().substring(5,7) + "-" + selectedAppointment.getStart().toString().substring(8, 10));
+            startHr = selectedAppointment.getStart().toString().substring(11, 13);
+            startMn = selectedAppointment.getStart().toString().substring(14, 16);
+            endHr = selectedAppointment.getEnd().toString().substring(11, 13);
+            endMn = selectedAppointment.getEnd().toString().substring(14, 16);
+            contactId = selectedAppointment.getContactId();
+            userId = selectedAppointment.getUserId();
+            customerId = selectedAppointment.getCustomerId();
+
+            int customerIndex = Customer.getCustomerIds().indexOf(customerId);
+            int userIndex = User.getUserIds().indexOf(userId);
+            int contactIndex = Contact.getContactIds().indexOf(contactId);
+            comboBoxContact.getSelectionModel().select(contactIndex);
+            comboBoxCustomer.getSelectionModel().select(customerIndex);
+            comboBoxUser.getSelectionModel().select(userIndex);
+
             textFieldAppointmentId.setText(appointmentId); //Appointment ID
             textFieldDescription.setText(description); //Description
             textFieldTitle.setText(title); //Title
@@ -336,15 +473,6 @@ public class AppointmentUpdateForm2 implements Initializable {
             comboBoxStartTimeMinute.setValue(startMn);
             comboBoxEndTimeHour.setValue(endHr);
             comboBoxEndTimeMinute.setValue(endMn);
-            contactId = selectedAppointment.getContactId();
-            int contactIndex = Contact.getContactIds().indexOf(contactId);
-            userId = selectedAppointment.getUserId();
-            int userIndex = User.getUserIds().indexOf(userId);
-            customerId = selectedAppointment.getCustomerId();
-            int customerIndex = Customer.getCustomerIds().indexOf(customerId);
-            comboBoxContact.getSelectionModel().select(contactIndex);
-            comboBoxCustomer.getSelectionModel().select(customerIndex);
-            comboBoxUser.getSelectionModel().select(userIndex);
         }else{
             labelAppointment.setText("NEW APPOINTMENT FORM");
         }

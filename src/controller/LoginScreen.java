@@ -82,7 +82,7 @@ public class LoginScreen implements Initializable {
       This is the toCustomerScreen method.  This class tests a user/password combination against the database and, if true,
       launches the CustomerScreen.  If the user/password combination has a match in the database then the user id is tested
       against the next appointment start time to see if an appointment starts within 15 minutes.  If so a message is
-      displayed stating this. Each time this method is initiated the login attempt is appended to the log.txt file.
+      displayed stating this. Each time this method is initiated the login attempt is appended to the login_activity.txt file.
 
       @param event This method is executed based on the action of pressing the login button
      */
@@ -146,12 +146,12 @@ public class LoginScreen implements Initializable {
                             stage.show();
                         }
                         try {
-                            fw = new FileWriter("log.txt", true);
+                            fw = new FileWriter("login_activity.txt", true);
                             bw = new BufferedWriter(fw);
                             pw = new PrintWriter(bw);
                             Timestamp timestamp = Timestamp.valueOf(DateTimeConverter.easternDateTime().toLocalDateTime());
                             pw.println(timestamp + " User: " + userNameInput + " successfully logged in.");
-                            System.out.println("Data Successfully appended into file");
+                            //System.out.println("Data Successfully appended into file");
                             pw.flush();
                         } finally {
                             try {
@@ -166,12 +166,12 @@ public class LoginScreen implements Initializable {
                         BufferedWriter bw = null;
                         PrintWriter pw = null;
                         try {
-                            fw = new FileWriter("log.txt", true);
+                            fw = new FileWriter("login_activity.txt", true);
                             bw = new BufferedWriter(fw);
                             pw = new PrintWriter(bw);
                             Timestamp timestamp = Timestamp.valueOf(DateTimeConverter.easternDateTime().toLocalDateTime());
                             pw.println(timestamp + " User: " + userNameInput + " unsuccessfully attempted to log in.");
-                            System.out.println("Data Successfully appended into file");
+                            //System.out.println("Data Successfully appended into file");
                             pw.flush();
                         } finally {
                             try {

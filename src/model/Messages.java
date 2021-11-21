@@ -68,6 +68,14 @@ public class Messages{
         JOptionPane.showMessageDialog(null,"Required fields left blank.", "ERROR-6", JOptionPane.WARNING_MESSAGE);
     }
 
+    public static void errorSeven(){
+        JOptionPane.showMessageDialog(null,"Start time must be before end time.", "ERROR-7", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void errorEight(){
+        JOptionPane.showMessageDialog(null,"This appointment overlaps with at least one other appointment assigned to the selected customer.", "ERROR-8", JOptionPane.WARNING_MESSAGE);
+    }
+
     public static void infoBox(String infoMessage, String titleBar)
     {
         infoBox(infoMessage, titleBar);
