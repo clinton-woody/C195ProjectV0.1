@@ -60,6 +60,7 @@ public class CustomerScreen implements Initializable {
     public static Customer selectedCustomer;
     public static int selectedCustomerId;
     public static int deleteCandidateId;
+    public static int deleteConfirmId;
     public static int confirmDeleteId;
     public static int updateCustomerId;
     public static boolean canDeleteCustomer = false;
@@ -118,19 +119,25 @@ public class CustomerScreen implements Initializable {
             else{
                 canDeleteCustomer = true;
                 Messages.messageFour();
+                deleteConfirmId = deleteCandidateId;
             }
         }else{
-            Customer selectedCustomerCells = customerTableView.getSelectionModel().getSelectedItem();
-            confirmDeleteId = selectedCustomerCells.getCustomerID();
-            if (deleteCandidateId==confirmDeleteId){
-                Customer.deleteCustomer();
-                Messages.messageFive();
-                deleteCandidateId = 0;
+            if(deleteCandidateId == deleteConfirmId) {
+                Customer selectedCustomerCells = customerTableView.getSelectionModel().getSelectedItem();
+                confirmDeleteId = selectedCustomerCells.getCustomerID();
+                if (deleteCandidateId == confirmDeleteId) {
+                    Customer.deleteCustomer();
+                    Messages.messageFive();
+                    deleteCandidateId = 0;
+                    canDeleteCustomer = false;
+                    customerTableView.setItems(Customer.getAllCustomers());
+                } else {
+                    deleteCandidateId = confirmDeleteId;
+                    Messages.messageFour();
+                }
+            }
+            else{
                 canDeleteCustomer = false;
-                customerTableView.setItems(Customer.getAllCustomers());
-            }else{
-                deleteCandidateId = confirmDeleteId;
-                Messages.messageFour();
             }
         }
     }
