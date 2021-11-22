@@ -149,21 +149,17 @@ public class AppointmentUpdateForm2 implements Initializable {
     ObservableList<String> startMinuteList = minuteList;
     ObservableList<String> endMinuteList = minuteList;
 
-    public void submitButton(ActionEvent event) throws IOException, SQLException {
+    public void submitButton(ActionEvent event) throws IOException, SQLException {//only new isnt working
         parsedStartTime = stichStartHr + stichStartMn + ZEROSEC;
         parsedEndTime = stichEndHr + stichEndMn + ZEROSEC;
-        //System.out.println(parsedStartTime);//Testing only
-        //System.out.println(parsedEndTime);//Testing only
-        parsedStartDateTime = date + " " + parsedStartTime; //need to make this a timestamp
-        parsedEndDateTime = date + " " + parsedEndTime; //need to make this a timestamp
-        //System.out.println(parsedStartDateTime);//Testing only
-        //System.out.println(parsedEndDateTime);//Testing only
+        parsedStartDateTime = dateString + " " + parsedStartTime;
+        parsedEndDateTime = dateString + " " + parsedEndTime;
+        System.out.println(parsedStartDateTime);//Testing only
+        System.out.println(parsedEndDateTime);//Testing only
         candidateStart = Timestamp.valueOf(parsedStartDateTime); //#error
         candidateEnd = Timestamp.valueOf(parsedEndDateTime);
         isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);
         startEndMismatch = DateTimeHandler.startEndMismatch(candidateStart, candidateEnd);
-        //System.out.println(isValid);//Testing only
-        //System.out.println("startEndMismatch == " + startEndMismatch);//Testing only
         if(isValid == true && startEndMismatch == false){
             if(update == true){
                 //
@@ -178,7 +174,6 @@ public class AppointmentUpdateForm2 implements Initializable {
                 dbEnd = Timestamp.valueOf(dateString + " " + stichEndHr + stichEndMn + ZEROSEC);
 
                 System.out.println(dbCustomerId + "" + customerId);
-                //System.out.println(appointmentId);//null
                 if(dbTitle != title){
                     try {
                         String insertTitle = "UPDATE appointments " + //AAD
@@ -195,9 +190,6 @@ public class AppointmentUpdateForm2 implements Initializable {
                         }
                         Customer.customerUpdated();
                         Appointment.appointmentUpdate = false;
-
-
-
                 }
                 if(dbDescription != description){
 
@@ -216,9 +208,7 @@ public class AppointmentUpdateForm2 implements Initializable {
                     }
                     Customer.customerUpdated();
                     Appointment.appointmentUpdate = false;
-
                 }
-
                 if(dbLocation != location){
                     try{
                         String insertLocation = "UPDATE appointments " + //AAD
@@ -345,11 +335,13 @@ public class AppointmentUpdateForm2 implements Initializable {
                 stage.show();
 
             }
-            else{
+            else{//not getting to here
                 title = textFieldTitle.getText();
                 description = textFieldDescription.getText();
                 location = textFieldLocation.getText();
                 type = textFieldType.getText();
+                System.out.println(candidateStart);
+                System.out.println(candidateEnd);
                 Appointment.insertAppointment();
                 isValid = true;
                 update = false;
@@ -399,12 +391,9 @@ public class AppointmentUpdateForm2 implements Initializable {
         });
 
         comboBoxCustomer.setItems(Customer.getAllCustomers());
-        comboBoxCustomer.valueProperty().addListener(new ChangeListener<Customer>() {
-            @Override
-            public void changed(ObservableValue<? extends Customer> observableValue, Customer customer, Customer t1) {
-                newCustomerId = t1.getCustomerID();
-                //customerFlag = true;
-            }
+        comboBoxCustomer.valueProperty().addListener((observableValue, customer, t1) -> {
+            newCustomerId = t1.getCustomerID();
+            //customerFlag = true;
         });
 
         comboBoxStartTimeHour.setItems(startHourList);//8am to 955pm

@@ -73,6 +73,9 @@ public class Appointment {
     }
 
     public static void insertAppointment() throws SQLException{
+        System.out.println(AppointmentUpdateForm2.candidateStart);
+        System.out.println(AppointmentUpdateForm2.candidateEnd);
+
         try{
             String insert = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//get rid of the datetime converter

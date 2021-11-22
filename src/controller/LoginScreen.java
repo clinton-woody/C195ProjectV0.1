@@ -68,15 +68,16 @@ public class LoginScreen implements Initializable {
     public final String FRENCH = "fr";
     public final String ENGLISH = "en";
     public static String language = Locale.getDefault().getLanguage();
+    FileWriter fw = null;
+    BufferedWriter bw = null;
+    PrintWriter pw = null;
     /*
     UNUSED CLASS VARIABLES
      */
     public static LocalDate convertedTime;
     public static LocalDate convertedTimePlus15;
     public static int timeUntilAppointment;
-    FileWriter fw = null;
-    BufferedWriter bw = null;
-    PrintWriter pw = null;
+
     /**
       This is the toCustomerScreen method.  This class tests a user/password combination against the database and, if true,
       launches the CustomerScreen.  If the user/password combination has a match in the database then the user id is tested
