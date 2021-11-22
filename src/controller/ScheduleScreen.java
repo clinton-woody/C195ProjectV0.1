@@ -36,6 +36,8 @@ public class ScheduleScreen implements Initializable {
     @FXML
     private TableColumn<Appointment, String> contactColumn;
     @FXML
+    private TableColumn<Appointment, String> userColumn;
+    @FXML
     private TableColumn<Appointment, String> typeColumn;
     @FXML
     private TableColumn<Appointment, String> startColumn;//datetime from string
@@ -63,6 +65,7 @@ public class ScheduleScreen implements Initializable {
     private Parent root;
     public static int updateAppointmentID;
     public static int deleteAppointmentID = 0;//CanDelete?
+    public static String selectedType;
 
     public void customerButton(ActionEvent event) throws IOException {
 
@@ -109,6 +112,7 @@ public class ScheduleScreen implements Initializable {
         if(canDeleteAppointment == false){
             Appointment selectedAppointmentCells = appointmentTableView.getSelectionModel().getSelectedItem();
             selectedAppointmentID = selectedAppointmentCells.getAppointmentId();
+            selectedType = selectedAppointmentCells.getType();
             deleteCandidateId = selectedAppointmentID;
             canDeleteAppointment = true;
             Messages.messageTwo();
@@ -116,6 +120,7 @@ public class ScheduleScreen implements Initializable {
         }else{
             Appointment selectedAppointmentCells = appointmentTableView.getSelectionModel().getSelectedItem();
             selectedAppointmentID = selectedAppointmentCells.getAppointmentId();
+            selectedType = selectedAppointmentCells.getType();
             confirmDeleteId = selectedAppointmentID;
             if (deleteCandidateId==confirmDeleteId){
                 Appointment.deleteAppointment();
@@ -170,6 +175,7 @@ public class ScheduleScreen implements Initializable {
             descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
             locationColumn.setCellValueFactory(new PropertyValueFactory<>("location"));
             contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
+            userColumn.setCellValueFactory(new PropertyValueFactory<>("user"));
             typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
             startColumn.setCellValueFactory(new PropertyValueFactory<>("start"));
             endColumn.setCellValueFactory(new PropertyValueFactory<>("end"));

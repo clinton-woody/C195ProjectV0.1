@@ -15,14 +15,15 @@
       <TableView fx:id="appointmentTableView" layoutX="48.0" layoutY="43.0" maxHeight="275.0" maxWidth="920.0" minHeight="275.0" minWidth="920.0" prefHeight="275.0" prefWidth="920.0" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <columns>
             <TableColumn fx:id="appointmentIDColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Appointment ID" />
-            <TableColumn fx:id="descriptionColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Description" />
-            <TableColumn fx:id="titleColumn" maxWidth="143.0" minWidth="104.0" prefWidth="143.0" text="Title" />
-            <TableColumn fx:id="typeColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Type" />
-            <TableColumn fx:id="customerColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Customer" />
-            <TableColumn fx:id="contactColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Contact" />
-            <TableColumn fx:id="startColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Start Date/Time" />
-            <TableColumn fx:id="endColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="End Date/Time" />
-            <TableColumn fx:id="locationColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Location" />
+            <TableColumn fx:id="descriptionColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Description" />
+            <TableColumn fx:id="titleColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Title" />
+            <TableColumn fx:id="typeColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Type" />
+            <TableColumn fx:id="customerColumn" maxWidth="80.0" minWidth="80.0" text="Customer" />
+            <TableColumn fx:id="contactColumn" maxWidth="80.0" minWidth="80.0" text="Contact" />
+            <TableColumn fx:id="userColumn" maxWidth="80.0" minWidth="80.0" text="User" />
+            <TableColumn fx:id="endColumn" maxWidth="121.0" minWidth="102.0" prefWidth="121.0" text="End Date/Time" />
+            <TableColumn fx:id="startColumn" maxWidth="112.0" minWidth="93.0" prefWidth="102.0" text="Start Date/Time" />
+            <TableColumn fx:id="locationColumn" maxWidth="100.0" minWidth="81.0" prefWidth="94.0" text="Location" />
          </columns>
       </TableView>
       <TitledPane animated="false" layoutX="700.0" layoutY="463.0" prefHeight="76.0" prefWidth="250.0" text="Appointment Controls" AnchorPane.bottomAnchor="200.0" AnchorPane.rightAnchor="20.0">

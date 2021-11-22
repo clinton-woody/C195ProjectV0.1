@@ -27,6 +27,7 @@ public class Appointment {
     public String description;
     public String location;
     public String contact;
+    public String user;
     public String type;
     public Timestamp start;
     public Timestamp end;
@@ -46,7 +47,7 @@ public class Appointment {
 
     //Constructor
 
-    public Appointment(int appointmentID, String title, String description, String location, String contact, String type, Timestamp start, Timestamp end, String customerName )
+    public Appointment(int appointmentID, String title, String description, String location, String contact, String user, String type, Timestamp start, Timestamp end, String customerName )
     {
         setAppointmentID(appointmentID);
         setTitle(title);
@@ -57,6 +58,7 @@ public class Appointment {
         setStart(start);
         setEnd(end);
         setCustomerName(customerName);
+        setUser(user);
     }
 
     //OVERLOADED CONSTRUCTOR
@@ -175,10 +177,11 @@ public class Appointment {
     public static ObservableList<Appointment> getAllAppointments(){
         try{
             String appointmentGrab = "SELECT appointments.Appointment_ID, appointments.Title, appointments.Description," +
-                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name" +
+                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name, users.User_Name" +
                     " FROM appointments" +
                     " JOIN contacts ON appointments.Contact_ID=contacts.Contact_ID" +
                     " JOIN customers ON appointments.Customer_ID=customers.Customer_ID" +
+                    " JOIN users ON appointments.User_ID=users.User_ID" +
                     " ORDER BY appointments.Start desc";
             DBQuery.setPreparedStatement(Interface.JDBC.conn, appointmentGrab);
             PreparedStatement psMA = DBQuery.getPreparedStatement();
@@ -192,6 +195,7 @@ public class Appointment {
                         rsA.getString("Description"),
                         rsA.getString("Location"),
                         rsA.getString("Contact_Name"),
+                        rsA.getString("User_Name"),
                         rsA.getString("Type"),
                         rsA.getTimestamp("Start"),
                         rsA.getTimestamp("End"),
@@ -211,10 +215,11 @@ public class Appointment {
             DateTimeConverter.currentWeekParser();
             //System.out.println("Begin currentWeekParser()");
             String weeklyAppointmentGrab = "SELECT appointments.Appointment_ID, appointments.Title, appointments.Description," +
-                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name" +
+                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name, users.User_Name" +
                     " FROM appointments" +
                     " JOIN contacts ON appointments.Contact_ID=contacts.Contact_ID" +
                     " JOIN customers ON appointments.Customer_ID=customers.Customer_ID" +
+                    " JOIN users ON appointments.User_ID=users.User_ID" +
                     " WHERE appointments.Start BETWEEN ? AND ?" +
                     " ORDER BY appointments.Start desc";
             DBQuery.setPreparedStatement(Interface.JDBC.conn, weeklyAppointmentGrab);
@@ -233,6 +238,7 @@ public class Appointment {
                         rsA.getString("Description"),
                         rsA.getString("Location"),
                         rsA.getString("Contact_Name"),
+                        rsA.getString("User_Name"),
                         rsA.getString("Type"),
                         rsA.getTimestamp("Start"),
                         rsA.getTimestamp("End"),
@@ -255,10 +261,11 @@ public class Appointment {
         try{
             DateTimeConverter.currentMonthParser();
             String appointmentGrab = "SELECT appointments.Appointment_ID, appointments.Title, appointments.Description," +
-                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name" +
+                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name, users.User_Name" +
                     " FROM appointments" +
                     " JOIN contacts ON appointments.Contact_ID=contacts.Contact_ID" +
                     " JOIN customers ON appointments.Customer_ID=customers.Customer_ID" +
+                    " JOIN users ON appointments.User_ID=users.User_ID" +
                     " WHERE appointments.Start BETWEEN ? AND ?" +
                     " ORDER BY appointments.Start desc";
             DBQuery.setPreparedStatement(Interface.JDBC.conn, appointmentGrab);
@@ -275,6 +282,7 @@ public class Appointment {
                         rsA.getString("Description"),
                         rsA.getString("Location"),
                         rsA.getString("Contact_Name"),
+                        rsA.getString("User_Name"),
                         rsA.getString("Type"),
                         rsA.getTimestamp("Start"),
                         rsA.getTimestamp("End"),
@@ -294,10 +302,11 @@ public class Appointment {
         CustomerScreen.hasAppointment = hasAppointmentResult;
         try {
             String hasAppointment = "SELECT appointments.Appointment_ID, appointments.Title, appointments.Description," +
-                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name" +
+                    " appointments.Location, contacts.Contact_Name, appointments.Type, appointments.Start, appointments.End, customers.Customer_Name, users.User_Name" +
                     " FROM appointments" +
                     " JOIN contacts ON appointments.Contact_ID=contacts.Contact_ID" +
                     " JOIN customers ON appointments.Customer_ID=customers.Customer_ID" +
+                    " JOIN users ON appointments.User_ID=users.User_ID" +
                     " WHERE appointments.Customer_ID = ?" +
                     " LIMIT 1";
             DBQuery.setPreparedStatement(Interface.JDBC.conn, hasAppointment);
@@ -354,6 +363,10 @@ public class Appointment {
 
     public String getContact(){
         return contact;
+    }
+
+    public String getUser(){
+        return user;
     }
 
     public String getType(){
@@ -416,6 +429,10 @@ public class Appointment {
 
     public void setContact(String newContact) {
         this.contact = newContact;
+    }
+
+    public void setUser(String newUser) {
+        this.user = newUser;
     }
 
     public void setType(String newType) {

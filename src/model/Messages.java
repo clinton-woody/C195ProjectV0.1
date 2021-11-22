@@ -19,11 +19,11 @@ public class Messages{
 
 
     public static void messageTwo(){
-        JOptionPane.showMessageDialog(null,"You are about to delete all records associated with appointment ID: " + ScheduleScreen.deleteCandidateId + ".  Press the delete button to finalize this transaction. ", "MESSAGE-2", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null,"You are about to delete all records associated with appointment ID: " + ScheduleScreen.deleteCandidateId + ", appointment type: " + ScheduleScreen.selectedType + ".  Press the delete button to finalize this transaction. ", "MESSAGE-2", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void messageThree(){
-        JOptionPane.showMessageDialog(null,"All records associated with appointment ID: " + ScheduleScreen.deleteCandidateId + " have been deleted. ", "MESSAGE-3", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null,"All records associated with appointment ID: " + ScheduleScreen.deleteCandidateId + ", appointment type: " + ScheduleScreen.selectedType + " have been deleted. ", "MESSAGE-3", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void messageFour(){
