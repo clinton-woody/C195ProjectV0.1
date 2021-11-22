@@ -81,6 +81,7 @@ public class CustomerUpdateForm implements Initializable {
                 dbAddress = textFieldAddress.getText(); //AAA
                 dbPostalCode = textFieldPostalCode.getText(); //AAA
                 dbPhone = textFieldPhoneNumber.getText(); //AAA
+                canInsert = false;
                 canInsert = Customer.canInsert();
                 if (canInsert == true) {
                     if (dbName != name) { //AAC
@@ -200,6 +201,7 @@ public class CustomerUpdateForm implements Initializable {
             dbAddress = textFieldAddress.getText();
             dbPostalCode = textFieldPostalCode.getText();
             dbPhone = textFieldPhoneNumber.getText();
+            canInsert = false;
             canInsert = Customer.canInsert();
 
             if (canInsert == true){

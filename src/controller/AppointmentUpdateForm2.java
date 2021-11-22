@@ -133,6 +133,7 @@ public class AppointmentUpdateForm2 implements Initializable {
     public static String stichEndMn;
     public static String dbParsedStart;
     public static String dbParsedEnd;
+    public static boolean canInsert = false;
 
 
     private Stage stage;
@@ -160,209 +161,221 @@ public class AppointmentUpdateForm2 implements Initializable {
         candidateEnd = Timestamp.valueOf(parsedEndDateTime);
         isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);
         startEndMismatch = DateTimeHandler.startEndMismatch(candidateStart, candidateEnd);
-        if(isValid == true && startEndMismatch == false){
-            if(update == true){
-                //
-                dbTitle = textFieldTitle.getText();
-                dbDescription = textFieldDescription.getText();
-                dbLocation = textFieldLocation.getText();
-                dbType = textFieldType.getText();
-                dbContactId = newContactId;
-                dbUserId = newUserId;
-                dbCustomerId = newCustomerId;
-                dbStart = Timestamp.valueOf(dateString + " " + stichStartHr + stichStartMn + ZEROSEC);
-                dbEnd = Timestamp.valueOf(dateString + " " + stichEndHr + stichEndMn + ZEROSEC);
-
-                System.out.println(dbCustomerId + "" + customerId);
-                if(dbTitle != title){
-                    try {
-                        String insertTitle = "UPDATE appointments " + //AAD
-                                             "SET Title = ? " + //AAD
-                                             "WHERE Appointment_ID = ?"; //AAD
-                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertTitle); //AAD
-                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
-                        psTU.setString(1, dbTitle); //AAD
-                        psTU.setString(2, appointmentId); //AAD
-                        psTU.execute(); //AAD
+        dbTitle = textFieldTitle.getText();
+        dbDescription = textFieldDescription.getText();
+        dbLocation = textFieldLocation.getText();
+        dbType = textFieldType.getText();
+        dbContactId = newContactId;
+        dbUserId = newUserId;
+        dbCustomerId = newCustomerId;
+        dbStart = Timestamp.valueOf(dateString + " " + stichStartHr + stichStartMn + ZEROSEC);
+        dbEnd = Timestamp.valueOf(dateString + " " + stichEndHr + stichEndMn + ZEROSEC);
+        canInsert = Appointment.canInsert();
+        System.out.println(canInsert);
+        if(canInsert == true) {
+            if (isValid == true && startEndMismatch == false) {
+                if (update == true) {
+                    /*
+                    dbTitle = textFieldTitle.getText();
+                    dbDescription = textFieldDescription.getText();
+                    dbLocation = textFieldLocation.getText();
+                    dbType = textFieldType.getText();
+                    dbContactId = newContactId;
+                    dbUserId = newUserId;
+                    dbCustomerId = newCustomerId;
+                    dbStart = Timestamp.valueOf(dateString + " " + stichStartHr + stichStartMn + ZEROSEC);
+                    dbEnd = Timestamp.valueOf(dateString + " " + stichEndHr + stichEndMn + ZEROSEC);
+*/
+                    System.out.println(dbCustomerId + "" + customerId);
+                    if (dbTitle != title) {
+                        try {
+                            String insertTitle = "UPDATE appointments " + //AAD
+                                    "SET Title = ? " + //AAD
+                                    "WHERE Appointment_ID = ?"; //AAD
+                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertTitle); //AAD
+                            PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                            psTU.setString(1, dbTitle); //AAD
+                            psTU.setString(2, appointmentId); //AAD
+                            psTU.execute(); //AAD
                         } catch (Exception e) {
                             e.printStackTrace(); //AAD
                             System.out.println("Check your SQL statement or variables");
                         }
                         Customer.customerUpdated();
                         Appointment.appointmentUpdate = false;
-                }
-                if(dbDescription != description){
-
-                    try {
-                        String insertDescription = "UPDATE appointments " + //AAD
-                                "SET Description = ? " + //AAD
-                                "WHERE Appointment_ID = ?"; //AAD
-                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertDescription); //AAD
-                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
-                        psTU.setString(1, dbDescription); //AAD
-                        psTU.setString(2, appointmentId); //AAD
-                        psTU.execute(); //AAD
-                    } catch (Exception e) {
-                        e.printStackTrace(); //AAD
-                        System.out.println("Check your SQL statement or variables");
                     }
-                    Customer.customerUpdated();
-                    Appointment.appointmentUpdate = false;
-                }
-                if(dbLocation != location){
-                    try{
-                        String insertLocation = "UPDATE appointments " + //AAD
-                                                "SET Location = ? " + //AAD
-                                                "WHERE Appointment_ID = ?"; //AAD
-                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertLocation); //AAD
-                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
-                        psTU.setString(1, dbLocation); //AAD
-                        psTU.setString(2, appointmentId); //AAD
-                        psTU.execute(); //AAD
-                    } catch (Exception e) {
-                        e.printStackTrace(); //AAD
-                        System.out.println("Check your SQL statement or variables");
+                    if (dbDescription != description) {
+
+                        try {
+                            String insertDescription = "UPDATE appointments " + //AAD
+                                    "SET Description = ? " + //AAD
+                                    "WHERE Appointment_ID = ?"; //AAD
+                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertDescription); //AAD
+                            PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                            psTU.setString(1, dbDescription); //AAD
+                            psTU.setString(2, appointmentId); //AAD
+                            psTU.execute(); //AAD
+                        } catch (Exception e) {
+                            e.printStackTrace(); //AAD
+                            System.out.println("Check your SQL statement or variables");
+                        }
+                        Customer.customerUpdated();
+                        Appointment.appointmentUpdate = false;
                     }
-                    Customer.customerUpdated();
-                    Appointment.appointmentUpdate = false;
-                }
-
-                if(dbType != type){
-                    try{
-                        String insertType = "UPDATE appointments " + //AAD
-                                "SET Type = ? " + //AAD
-                                "WHERE Appointment_ID = ?"; //AAD
-                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertType); //AAD
-                        PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
-                        psTU.setString(1, dbType); //AAD
-                        psTU.setString(2, appointmentId); //AAD
-                        psTU.execute(); //AAD
-                    } catch (Exception e) {
-                        e.printStackTrace(); //AAD
-                        System.out.println("Check your SQL statement or variables");
+                    if (dbLocation != location) {
+                        try {
+                            String insertLocation = "UPDATE appointments " + //AAD
+                                    "SET Location = ? " + //AAD
+                                    "WHERE Appointment_ID = ?"; //AAD
+                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertLocation); //AAD
+                            PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                            psTU.setString(1, dbLocation); //AAD
+                            psTU.setString(2, appointmentId); //AAD
+                            psTU.execute(); //AAD
+                        } catch (Exception e) {
+                            e.printStackTrace(); //AAD
+                            System.out.println("Check your SQL statement or variables");
+                        }
+                        Customer.customerUpdated();
+                        Appointment.appointmentUpdate = false;
                     }
-                    Customer.customerUpdated();
-                    Appointment.appointmentUpdate = false;
-                }
 
-                System.out.println(dbStart);
-                try{//update start date
-                    String insertStart = "UPDATE appointments " +
-                                         "SET Start = ? " +
-                                         "WHERE Appointment_ID = ?";
-                    DBQuery.setPreparedStatement(Interface.JDBC.conn, insertStart); //AAD
-                    PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
-                    psSU.setTimestamp(1, dbStart); //AAD
-                    psSU.setString(2, appointmentId); //AAD
-                    psSU.execute(); //AAD
-                }catch (Exception e){
-
-                }
-
-                System.out.println(dbEnd);
-                try{//update end date
-                    String insertEnd = "UPDATE appointments " +
-                            "SET End = ? " +
-                            "WHERE Appointment_ID = ?";
-                    DBQuery.setPreparedStatement(Interface.JDBC.conn, insertEnd); //AAD
-                    PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
-                    psSU.setTimestamp(1, dbEnd); //AAD
-                    psSU.setString(2, appointmentId); //AAD
-                    psSU.execute(); //AAD
-
-                }catch (Exception e){
-
-                }
-                if(dbContactId != contactId){//not working
-                    try{
-                        String insertContact = "UPDATE appointments " + //AAD
-                                "SET Contact_ID = ? " + //AAD
-                                "WHERE Appointment_ID = ?"; //AAD
-                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertContact); //AAD
-                        PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
-                        psCU.setInt(1, dbContactId); //AAD
-                        psCU.setString(2, appointmentId); //AAD
-                        psCU.execute(); //AAD
-                    } catch (Exception e) {
-                        e.printStackTrace(); //AAD
-                        System.out.println("Check your SQL statement or variables");
+                    if (dbType != type) {
+                        try {
+                            String insertType = "UPDATE appointments " + //AAD
+                                    "SET Type = ? " + //AAD
+                                    "WHERE Appointment_ID = ?"; //AAD
+                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertType); //AAD
+                            PreparedStatement psTU = DBQuery.getPreparedStatement(); //AAD
+                            psTU.setString(1, dbType); //AAD
+                            psTU.setString(2, appointmentId); //AAD
+                            psTU.execute(); //AAD
+                        } catch (Exception e) {
+                            e.printStackTrace(); //AAD
+                            System.out.println("Check your SQL statement or variables");
+                        }
+                        Customer.customerUpdated();
+                        Appointment.appointmentUpdate = false;
                     }
-                    Customer.customerUpdated();
-                    Appointment.appointmentUpdate = false;
-                }
-                if(dbUserId != userId){//not working
-                    try{
-                        String insertUser = "UPDATE appointments " + //AAD
-                                "SET User_ID = ? " + //AAD
-                                "WHERE Appointment_ID = ?"; //AAD
-                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertUser); //AAD
-                        PreparedStatement psUU = DBQuery.getPreparedStatement(); //AAD
-                        psUU.setInt(1, dbUserId); //AAD
-                        psUU.setString(2, appointmentId); //AAD
-                        psUU.execute(); //AAD
+
+                    System.out.println(dbStart);
+                    try {//update start date
+                        String insertStart = "UPDATE appointments " +
+                                "SET Start = ? " +
+                                "WHERE Appointment_ID = ?";
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertStart); //AAD
+                        PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
+                        psSU.setTimestamp(1, dbStart); //AAD
+                        psSU.setString(2, appointmentId); //AAD
+                        psSU.execute(); //AAD
                     } catch (Exception e) {
-                        e.printStackTrace(); //AAD
-                        System.out.println("Check your SQL statement or variables");
+
                     }
-                    Customer.customerUpdated();
-                    Appointment.appointmentUpdate = false;
-                }
-                if(dbCustomerId != customerId){//not working
-                    try{
-                        String insertCustomer = "UPDATE appointments " + //AAD
-                                "SET Customer_ID = ? " + //AAD
-                                "WHERE Appointment_ID = ?"; //AAD
-                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAD
-                        PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
-                        psCU.setInt(1, dbCustomerId); //AAD
-                        psCU.setString(2, appointmentId); //AAD
-                        psCU.execute(); //AAD
+
+                    System.out.println(dbEnd);
+                    try {//update end date
+                        String insertEnd = "UPDATE appointments " +
+                                "SET End = ? " +
+                                "WHERE Appointment_ID = ?";
+                        DBQuery.setPreparedStatement(Interface.JDBC.conn, insertEnd); //AAD
+                        PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
+                        psSU.setTimestamp(1, dbEnd); //AAD
+                        psSU.setString(2, appointmentId); //AAD
+                        psSU.execute(); //AAD
+
                     } catch (Exception e) {
-                        e.printStackTrace(); //AAD
-                        System.out.println("Check your SQL statement or variables");
+
                     }
-                    Customer.customerUpdated();
-                    Appointment.appointmentUpdate = false;
+                    if (dbContactId != contactId) {//not working
+                        try {
+                            String insertContact = "UPDATE appointments " + //AAD
+                                    "SET Contact_ID = ? " + //AAD
+                                    "WHERE Appointment_ID = ?"; //AAD
+                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertContact); //AAD
+                            PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
+                            psCU.setInt(1, dbContactId); //AAD
+                            psCU.setString(2, appointmentId); //AAD
+                            psCU.execute(); //AAD
+                        } catch (Exception e) {
+                            e.printStackTrace(); //AAD
+                            System.out.println("Check your SQL statement or variables");
+                        }
+                        Customer.customerUpdated();
+                        Appointment.appointmentUpdate = false;
+                    }
+                    if (dbUserId != userId) {//not working
+                        try {
+                            String insertUser = "UPDATE appointments " + //AAD
+                                    "SET User_ID = ? " + //AAD
+                                    "WHERE Appointment_ID = ?"; //AAD
+                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertUser); //AAD
+                            PreparedStatement psUU = DBQuery.getPreparedStatement(); //AAD
+                            psUU.setInt(1, dbUserId); //AAD
+                            psUU.setString(2, appointmentId); //AAD
+                            psUU.execute(); //AAD
+                        } catch (Exception e) {
+                            e.printStackTrace(); //AAD
+                            System.out.println("Check your SQL statement or variables");
+                        }
+                        Customer.customerUpdated();
+                        Appointment.appointmentUpdate = false;
+                    }
+                    if (dbCustomerId != customerId) {//not working
+                        try {
+                            String insertCustomer = "UPDATE appointments " + //AAD
+                                    "SET Customer_ID = ? " + //AAD
+                                    "WHERE Appointment_ID = ?"; //AAD
+                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAD
+                            PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
+                            psCU.setInt(1, dbCustomerId); //AAD
+                            psCU.setString(2, appointmentId); //AAD
+                            psCU.execute(); //AAD
+                        } catch (Exception e) {
+                            e.printStackTrace(); //AAD
+                            System.out.println("Check your SQL statement or variables");
+                        }
+                        Customer.customerUpdated();
+                        Appointment.appointmentUpdate = false;
+                    }
+
+                    isValid = true;
+                    update = false;
+                    startEndMismatch = false;
+                    root = FXMLLoader.load(getClass().getResource("/view/ScheduleScreen.fxml"));
+                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+
+                } else {//not getting to here
+                    title = textFieldTitle.getText();
+                    description = textFieldDescription.getText();
+                    location = textFieldLocation.getText();
+                    type = textFieldType.getText();
+                    System.out.println(candidateStart);
+                    System.out.println(candidateEnd);
+                    Appointment.insertAppointment();
+                    isValid = true;
+                    update = false;
+                    startEndMismatch = false;
+                    root = FXMLLoader.load(getClass().getResource("/view/ScheduleScreen.fxml"));
+                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
                 }
 
-                isValid = true;
-                update = false;
-                startEndMismatch = false;
-                root = FXMLLoader.load(getClass().getResource( "/view/ScheduleScreen.fxml"));
-                stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
 
+            } else if (isValid == true && startEndMismatch == true) {
+                Messages.errorSeven();
+            } else {
+                Messages.errorEight();
             }
-            else{//not getting to here
-                title = textFieldTitle.getText();
-                description = textFieldDescription.getText();
-                location = textFieldLocation.getText();
-                type = textFieldType.getText();
-                System.out.println(candidateStart);
-                System.out.println(candidateEnd);
-                Appointment.insertAppointment();
-                isValid = true;
-                update = false;
-                startEndMismatch = false;
-                root = FXMLLoader.load(getClass().getResource( "/view/ScheduleScreen.fxml"));
-                stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            }
-
-
+            isValid = true;
         }
-        else if(isValid == true && startEndMismatch == true){
-            Messages.errorSeven();
+        else{
+            Messages.errorSix();
         }
-        else {
-            Messages.errorEight();
-        }
-        isValid = true;
-
     }
 
     public void resetButton(ActionEvent event) throws IOException {

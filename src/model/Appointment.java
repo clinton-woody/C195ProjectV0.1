@@ -4,6 +4,7 @@ package model;
 import Interface.DBQuery;
 import controller.AppointmentUpdateForm2;
 import controller.CustomerScreen;
+import controller.CustomerUpdateForm;
 import controller.ScheduleScreen;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +36,7 @@ public class Appointment {
 //    public static Customer customerToUpdate;
 //    public static boolean selectedAppointmentDeletable = false;
     public static boolean appointmentUpdate = false;
+//    public static boolean canInsert = true;
 
 
     //DELETE Variables
@@ -70,6 +72,27 @@ public class Appointment {
         setCustomerId(customerId);
         setUserId(userId);
         setContactId(contactId);
+    }
+
+    public static boolean canInsert(){
+
+        boolean canInsert = true;
+        System.out.println("Working");
+        if (AppointmentUpdateForm2.dbType == null || AppointmentUpdateForm2.dbTitle == null || AppointmentUpdateForm2.dbDescription == null || AppointmentUpdateForm2.dbLocation == null || AppointmentUpdateForm2.parsedStartDateTime == null || AppointmentUpdateForm2.parsedEndDateTime == null) {
+            canInsert = false;
+            System.out.println(AppointmentUpdateForm2.dbType + AppointmentUpdateForm2.dbTitle + AppointmentUpdateForm2.dbDescription + AppointmentUpdateForm2.dbLocation + AppointmentUpdateForm2.parsedStartDateTime + AppointmentUpdateForm2.parsedEndDateTime);
+            System.out.println("Working1");
+        }
+        else if (AppointmentUpdateForm2.dbType.isEmpty() || AppointmentUpdateForm2.dbTitle.isEmpty() || AppointmentUpdateForm2.dbDescription.isEmpty() || AppointmentUpdateForm2.dbLocation.isEmpty()) {
+            canInsert = false;
+            System.out.println("Working2");
+        }
+        else{
+
+            System.out.println("Working3");
+        }
+        return canInsert;
+
     }
 
     public static void insertAppointment() throws SQLException{
