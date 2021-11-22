@@ -151,12 +151,14 @@ public class AppointmentUpdateForm2 implements Initializable {
     ObservableList<String> endMinuteList = minuteList;
 
     public void submitButton(ActionEvent event) throws IOException, SQLException {//only new isnt working
-        parsedStartTime = stichStartHr + stichStartMn + ZEROSEC;
-        parsedEndTime = stichEndHr + stichEndMn + ZEROSEC;
+        parsedStartTime = stichStartHr + stichStartMn + ZEROSEC;//put if check for null of stichStartHr,stichStartMn,stichEndHr,stichEndMn,dateString here that encompases all of Submit() method
+        parsedEndTime = stichEndHr + stichEndMn + ZEROSEC;//Make else of above output to blank error
         parsedStartDateTime = dateString + " " + parsedStartTime;
         parsedEndDateTime = dateString + " " + parsedEndTime;
+
         System.out.println(parsedStartDateTime);//Testing only
         System.out.println(parsedEndDateTime);//Testing only
+
         candidateStart = Timestamp.valueOf(parsedStartDateTime); //#error
         candidateEnd = Timestamp.valueOf(parsedEndDateTime);
         isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);

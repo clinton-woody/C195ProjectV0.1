@@ -17,6 +17,7 @@ public class DateTimeHandler {
     public static boolean overlap = false;
     public static boolean validTime = true;
     public static boolean startEndMismatch = false;
+    public static boolean eastTimeValid = false;//local to eastern time; eastern is before 0800 or eastern is after 2200; make a static variable for 0800 and 2200 timestamp as datetime
 
     public static boolean within15(Timestamp apptTime) {
         LocalDateTime now = LocalDateTime.now();
