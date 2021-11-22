@@ -158,7 +158,7 @@ public class AppointmentUpdateForm2 implements Initializable {
         parsedEndDateTime = date + " " + parsedEndTime; //need to make this a timestamp
         //System.out.println(parsedStartDateTime);//Testing only
         //System.out.println(parsedEndDateTime);//Testing only
-        candidateStart = Timestamp.valueOf(parsedStartDateTime);
+        candidateStart = Timestamp.valueOf(parsedStartDateTime); //#error
         candidateEnd = Timestamp.valueOf(parsedEndDateTime);
         isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);
         startEndMismatch = DateTimeHandler.startEndMismatch(candidateStart, candidateEnd);

@@ -101,7 +101,7 @@ public class CustomerScreen implements Initializable {
         stage.show();
     }
 
-    public void deleteButton(ActionEvent event) throws IOException, SQLException {
+    public void deleteButton(ActionEvent event) throws IOException, SQLException {//#error, need to reset can delete flag when switching between lines
 
         if(canDeleteCustomer == false){
             Customer selectedCustomerCells = customerTableView.getSelectionModel().getSelectedItem();
