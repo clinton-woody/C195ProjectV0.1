@@ -33,7 +33,7 @@ public class Main extends Application {
         public void start(Stage stage) throws Exception {
         //Zone.setDefault(TimeZone.getTimeZone("CST"));     //Used to switch timezone for testing purposes
         //Local.setDefault(new Locale("fr"));     //Used to switch locale for testing purposes
-        ///System.out.println(java.util.TimeZone.getDefault().getID());
+        //System.out.println(java.util.TimeZone.getDefault().getID());
         Parent root = FXMLLoader.load(getClass().getResource( "/view/LoginScreen.fxml"));
         stage.setTitle("C195");
         stage.setScene(new Scene(root,  240,  255));
@@ -53,9 +53,3 @@ public class Main extends Application {
 }
 
 //THIS CLASS IS COMPLETED and documented
-
-/*
-import model.Messages;
-import java.util.Locale;
-import Interface.DBQuery;
- */

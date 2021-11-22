@@ -22,21 +22,22 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.*;
 import java.text.ParseException;
-import java.time.Instant;
 import java.time.LocalDate;
 import Interface.DBQuery;
-import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import model.*;
 import Interface.JDBC;
+/*
+ UNUSED IMPORT STATEMENTS
+ */
+import java.time.Instant;
 import java.time.LocalDateTime;
-
+import java.time.ZonedDateTime;
 /**
 This is the LoginScreen class.
 */
 public class LoginScreen implements Initializable {
-
     /*
     USED CLASS VARIABLES
     */
@@ -67,7 +68,6 @@ public class LoginScreen implements Initializable {
     public final String FRENCH = "fr";
     public final String ENGLISH = "en";
     public static String language = Locale.getDefault().getLanguage();
-
     /*
     UNUSED CLASS VARIABLES
      */
@@ -77,7 +77,6 @@ public class LoginScreen implements Initializable {
     FileWriter fw = null;
     BufferedWriter bw = null;
     PrintWriter pw = null;
-
     /**
       This is the toCustomerScreen method.  This class tests a user/password combination against the database and, if true,
       launches the CustomerScreen.  If the user/password combination has a match in the database then the user id is tested
@@ -90,9 +89,9 @@ public class LoginScreen implements Initializable {
         Appointment.getMonthlyAppointments();
         userNameInput = textFieldLoginFormUser.getText();
         userPasswordInput = textFieldLoginFormPassword.getText();
-        String passwordCheck = "SELECT * " +
-                "FROM users " +
-                "WHERE User_Name=? AND Password=?";
+        String passwordCheck =  "SELECT * " +
+                                "FROM users " +
+                                "WHERE User_Name=? AND Password=?";
         DBQuery.setPreparedStatement(JDBC.conn, passwordCheck);
         PreparedStatement ps1 = DBQuery.getPreparedStatement();
         ps1.setString(1, userNameInput);
@@ -151,7 +150,7 @@ public class LoginScreen implements Initializable {
                             pw = new PrintWriter(bw);
                             Timestamp timestamp = Timestamp.valueOf(DateTimeConverter.easternDateTime().toLocalDateTime());
                             pw.println(timestamp + " User: " + userNameInput + " successfully logged in.");
-                            //System.out.println("Data Successfully appended into file");
+                            System.out.println("Data Successfully appended into file");
                             pw.flush();
                         } finally {
                             try {
@@ -161,7 +160,13 @@ public class LoginScreen implements Initializable {
                             } catch (IOException io) {
                             }
                         }
-                    } else {
+                    }
+
+                } catch (Exception e) {
+                }
+            }
+            else {
+                System.out.println("Good to here");
                         FileWriter fw = null;
                         BufferedWriter bw = null;
                         PrintWriter pw = null;
@@ -171,7 +176,7 @@ public class LoginScreen implements Initializable {
                             pw = new PrintWriter(bw);
                             Timestamp timestamp = Timestamp.valueOf(DateTimeConverter.easternDateTime().toLocalDateTime());
                             pw.println(timestamp + " User: " + userNameInput + " unsuccessfully attempted to log in.");
-                            //System.out.println("Data Successfully appended into file");
+                            System.out.println("Data Successfully appended into file");
                             pw.flush();
                         } finally {
                             try {
@@ -181,21 +186,15 @@ public class LoginScreen implements Initializable {
                             } catch (IOException io) {
                             }
                         }
-
-                        if (language == ENGLISH) {
-                            model.Messages.errorOne();
-                        } else {
-                            model.Messages.errorOneFrench();
-                        }
-
-                    }
-                } catch (Exception e) {
+                if (language == ENGLISH) {
+                    model.Messages.errorOne();
+                } else {
+                    model.Messages.errorOneFrench();
                 }
             }
         } catch (SQLException e) {
         }
     }
-
     /**
      * This is the resetLoginScreen method.  It resets the LoginScreen to the original state.
      *
@@ -209,7 +208,6 @@ public class LoginScreen implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-
     /**
      * This is the initialize method.  This method determines the starting condition of the Login
      *
@@ -247,11 +245,8 @@ public class LoginScreen implements Initializable {
             labelLanguage.setText("Default Language: English");
         }
     }
-
 }
-/*
 
- */
 
 
 
