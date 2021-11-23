@@ -68,3 +68,6 @@ ADDITIONAL REPORTS
 
 MYSQL CONNECTION DRIVER VERSION
     - mysql-connector-java-8.0.25
+
+    //add lambda locations in this doc
+    //check javadocs (slide bar/private members)

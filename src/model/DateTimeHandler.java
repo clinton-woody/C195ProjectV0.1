@@ -82,7 +82,9 @@ public class DateTimeHandler {
         //System.out.println(aEnd);
         //System.out.println(cStart);
         //System.out.println(cEnd);
-        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd)) || ((cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd)) || ((cStart.isBefore(aStart)) && cEnd.isAfter(aEnd)))){
+        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd)) ||
+                ((cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd)) ||
+                ((cStart.isBefore(aEnd)) && cEnd.isAfter(aStart)) || cEnd.isAfter(aStart) && cEnd.isBefore(aEnd))){
                 overlap = true;
         }
         if (overlap == true){

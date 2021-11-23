@@ -51,6 +51,12 @@ public class ScheduleScreen implements Initializable {
     private RadioButton radioButtonWeek;//CanDelete?
     @FXML
     private RadioButton radioButtonAll;//CanDelete?
+    @FXML
+    private RadioButton customerRadio;//CanDelete?
+    @FXML
+    private RadioButton contactRadio;//CanDelete?
+    @FXML
+    private RadioButton locationRadio;//CanDelete?
     //public static String deleteType;
     public static boolean canDeleteAppointment = false;
     public static int selectedAppointmentID;
@@ -166,6 +172,25 @@ public class ScheduleScreen implements Initializable {
         isMonth = false;
         isWeek = false;
         isAll = true;
+
+    }
+
+    public void reportButton(ActionEvent event) throws IOException {
+
+        if (customerRadio.isSelected()){
+
+        }
+        else if(contactRadio.isSelected()){
+
+        }
+        else if(locationRadio.isSelected()){
+
+        }
+        else{
+            //make a message directing the selection of a redio button here//this should never be seen as the radio buttons are part of a toggle group
+        }
+
+
 
     }
 

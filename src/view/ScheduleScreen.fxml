@@ -52,5 +52,13 @@
          </toggleGroup></RadioButton>
       <RadioButton fx:id="radioButtonWeek" layoutX="287.0" layoutY="361.0" mnemonicParsing="false" onAction="#radioButtonWeek" text="Week" toggleGroup="$radio" AnchorPane.leftAnchor="287.0" />
       <RadioButton fx:id="radioButtonAll" layoutX="287.0" layoutY="390.0" mnemonicParsing="false" onAction="#radioButtonAll" text="All" toggleGroup="$radio" />
+      <Button fx:id="reportButtonScheduleScreen" layoutX="590.0" layoutY="327.0" mnemonicParsing="false" onAction="#reportButton" prefWidth="70.0" text="Report" />
+      <RadioButton fx:id="customerRadio" layoutX="385.0" layoutY="331.0" mnemonicParsing="false" selected="true" text="Customer Appointment Report">
+         <toggleGroup>
+            <ToggleGroup fx:id="report" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="contactRadio" layoutX="385.0" layoutY="361.0" mnemonicParsing="false" text="Contact Schedule Report" toggleGroup="$report" />
+      <RadioButton fx:id="locationRadio" layoutX="385.0" layoutY="390.0" mnemonicParsing="false" text="Appointment Location Report" toggleGroup="$report" />
    </children>
 </AnchorPane>
