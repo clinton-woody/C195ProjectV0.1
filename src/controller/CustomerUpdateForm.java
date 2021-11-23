@@ -85,98 +85,123 @@ public class CustomerUpdateForm implements Initializable {
                 canInsert = Customer.canInsert();
                 if (canInsert == true) {
                     if (dbName != name) { //AAC
-                        try {
-                            String insertCustomer = "UPDATE customers " + //AAC
-                                                    "SET Customer_Name = ? " + //AAC
-                                                    "WHERE Customer_ID = ?"; //AAC
+                        if (dbName != null) {
+                            try {
+                                String insertCustomer = "UPDATE customers " + //AAC
+                                        "SET Customer_Name = ? " + //AAC
+                                        "WHERE Customer_ID = ?"; //AAC
 
-                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAC
-                            PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAC
-                            psCU.setString(1, dbName); //AAC
-                            psCU.setInt(2, updateCustomerId); //AAC
-                            psCU.execute(); //AAC
-                        } catch (Exception e) {
-                            e.printStackTrace(); //AAC
-                            System.out.println("Check your SQL statement or variables");
+                                DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAC
+                                PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAC
+                                psCU.setString(1, dbName); //AAC
+                                psCU.setInt(2, updateCustomerId); //AAC
+                                psCU.execute(); //AAC
+                            } catch (Exception e) {
+                                e.printStackTrace(); //AAC
+                                System.out.println("Check your SQL statement or variables");
+                            }
+                            Customer.customerUpdated();
+                            Customer.customerUpdate = false;
                         }
-                        Customer.customerUpdated();
-                        Customer.customerUpdate = false;
+                        else{
+                            Messages.errorSix();
+                        }
                     }
                     if (dbAddress != address) { //AAD
-                        try {
-                            String insertCustomer = "UPDATE customers " + //AAD
-                                                    "SET Address = ? " + //AAD
-                                                    "WHERE Customer_ID = ?"; //AAD
-                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAD
-                            PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
-                            psCU.setString(1, dbAddress); //AAD
-                            psCU.setInt(2, updateCustomerId); //AAD
-                            psCU.execute(); //AAD
-                        } catch (Exception e) {
-                            e.printStackTrace(); //AAD
-                            System.out.println("Check your SQL statement or variables");
+                        if(dbAddress != null) {
+                            try {
+                                String insertCustomer = "UPDATE customers " + //AAD
+                                        "SET Address = ? " + //AAD
+                                        "WHERE Customer_ID = ?"; //AAD
+                                DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAD
+                                PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAD
+                                psCU.setString(1, dbAddress); //AAD
+                                psCU.setInt(2, updateCustomerId); //AAD
+                                psCU.execute(); //AAD
+                            } catch (Exception e) {
+                                e.printStackTrace(); //AAD
+                                System.out.println("Check your SQL statement or variables");
+                            }
+                            Customer.customerUpdated();
+                            Customer.customerUpdate = false;
                         }
-                        Customer.customerUpdated();
-                        Customer.customerUpdate = false;
+                        else{
+                            Messages.errorSix();
+                        }
+
                     }
                     if (dbPostalCode != postalCode) { //AAE
-                        try {
-                            String insertCustomer = "UPDATE customers " + //AAE
-                                                    "SET Postal_Code = ? " + //AAE
-                                                    "WHERE Customer_ID = ?"; //AAE
-                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAE
-                            PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAE
-                            psCU.setString(1, dbPostalCode); //AAE
-                            psCU.setInt(2, updateCustomerId); //AAE
-                            psCU.execute(); //AAE
-                        } catch (Exception e) {
-                            e.printStackTrace(); //AAE
-                            System.out.println("Check your SQL statement or variables");
+                        if(dbPostalCode != null) {
+                            try {
+                                String insertCustomer = "UPDATE customers " + //AAE
+                                        "SET Postal_Code = ? " + //AAE
+                                        "WHERE Customer_ID = ?"; //AAE
+                                DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAE
+                                PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAE
+                                psCU.setString(1, dbPostalCode); //AAE
+                                psCU.setInt(2, updateCustomerId); //AAE
+                                psCU.execute(); //AAE
+                            } catch (Exception e) {
+                                e.printStackTrace(); //AAE
+                                System.out.println("Check your SQL statement or variables");
+                            }
+                            Customer.customerUpdated();
+                            Customer.customerUpdate = false;
                         }
-                        Customer.customerUpdated();
-                        Customer.customerUpdate = false;
+                        else{
+                            Messages.errorSix();
+                        }
                     }
                     if (dbPhone != phone) { //AAF
-                        try {
-                            String insertCustomer = "UPDATE customers " + //AAF
-                                                    "SET Phone = ? " + //AAF
-                                                    "WHERE Customer_ID = ?"; //AAF
-                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAF
-                            PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAF
-                            psCU.setString(1, dbPhone); //AAF
-                            psCU.setInt(2, updateCustomerId); //AAF
-                            psCU.execute(); //AAF
-                        } catch (Exception e) {
-                            e.printStackTrace(); //AAF
-                            System.out.println("Check your SQL statement or variables");
+                        if(dbPhone != null) {
+                            try {
+                                String insertCustomer = "UPDATE customers " + //AAF
+                                        "SET Phone = ? " + //AAF
+                                        "WHERE Customer_ID = ?"; //AAF
+                                DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAF
+                                PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAF
+                                psCU.setString(1, dbPhone); //AAF
+                                psCU.setInt(2, updateCustomerId); //AAF
+                                psCU.execute(); //AAF
+                            } catch (Exception e) {
+                                e.printStackTrace(); //AAF
+                                System.out.println("Check your SQL statement or variables");
+                            }
+                            Customer.customerUpdated();
+                            Customer.customerUpdate = false;
                         }
-                        Customer.customerUpdated();
-                        Customer.customerUpdate = false;
+                        else{
+                            Messages.errorSix();
+                        }
                     }
                     if (FirstLevelDivision.divisionId != dbDivisionInt) { //AAG
-                        try {
-                            String insertCustomer = "UPDATE customers " +  //AAG
-                                                    "SET Division_ID = ? " + //AAG
-                                                    "WHERE Customer_ID = ?"; //AAG
-                            DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAG
-                            PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAG
-                            psCU.setInt(1, dbDivisionInt); //AAG
-                            psCU.setInt(2, updateCustomerId); //AAG
-                            psCU.execute(); //AAG
+                        if (dbDivisionInt != 0) {
+                            try {
+                                String insertCustomer = "UPDATE customers " +  //AAG
+                                        "SET Division_ID = ? " + //AAG
+                                        "WHERE Customer_ID = ?"; //AAG
+                                DBQuery.setPreparedStatement(Interface.JDBC.conn, insertCustomer); //AAG
+                                PreparedStatement psCU = DBQuery.getPreparedStatement(); //AAG
+                                psCU.setInt(1, dbDivisionInt); //AAG
+                                psCU.setInt(2, updateCustomerId); //AAG
+                                psCU.execute(); //AAG
+                                dbDivisionInt = 0;
+                            } catch (Exception e) {
+                                e.printStackTrace(); //AAG
+                                System.out.println("Check your SQL statement or variables"); //AAG
+                            }
+                            Customer.customerUpdated();
+                            Customer.customerUpdate = false;
+                            canInsert = false;
+                            root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
+                            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            scene = new Scene(root);
+                            stage.setScene(scene);
+                            stage.show();
                         }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace(); //AAG
-                            System.out.println("Check your SQL statement or variables"); //AAG
+                        else{
+                            Messages.errorSix();
                         }
-                        Customer.customerUpdated();
-                        Customer.customerUpdate = false;
-                        canInsert = false;
-                        root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
-                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        scene = new Scene(root);
-                        stage.setScene(scene);
-                        stage.show();
                     }
                     else
                     {
@@ -206,6 +231,7 @@ public class CustomerUpdateForm implements Initializable {
 
             if (canInsert == true){
                 Customer.insertCustomer();
+                selectedDivision = null;
                 Customer.customerUpdate = false;
                 canInsert = false;
                 root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));

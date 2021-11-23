@@ -51,6 +51,7 @@ public class ScheduleScreen implements Initializable {
     private RadioButton radioButtonWeek;//CanDelete?
     @FXML
     private RadioButton radioButtonAll;//CanDelete?
+    //public static String deleteType;
     public static boolean canDeleteAppointment = false;
     public static int selectedAppointmentID;
     public static int deleteCandidateId;
@@ -123,6 +124,7 @@ public class ScheduleScreen implements Initializable {
             selectedType = selectedAppointmentCells.getType();
             confirmDeleteId = selectedAppointmentID;
             if (deleteCandidateId==confirmDeleteId){
+                //deleteType = Appointment.getSelectedAppointment().getType();
                 Appointment.deleteAppointment();
                 Messages.messageThree();
                 canDeleteAppointment = false;

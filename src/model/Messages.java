@@ -10,11 +10,11 @@ public class Messages{
     //Messages
 
     public static void messageOne(String stringIDDateTime){
-        JOptionPane.showMessageDialog(null, LoginScreen.userNameInput + "Has an appointment within 15 minutes.  " + stringIDDateTime, "Message-1", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, "User: " + LoginScreen.userNameInput + " has an appointment within 15 minutes.  " + stringIDDateTime, "Message-1", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void messageOneFrench(String stringIDDateTime){
-        JOptionPane.showMessageDialog(null, LoginScreen.userNameInput + "A un rendez-vous dans les 15 minutes.  " + stringIDDateTime, "Un message-1", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Utilisateur: " + LoginScreen.userNameInput + " a un rendez-vous dans les 15 minutes.  " + stringIDDateTime, "Un message-1", JOptionPane.WARNING_MESSAGE);
     }
 
 
@@ -36,6 +36,14 @@ public class Messages{
 
     public static void messageSix(){
         JOptionPane.showMessageDialog(null,"Selected customer has appointments that need to be deleted before this customer can be deleted.", "MESSAGE-6", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void messageSeven(){
+        JOptionPane.showMessageDialog(null, "User: " + LoginScreen.userNameInput + " does not have an appointment starting within 15 minutes.  ", "Message-7", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void messageSevenFrench(){
+        JOptionPane.showMessageDialog(null, "Utilisateur: " + LoginScreen.userNameInput + " n'a pas de rendez-vous à partir de 15 minutes.  ", "Un message-7", JOptionPane.WARNING_MESSAGE);
     }
 
     //Errors
@@ -74,6 +82,10 @@ public class Messages{
 
     public static void errorEight(){
         JOptionPane.showMessageDialog(null,"This appointment overlaps with at least one other appointment assigned to the selected customer.", "ERROR-8", JOptionPane.WARNING_MESSAGE);
+    }
+
+    public static void errorNine(){
+        JOptionPane.showMessageDialog(null,"This appointment Start or End time does not fall between 0800 EST and 2200 EST.", "ERROR-9", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void infoBox(String infoMessage, String titleBar)

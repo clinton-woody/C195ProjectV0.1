@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class AppointmentUpdateForm2 implements Initializable {
@@ -80,6 +81,8 @@ public class AppointmentUpdateForm2 implements Initializable {
     public static String description;
     public static String location;
     public static LocalDate date;
+    public static LocalDateTime selectedStart;
+    public static LocalDateTime selectedEnd;
     public static int contactId;
     public static int userId;
     public static int customerId;
@@ -174,6 +177,9 @@ public class AppointmentUpdateForm2 implements Initializable {
         dbEnd = Timestamp.valueOf(dateString + " " + stichEndHr + stichEndMn + ZEROSEC);
         canInsert = Appointment.canInsert();
         System.out.println(canInsert);
+        if(DateTimeHandler.eastTimeValid(dateString, candidateStart, candidateEnd) == true){//line 177, 385-387
+
+
         if(canInsert == true) {
             if (isValid == true && startEndMismatch == false) {
                 if (update == true) {
@@ -260,28 +266,28 @@ public class AppointmentUpdateForm2 implements Initializable {
                         Appointment.appointmentUpdate = false;
                     }
 
-                    System.out.println(dbStart);
+                    DateTimeHandler.eastCandidateStart();
                     try {//update start date
                         String insertStart = "UPDATE appointments " +
                                 "SET Start = ? " +
                                 "WHERE Appointment_ID = ?";
                         DBQuery.setPreparedStatement(Interface.JDBC.conn, insertStart); //AAD
                         PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
-                        psSU.setTimestamp(1, dbStart); //AAD
+                        psSU.setTimestamp(1, candidateStart); //AAD
                         psSU.setString(2, appointmentId); //AAD
                         psSU.execute(); //AAD
                     } catch (Exception e) {
 
                     }
 
-                    System.out.println(dbEnd);
+                    DateTimeHandler.eastCandidateEnd();
                     try {//update end date
                         String insertEnd = "UPDATE appointments " +
                                 "SET End = ? " +
                                 "WHERE Appointment_ID = ?";
                         DBQuery.setPreparedStatement(Interface.JDBC.conn, insertEnd); //AAD
                         PreparedStatement psSU = DBQuery.getPreparedStatement(); //AAD
-                        psSU.setTimestamp(1, dbEnd); //AAD
+                        psSU.setTimestamp(1, candidateEnd); //AAD
                         psSU.setString(2, appointmentId); //AAD
                         psSU.execute(); //AAD
 
@@ -356,15 +362,27 @@ public class AppointmentUpdateForm2 implements Initializable {
                     type = textFieldType.getText();
                     System.out.println(candidateStart);
                     System.out.println(candidateEnd);
-                    Appointment.insertAppointment();
-                    isValid = true;
-                    update = false;
-                    startEndMismatch = false;
-                    root = FXMLLoader.load(getClass().getResource("/view/ScheduleScreen.fxml"));
-                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
+                    DateTimeHandler.eastCandidateStart();
+                    DateTimeHandler.eastCandidateEnd();
+                    if((newContactId * newUserId * newCustomerId) == 0){
+                        Messages.errorSix();
+                    }
+                    else {
+                        Appointment.insertAppointment();
+                        newContactId = 0;
+                        newUserId = 0;
+                        newCustomerId = 0;
+                        isValid = true;
+                        update = false;
+                        startEndMismatch = false;
+                        root = FXMLLoader.load(getClass().getResource("/view/ScheduleScreen.fxml"));
+                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    }
+
+
                 }
 
 
@@ -377,6 +395,10 @@ public class AppointmentUpdateForm2 implements Initializable {
         }
         else{
             Messages.errorSix();
+        }
+        }
+        else{
+            Messages.errorNine();
         }
     }
 
@@ -451,11 +473,18 @@ public class AppointmentUpdateForm2 implements Initializable {
             title = selectedAppointment.getTitle();
             type = selectedAppointment.getType();
             location = selectedAppointment.getLocation();
-            date = LocalDate.parse(selectedAppointment.getStart().toString().substring(0, 4) + "-" + selectedAppointment.getStart().toString().substring(5,7) + "-" + selectedAppointment.getStart().toString().substring(8, 10));
-            startHr = selectedAppointment.getStart().toString().substring(11, 13);
-            startMn = selectedAppointment.getStart().toString().substring(14, 16);
-            endHr = selectedAppointment.getEnd().toString().substring(11, 13);
-            endMn = selectedAppointment.getEnd().toString().substring(14, 16);
+            //
+            selectedStart = selectedAppointment.getStart().toLocalDateTime();
+            selectedEnd = selectedAppointment.getEnd().toLocalDateTime();
+
+            DateTimeHandler.selectedDateStart();
+            DateTimeHandler.selectedDateEnd();
+            System.out.println("IIIII" + selectedStart);
+            date = LocalDate.parse(selectedStart.toString().substring(0, 4) + "-" + selectedAppointment.getStart().toString().substring(5,7) + "-" + selectedAppointment.getStart().toString().substring(8, 10));
+            startHr = selectedStart.toString().substring(11, 13);
+            startMn = selectedStart.toString().substring(14, 16);
+            endHr = selectedEnd.toString().substring(11, 13);
+            endMn = selectedEnd.toString().substring(14, 16);
             contactId = selectedAppointment.getContactId();
             userId = selectedAppointment.getUserId();
             customerId = selectedAppointment.getCustomerId();

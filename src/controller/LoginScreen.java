@@ -137,8 +137,19 @@ public class LoginScreen implements Initializable {
                                 stage.setScene(scene);
                                 stage.show();
                             }
-                        } else {
+                        }
+                        else if(language == ENGLISH){
                             User.currentUser = userNameInput;
+                            Messages.messageSeven();
+                            root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
+                            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                            scene = new Scene(root);
+                            stage.setScene(scene);
+                            stage.show();
+                        }
+                        else {
+                            User.currentUser = userNameInput;
+                            Messages.messageSevenFrench();
                             root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
                             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                             scene = new Scene(root);
@@ -162,11 +173,19 @@ public class LoginScreen implements Initializable {
                             }
                         }
                     }
+                    else{
+                        root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
+                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    }
 
                 } catch (Exception e) {
                 }
             }
             else {
+
                 System.out.println("Good to here");
                         FileWriter fw = null;
                         BufferedWriter bw = null;

@@ -1,23 +1,26 @@
 package model;
 
 import Interface.DBQuery;
+import controller.AppointmentUpdateForm2;
 import controller.ScheduleScreen;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateTimeHandler {
+    public static Timestamp eastCandidateStart;
+    public static Timestamp eastCandidateEnd;
+    public static DateTimeFormatter HMFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     public static boolean within15 = false;
     public static boolean overlap = false;
     public static boolean validTime = true;
     public static boolean startEndMismatch = false;
     public static boolean eastTimeValid = false;//local to eastern time; eastern is before 0800 or eastern is after 2200; make a static variable for 0800 and 2200 timestamp as datetime
+
 
     public static boolean within15(Timestamp apptTime) {
         LocalDateTime now = LocalDateTime.now();
@@ -63,6 +66,7 @@ public class DateTimeHandler {
                 //System.out.println("Beginning Overlap: " + overlap);
                 boolean isValid = overlapChecker(apptStart, apptEnd, candidateStart, candidateEnd);
                 validTime = isValid;
+
             }
         }catch (SQLException e){
         }
@@ -97,5 +101,77 @@ public class DateTimeHandler {
         }
         return startEndMismatch;
     }
+/* Maybe ZoneOffset*/
+    public static boolean eastTimeValid(String dateString, Timestamp candidateStart, Timestamp candidateEnd){
+
+        eastTimeValid = true;
+        ZoneId etZoneId = ZoneId.of("America/New_York");
+        ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
+        String string0800 = dateString + " 08:00";//change to dateString
+        String string2200 = dateString + " 22:00";//change to dateString
+        ZonedDateTime MINTIME = ZonedDateTime.of(LocalDateTime.parse(string0800, HMFormatter), etZoneId);//CONSTANT MIN APPT TIME
+        ZonedDateTime MAXTIME = ZonedDateTime.of(LocalDateTime.parse(string2200, HMFormatter), etZoneId);//CONSTANT MAX APPT TIME
+        ZonedDateTime CONMIN = MINTIME.withZoneSameInstant(ltZoneId);//Convert MINTIME from EST to system time as CONMIN
+        ZonedDateTime CONMAX = MAXTIME.withZoneSameInstant(ltZoneId);//Convert MAXTIME from EST to system time as CONMAX
+        LocalDateTime LOCCONMIN = CONMIN.toLocalDateTime();//Converts CONMIN from ZonedDateTime to LocalDateTime as LOCCONMIN
+        LocalDateTime LOCCONMAX = CONMAX.toLocalDateTime();//Converts CONMAX from ZonedDateTime to LocalDateTime as LOCCONMAX
+        LocalDateTime cStart = candidateStart.toLocalDateTime();
+        LocalDateTime cEnd = candidateEnd.toLocalDateTime();
+        if ((cStart.isBefore(LOCCONMIN) || cStart.isAfter(LOCCONMAX)) || (cEnd.isBefore(LOCCONMIN) || cEnd.isAfter(LOCCONMAX))){
+            eastTimeValid = false;
+        }
+        else{
+            eastTimeValid = true;
+        }
+        System.out.println(LOCCONMIN);
+        System.out.println(LOCCONMAX);
+        System.out.println("eastTimeValid " + eastTimeValid);
+        return eastTimeValid;
+    }
+
+    public static void eastCandidateStart(){
+        ZoneId etZoneId = ZoneId.of("America/New_York");
+        ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
+        LocalDateTime preConvert =  AppointmentUpdateForm2.candidateStart.toLocalDateTime();
+        ZonedDateTime zConvert = preConvert.atZone(ltZoneId);
+        System.out.println("local" + zConvert);
+        ZonedDateTime z2Convert = zConvert.withZoneSameInstant(etZoneId);
+        eastCandidateStart = Timestamp.valueOf(z2Convert.toLocalDateTime());
+        System.out.println("eastern" + z2Convert);
+        AppointmentUpdateForm2.candidateStart = eastCandidateStart;
+    }
+
+    public static void eastCandidateEnd(){
+        ZoneId etZoneId = ZoneId.of("America/New_York");
+        ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
+        LocalDateTime preConvert = AppointmentUpdateForm2.candidateEnd.toLocalDateTime();
+        ZonedDateTime zConvert = preConvert.atZone(ltZoneId);
+        System.out.println("local" + zConvert);
+        ZonedDateTime z2Convert = zConvert.withZoneSameInstant(etZoneId);
+        eastCandidateEnd = Timestamp.valueOf(z2Convert.toLocalDateTime());
+        System.out.println("eastern" + z2Convert);
+        AppointmentUpdateForm2.candidateEnd = eastCandidateEnd;
+    }
+
+    public static void selectedDateStart(){
+        ZoneId etZoneId = ZoneId.of("America/New_York");
+        ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
+        LocalDateTime preConvert = AppointmentUpdateForm2.selectedStart;
+        ZonedDateTime zConvert = preConvert.atZone(etZoneId);
+        ZonedDateTime z2Convert = zConvert.withZoneSameInstant(ltZoneId);
+        AppointmentUpdateForm2.selectedStart = z2Convert.toLocalDateTime();
+    }
+
+    public static void selectedDateEnd(){
+        ZoneId etZoneId = ZoneId.of("America/New_York");
+        ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
+        LocalDateTime preConvert = AppointmentUpdateForm2.selectedEnd;
+        ZonedDateTime zConvert = preConvert.atZone(etZoneId);
+        ZonedDateTime z2Convert = zConvert.withZoneSameInstant(ltZoneId);
+        AppointmentUpdateForm2.selectedEnd = z2Convert.toLocalDateTime();
+    }
+
+
+
 
 }
