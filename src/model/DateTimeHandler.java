@@ -82,11 +82,27 @@ public class DateTimeHandler {
         //System.out.println(aEnd);
         //System.out.println(cStart);
         //System.out.println(cEnd);
+        //Need to verify this works
+        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd))
+            ||
+            (cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd))
+            ||
+            (cStart.isEqual(aStart) || cStart.isBefore(aStart)) && (cEnd.isEqual(aEnd)) || cEnd.isAfter(aEnd)){
+            overlap = true;
+                /*
+                //If cStart is =< aStart && cEnd => aStart
+                If cStart is => astart && cStart=< aEnd
+
+                 */
+
+        }
+        /*
         if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd)) ||
                 ((cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd)) ||
-                ((cStart.isBefore(aEnd)) && cEnd.isAfter(aStart)) || cEnd.isAfter(aStart) && cEnd.isBefore(aEnd))){
-                overlap = true;
-        }
+                        ((cStart.isBefore(aEnd)) && cEnd.isAfter(aStart)) || cEnd.isAfter(aStart) && cEnd.isBefore(aEnd))){
+            overlap = true;
+        } //Old just in case
+        */
         if (overlap == true){
             validTime = false;
         }
