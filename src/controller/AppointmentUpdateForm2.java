@@ -159,12 +159,12 @@ public class AppointmentUpdateForm2 implements Initializable {
         parsedStartDateTime = dateString + " " + parsedStartTime;
         parsedEndDateTime = dateString + " " + parsedEndTime;
 
-        System.out.println(parsedStartDateTime);//Testing only
-        System.out.println(parsedEndDateTime);//Testing only
+        //System.out.println(parsedStartDateTime);//Testing only
+        //System.out.println(parsedEndDateTime);//Testing only
 
         candidateStart = Timestamp.valueOf(parsedStartDateTime); //#error
         candidateEnd = Timestamp.valueOf(parsedEndDateTime);
-        isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);
+        isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);//#need version for new and update because new doesn't have an appointment id
         startEndMismatch = DateTimeHandler.startEndMismatch(candidateStart, candidateEnd);
         dbTitle = textFieldTitle.getText();
         dbDescription = textFieldDescription.getText();
@@ -176,7 +176,7 @@ public class AppointmentUpdateForm2 implements Initializable {
         dbStart = Timestamp.valueOf(dateString + " " + stichStartHr + stichStartMn + ZEROSEC);
         dbEnd = Timestamp.valueOf(dateString + " " + stichEndHr + stichEndMn + ZEROSEC);
         canInsert = Appointment.canInsert();
-        System.out.println(canInsert);
+        //System.out.println(canInsert);
         if(DateTimeHandler.eastTimeValid(dateString, candidateStart, candidateEnd) == true){//line 177, 385-387
 
 
@@ -346,7 +346,7 @@ public class AppointmentUpdateForm2 implements Initializable {
                         Appointment.appointmentUpdate = false;
                     }
 
-                    isValid = true;
+                    isValid = false;//#true
                     update = false;
                     startEndMismatch = false;
                     root = FXMLLoader.load(getClass().getResource("/view/ScheduleScreen.fxml"));
@@ -360,8 +360,8 @@ public class AppointmentUpdateForm2 implements Initializable {
                     description = textFieldDescription.getText();
                     location = textFieldLocation.getText();
                     type = textFieldType.getText();
-                    System.out.println(candidateStart);
-                    System.out.println(candidateEnd);
+                    //System.out.println(candidateStart);
+                    //System.out.println(candidateEnd);
                     DateTimeHandler.eastCandidateStart();
                     DateTimeHandler.eastCandidateEnd();
                     if((newContactId * newUserId * newCustomerId) == 0){
@@ -372,7 +372,7 @@ public class AppointmentUpdateForm2 implements Initializable {
                         newContactId = 0;
                         newUserId = 0;
                         newCustomerId = 0;
-                        isValid = true;
+                        isValid = false;//#true
                         update = false;
                         startEndMismatch = false;
                         root = FXMLLoader.load(getClass().getResource("/view/ScheduleScreen.fxml"));
@@ -391,7 +391,7 @@ public class AppointmentUpdateForm2 implements Initializable {
             } else {
                 Messages.errorEight();
             }
-            isValid = true;
+            isValid = false;//#true
         }
         else{
             Messages.errorSix();
