@@ -75,7 +75,7 @@ public class AppointmentUpdateForm2 implements Initializable {
     /*
     INITIAL VARIABLES
      */
-    public static String appointmentId;
+    public static String appointmentId = "0";
     public static String type;
     public static String title;
     public static String description;
@@ -164,7 +164,7 @@ public class AppointmentUpdateForm2 implements Initializable {
 
         candidateStart = Timestamp.valueOf(parsedStartDateTime); //#error
         candidateEnd = Timestamp.valueOf(parsedEndDateTime);
-        isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, customerId, appointmentId);//#need version for new and update because new doesn't have an appointment id
+        isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, newCustomerId, appointmentId);//#need version for new and update because new doesn't have an appointment id
         startEndMismatch = DateTimeHandler.startEndMismatch(candidateStart, candidateEnd);
         dbTitle = textFieldTitle.getText();
         dbDescription = textFieldDescription.getText();
