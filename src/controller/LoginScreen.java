@@ -218,7 +218,7 @@ public class LoginScreen implements Initializable {
     /**
      * This is the resetLoginScreen method.  It resets the LoginScreen to the original state.
      *
-     * @param event
+     * @param event This method is executed based on the action of pressing the reset button
      * @throws IOException
      */
     public void resetLoginScreen(ActionEvent event) throws IOException {

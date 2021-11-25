@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="607.0" maxWidth="1000.0" minHeight="607.0" minWidth="1000.0" prefHeight="607.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ScheduleScreen">
    <children>
-      <TextArea fx:id="textAreaScheduleScreen" layoutX="50.0" layoutY="559.0" prefHeight="142.0" prefWidth="900.0" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
+      <TextArea fx:id="textArea" layoutX="50.0" layoutY="559.0" prefHeight="142.0" prefWidth="900.0" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
       <TableView fx:id="appointmentTableView" layoutX="48.0" layoutY="43.0" maxHeight="275.0" maxWidth="920.0" minHeight="275.0" minWidth="920.0" prefHeight="275.0" prefWidth="920.0" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <columns>
             <TableColumn fx:id="appointmentIDColumn" maxWidth="102.0" minWidth="102.0" prefWidth="102.0" text="Appointment ID" />
