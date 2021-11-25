@@ -28,7 +28,9 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-
+/**
+ This is the AppointmentUpdateForm2 class
+ */
 public class AppointmentUpdateForm2 implements Initializable {
     @FXML
     private Label labelAppointment;

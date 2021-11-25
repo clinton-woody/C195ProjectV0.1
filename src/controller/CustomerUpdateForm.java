@@ -28,7 +28,9 @@ import java.util.Optional; //CanDelete?
 import java.util.OptionalInt;import static java.lang.Integer.parseInt; //CanDelete?
 
 import javafx.beans.value.ObservableListValue; //CanDelete?
-
+/**
+ This is the CustomerUpdateForm class
+ */
 public class CustomerUpdateForm implements Initializable {
     /*
     VARIABLES

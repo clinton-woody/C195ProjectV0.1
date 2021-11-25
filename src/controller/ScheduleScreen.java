@@ -26,7 +26,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ResourceBundle;
-
+/**
+ This is the ScheduleScreen class
+ */
 public class ScheduleScreen implements Initializable {
     @FXML
     private TableView<Appointment> appointmentTableView;

@@ -24,8 +24,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-/*
-CLASS DECLARATION
+/**
+This is the CustomerScreen class
  */
 public class CustomerScreen implements Initializable {
 
