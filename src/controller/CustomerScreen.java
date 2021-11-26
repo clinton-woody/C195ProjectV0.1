@@ -1,9 +1,6 @@
-//WORKING
 package controller;
 
-/*
-IMPORT STATEMENTS
- */
+//IMPORT STATEMENTS
 import javafx.collections.ObservableList; //CanDelete?
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,13 +22,10 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
-This is the CustomerScreen class
+This is the CustomerScreen class.  This class is the controller of the Customer Screen.
  */
 public class CustomerScreen implements Initializable {
-
-    /*
-    USED CLASS VARIABLES
-    */
+    //CLASS VARIABLES
     @FXML
     private TableView<Customer> customerTableView;
     @FXML
@@ -66,11 +60,12 @@ public class CustomerScreen implements Initializable {
     public static boolean canDeleteCustomer = false;
     public static boolean hasAppointment = false;
 
-    /*
-    METHODS
-    */
+    /**
+     This is the toScheduleScreen method.  This class switches the program from the Customer Screen to the Schedule
+     Screen.
+     @param event This method is executed based on the action of pressing the Schedule button.
+     */
     public void toScheduleScreen(ActionEvent event) throws IOException {
-
         root = FXMLLoader.load(getClass().getResource("/view/ScheduleScreen.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -78,8 +73,12 @@ public class CustomerScreen implements Initializable {
         stage.show();
     }
 
+    /**
+     This is the toNewCustomerForm method.  This class switches the program from the Customer Screen to the Customer
+     Update Form in it's new customer configuration.
+     @param event This method is executed based on the action of pressing the New button.
+     */
     public void toNewCustomerForm(ActionEvent event) throws IOException {
-
         root = FXMLLoader.load(getClass().getResource("/view/CustomerUpdateForm.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -87,8 +86,12 @@ public class CustomerScreen implements Initializable {
         stage.show();
     }
 
+    /**
+     This is the toUpdateCustomerForm method.  This class takes the selected appointment id and passes it to the
+     customer update form in it's customer update configuration.
+     @param event This method is executed based on the action of pressing the Update button.
+     */
     public void toUpdateCustomerForm(ActionEvent event) throws IOException, SQLException {
-
         Customer.customerUpdate = true;
         Customer selectedCustomerCells = customerTableView.getSelectionModel().getSelectedItem();
         int updateCustomerId = selectedCustomerCells.getCustomerID();
@@ -102,8 +105,16 @@ public class CustomerScreen implements Initializable {
         stage.show();
     }
 
-    public void deleteButton(ActionEvent event) throws IOException, SQLException {//#error, need to reset can delete flag when switching between lines
-
+    /**
+     This is the deleteButton method.  This class is used to delete customers.  When first initiated the customer
+     selected in the customer table view is grabbed and the customer id is searched for in the appointment database
+     table to see if any appointments are assigned to the selected customer.  If there is no appointment associated with
+     the customer id then the customer selected is marked safe to delete. When initiated a second time if the customer
+     id selected is the same customer id that was selected during the first button initiation the selected customer is
+     deleted.
+     @param event This method is executed based on the action of pressing the Delete button.
+     */
+    public void deleteButton(ActionEvent event) throws IOException, SQLException {
         if(canDeleteCustomer == false){
             Customer selectedCustomerCells = customerTableView.getSelectionModel().getSelectedItem();
             deleteCandidateId = selectedCustomerCells.getCustomerID();
@@ -121,7 +132,8 @@ public class CustomerScreen implements Initializable {
                 Messages.messageFour();
                 deleteConfirmId = deleteCandidateId;
             }
-        }else{
+        }
+        else{
             if(deleteCandidateId == deleteConfirmId) {
                 Customer selectedCustomerCells = customerTableView.getSelectionModel().getSelectedItem();
                 confirmDeleteId = selectedCustomerCells.getCustomerID();
@@ -131,7 +143,8 @@ public class CustomerScreen implements Initializable {
                     deleteCandidateId = 0;
                     canDeleteCustomer = false;
                     customerTableView.setItems(Customer.getAllCustomers());
-                } else {
+                }
+                else {
                     deleteCandidateId = confirmDeleteId;
                     Messages.messageFour();
                 }
@@ -142,9 +155,11 @@ public class CustomerScreen implements Initializable {
         }
     }
 
-    /*
-    INITIALIZE
-    */
+    /**
+     This is the initialize method.  This class imports the contents of the database customer table into the customer
+     table view.
+     @param resourceBundle Store texts and components that are locale sensitive.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));

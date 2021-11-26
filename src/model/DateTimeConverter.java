@@ -9,7 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
-
+/**
+ * This is the DateTimeConverter class.  This class contains methods relating to checking time measurements in relation
+ * to the current date and time.
+ */
 public class DateTimeConverter {
     public static String ZEROTIME = " 00:00:00";  //NEEDED
     public static LocalDateTime currentSun;  //NEEDED
@@ -32,6 +35,13 @@ public class DateTimeConverter {
     public static Timestamp firstDayTS;  //NEEDED
     public static Timestamp afterLastDayTS;  //NEEDED
 
+    /**
+     * This is the currentWeekParser method.  This method takes the local day and compares it against the currentSunInt
+     * to determine what date the current weeks Sunday is.  It then creates nextSun as 7 days from currentSun.  It sets
+     * variables as nextSun, currentSun, nextSunString, and currentSunString.
+     *
+     * @return Returns currentSun as LocalDateTime variable.
+     */
     public static LocalDateTime currentWeekParser(){//works
 //    public static String currentWeekParser(){
         if (currentSunInt == 0){
@@ -59,6 +69,13 @@ public class DateTimeConverter {
 
     }
 
+    /**
+     * This is the currentMonthParser method.  This method takes the currentDayOfMonth and, based on the current month,
+     * determines first and last day of that month.  It sets variables as afterLastDayString, firstDayString,
+     * firstDayTS, afterLastDayTS.
+     *
+     * @return Returns firstDay as LocalDateTime variable.
+     */
     public static LocalDateTime currentMonthParser(){//works
         int firstDayOfMonthModifier = currentDayOfMonth - 1;
         long currentDayOfMonthLong = firstDayOfMonthModifier;
@@ -83,14 +100,25 @@ public class DateTimeConverter {
     }
 
 
-
-
-    //public static Date getCurrentSun
+    /**
+     * This is the getDayNumberOld method.  This method returns the current weekday as an int for use by other methods
+     * within this class.
+     *
+     * @param date
+     *
+     * @return  Returns int that represents the current day of the week.
+     */
     public static int getDayNumberOld(LocalDateTime date) {
         Calendar cal = Calendar.getInstance();
         return cal.get(Calendar.DAY_OF_WEEK);
+
     }
 
+    /**
+     * This is the easternDateTime method.  This method returns eastern time for use by other methods.
+     *
+     * @return Returns ZonedDateTime that represents what eastern time is from current local time.
+     */
     public static ZonedDateTime easternDateTime()//provides eastern time at tile method is called
     {
 
@@ -100,6 +128,12 @@ public class DateTimeConverter {
         //Works; returns eastern time as ZonedDateTime
     }
 
+    /**
+     * This is the easternDateTimeStamp method.    This method returns eastern time as a Timestamp for use by other
+     * methods.
+     *
+     * @return Returns Timestamp that represents easternDateTime
+     */
     public static Timestamp easternDateTimeStamp()//COMPLETE AND WORKING WITH CUSTOMER UPDATE FORM NEW
     {
 
@@ -110,7 +144,15 @@ public class DateTimeConverter {
         //Works; returns eastern time as timestamp
     }
 
-    public static boolean within15Min(String inputDate)//checks if a time is within 15 minutes of current eastern standard time
+    /**
+     * This is the within15Min method.  This method checks if a time is within 15 minutes of current eastern standard
+     * time and returns a boolean.
+     *
+     * @param inputDate
+     *
+     * @return Returns a boolean to be used by other methods.
+     */
+    public static boolean within15Min(String inputDate)
     {
 
         boolean within15Minutes = false;
@@ -149,6 +191,7 @@ public class DateTimeConverter {
 
     }
 
+/*  #check. This is commented out during javadoc commenting.
     public static ZonedDateTime testOnly()//provides eastern time at tile method is called
     {
 
@@ -159,7 +202,7 @@ public class DateTimeConverter {
         ZonedDateTime e20 = easternDateTime.plusMinutes(20);
         return e10;
     }
-
+*/
 
 
 }

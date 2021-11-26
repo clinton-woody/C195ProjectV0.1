@@ -7,23 +7,30 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ This is the Contact class
+ */
 public class Contact {
-    //Variables
+    //CLASS Variables
     public String name;
     public int id;
     public static List<Integer> contactIds = new ArrayList<>();
 
-
-    //Constructor
-
+    /**
+     * This is the Contact constructor method.
+     * @param id contact id
+     * @param name contact name
+     */
     public Contact(int id, String name) {
-
         setId(id);
         setName(name);
     }
 
-
+    /**
+     * This is the getContactIds method.  This method sends a SELECT statement to the database that returns all contact
+     * ids as a List.
+     * @return Returns contactIds as a list.
+     */
     public static List getContactIds() {
         try {
             String idGrab = "SELECT Contact_ID FROM Contacts";
@@ -45,8 +52,12 @@ public class Contact {
         }
     }
 
+    /**
+     * This is the getAllContacts method.  This method sends a SELECT statement to the database that returns allContacts
+     * as an ObservableList.
+     * @return Returns allCOntacts as an ObservableList.
+     */
     public static ObservableList<Contact> getAllContacts() {
-
         try {
             String contactGrab = "SELECT Contact_ID, Contact_Name FROM Contacts";
             DBQuery.setPreparedStatement(Interface.JDBC.conn, contactGrab);
@@ -62,33 +73,42 @@ public class Contact {
             }
             //System.out.println(allContacts);
             return allContacts;
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error on Building Data");
             return null;
         }
-
     }
 
-
-/*
-    public static Contact getSelectedContact() {
-
-    }
-*/
+    /**
+     * This is the getContactName method.  This is the getter method for name.
+     * @return Returns name as a String.
+     */
     public String getContactName(){
         return name;
     }
 
+    /**
+     * This is the getContactId method.  This is the getter method for id.
+     * @return Returns id as an int.
+     */
     public int getContactId(){
         return id;
     }
 
+    /**
+     * This is the setName method.  This is the setter method for name.
+     * @param newName Takes String newName.
+     */
     public void setName (String newName){
         this.name = newName;
     }
 
+    /**
+     * This is the setId method.  This is the setter method for id.
+     * @param newId Takes int newId.
+     */
     public void setId (int newId){
         this.id = newId;
     }

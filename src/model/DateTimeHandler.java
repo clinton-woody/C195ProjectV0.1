@@ -10,7 +10,9 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-
+/**
+ This is the DateTimeHandler class
+ */
 public class DateTimeHandler {
     public static Timestamp eastCandidateStart;
     public static Timestamp eastCandidateEnd;

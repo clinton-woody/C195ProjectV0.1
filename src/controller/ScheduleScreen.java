@@ -1,4 +1,3 @@
-//STILL NEED WORK
 package controller;
 
 import Interface.DBQuery;
@@ -18,7 +17,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -26,8 +24,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ResourceBundle;
+
 /**
- This is the ScheduleScreen class
+ This is the ScheduleScreen class.  This class is the controller for the Schedule Screen.
  */
 public class ScheduleScreen implements Initializable {
     @FXML
@@ -83,8 +82,12 @@ public class ScheduleScreen implements Initializable {
     public static int deleteAppointmentID = 0;//CanDelete?
     public static String selectedType;
 
+    /**
+     This is the customerButton method.  This method switches the program from the Schedule Screen to the Customer
+     Screen.
+     @param event This method is executed based on the action of pressing the Customer Button.
+     */
     public void customerButton(ActionEvent event) throws IOException {
-
         root = FXMLLoader.load(getClass().getResource( "/view/CustomerScreen.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -92,8 +95,12 @@ public class ScheduleScreen implements Initializable {
         stage.show();
     }
 
+    /**
+     This is the newButton method.  This method switches the program from the Schedule Screen to the Appointment Update
+     Form in its new appointment configuration.
+     @param event This method is executed based on the action of pressing the New Button.
+     */
     public void newButton(ActionEvent event) throws IOException {
-
         Appointment.appointmentUpdate = false;
         root = FXMLLoader.load(getClass().getResource( "/view/AppointmentUpdateForm2.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -102,29 +109,33 @@ public class ScheduleScreen implements Initializable {
         stage.show();
     }
 
+    /**
+     This is the newButton method.  This method takes the selected appointment id and switches the program from the
+     Schedule Screen to the Appointment Update Form in its update selected appointment id configuration.
+     @param event This method is executed based on the action of pressing the Update Button.
+     */
     public void updateButton(ActionEvent event) throws IOException, SQLException {
-
         Appointment.appointmentUpdate = true;
         AppointmentUpdateForm2.update = true;
         Appointment selectedAppointment = appointmentTableView.getSelectionModel().getSelectedItem();
         selectedAppointmentID = selectedAppointment.getAppointmentId();
         Appointment.updateAppointmentID = selectedAppointmentID;
         AppointmentUpdateForm2.selectedAppointment = Appointment.getSelectedAppointment();
-
         //AppointmentUpdateForm.updateAppointmentID = selectedAppointmentID;
-
         root = FXMLLoader.load(getClass().getResource("/view/AppointmentUpdateForm2.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-
     }
 
-
-
+    /**
+     This is the deleteButton method.  This method is used to delete appointments.  When first initiated the appointment
+     selected is marked safe to delete. When initiated a second time if the appointment id selected is the same
+     appointment id that was selected during the first button initiation the selected appointment is deleted.
+     @param event This method is executed based on the action of pressing the Delete button.
+     */
     public void deleteButton(ActionEvent event) throws IOException, SQLException {
-
         if(canDeleteAppointment == false){
             Appointment selectedAppointmentCells = appointmentTableView.getSelectionModel().getSelectedItem();
             selectedAppointmentID = selectedAppointmentCells.getAppointmentId();
@@ -132,8 +143,8 @@ public class ScheduleScreen implements Initializable {
             deleteCandidateId = selectedAppointmentID;
             canDeleteAppointment = true;
             Messages.messageTwo();
-
-        }else{
+        }
+        else{
             Appointment selectedAppointmentCells = appointmentTableView.getSelectionModel().getSelectedItem();
             selectedAppointmentID = selectedAppointmentCells.getAppointmentId();
             selectedType = selectedAppointmentCells.getType();
@@ -146,21 +157,26 @@ public class ScheduleScreen implements Initializable {
                 deleteCandidateId = 0;
                 if (isMonth == true){
                     appointmentTableView.setItems(Appointment.getMonthlyAppointments());
-                }else if(isWeek == true){
+                }
+                else if(isWeek == true){
                     appointmentTableView.setItems(Appointment.getWeeklyAppointments());
-                }else{
+                }
+                else{
                     appointmentTableView.setItems(Appointment.getAllAppointments());
                 }
-            }else{
+            }
+            else{
                 deleteCandidateId = confirmDeleteId;
                 Messages.messageTwo();
             }
-
         }
-
     }
 
-
+    /**
+     This is the radioButtonMonth method.  This method is used to set the isMonth boolean flag to true and pass a query
+     that pulls all appointments between the 1st and last day of the month and passes them to the table view.
+     @param event This method is executed based on the action of toggling the monthly radio button.
+     */
     public void radioButtonMonth(ActionEvent event) throws IOException {
         appointmentTableView.setItems(Appointment.getMonthlyAppointments());//Works
         isMonth = true;
@@ -168,27 +184,39 @@ public class ScheduleScreen implements Initializable {
         isAll = false;
     }
 
+    /**
+     This is the radioButtonWeek method.  This method is used to set the isWeek boolean flag to true and pass a query
+     that pulls all appointments between the 1st and last day of the Week and passes them to the table view.
+     @param event This method is executed based on the action of toggling the weekly radio button.
+     */
     public void radioButtonWeek(ActionEvent event) throws IOException {
         appointmentTableView.setItems(Appointment.getWeeklyAppointments());//no work
         isMonth = false;
         isWeek = true;
         isAll = false;
-
     }
 
+    /**
+     This is the radioButtonAll method.  This method is used to set the isAll boolean flag to true and pass a query
+     that pulls all appointments  and passes them to the table view.
+     @param event This method is executed based on the action of toggling the all radio button.
+     */
     public void radioButtonAll(ActionEvent event) throws IOException {
         appointmentTableView.setItems(Appointment.getAllAppointments());//no work throws DAY_OF_MONTH error
         isMonth = false;
         isWeek = false;
         isAll = true;
-
     }
 
+    /**
+     This is the reportButton method.  This method is used to pull the report determined by the report radio button
+     toggled and print it in the text area.  If the customer radio button is toggled run the customer report.  If the
+     appointment radio button is toggled run the appointment report.  If the location radio button is toggled run the
+     location report.
+     @param event This method is executed based on the action of pressing the report button.
+     */
     public void reportButton(ActionEvent event) throws SQLException {
-
-
         if (customerRadio.isSelected()){
-
             try{
                 textArea.clear();
                 String customerReport = "SELECT customers.Customer_Name, appointments.Type, appointments.Start " +
@@ -200,10 +228,11 @@ public class ScheduleScreen implements Initializable {
                 textArea.setText("Customer Name  " + "|" + "Appointment Type   " + "|" + "Start Time" + '\n');
                 psMA.execute();
 
-
-
+                /**
+                 * lambda9: Takes the output of the appointment report and passes it to the text area.  This lambda
+                 * uses the AppointmentReport interface.
+                 */
                 AppointmentReport appointmentReport = (customerName, appointmentType, appointmentStart) -> textArea.appendText( (customerName = customerName + "                    ").substring(0, 22) + "|" + (appointmentType = appointmentType + "                    ").substring(0, 24) + "|" + appointmentStart + '\n');
-
                 ResultSet rsA = psMA.getResultSet();
                     while (rsA.next()) {
                         String customerName = null;
@@ -211,9 +240,7 @@ public class ScheduleScreen implements Initializable {
                          rsA.getString("Customer_Name"),
                         rsA.getString("Type"),
                         rsA.getTimestamp("Start")
-
                         );
-
                     }
             }
             catch (Exception e) {
@@ -221,9 +248,7 @@ public class ScheduleScreen implements Initializable {
                 System.out.println("Error on Building Data");
             }
         }
-
         else if(contactRadio.isSelected()){
-
             try{
                 textArea.clear();
                 String customerReport = "SELECT contacts.Contact_Name, appointments.appointment_ID, appointments.Title, appointments.Type, appointments.Description, appointments.Start, appointments.End " +
@@ -233,13 +258,16 @@ public class ScheduleScreen implements Initializable {
                 PreparedStatement psMA = DBQuery.getPreparedStatement();
                 textArea.setText("Contact Name" + "  |  " + "Appointment ID  " + "   |   " + "Title   " + "   |   " + "Type" + "   |   " + "Description" + "   |   "  + "Start" + "   |   "  + "End" + '\n');
                 psMA.execute();
+
+                /**
+                 * lambda10: Takes the output of the contact report and passes it to the text area.  This lambda
+                 * uses the ContactReport interface.
+                 */
                 ContactReport contactReport = (Contact_Name, Appointment_ID, Title, Type, Description, Start, End) -> textArea.appendText( (Contact_Name = Contact_Name + "                        ").substring(0, 20) + "   |   " + (Appointment_ID = Appointment_ID + "                         ").substring(0, 15) + "   |   " + (Title = Title + " ") + "   |   " +  (Type = Type + " ") + "   |   " +  (Description = Description + " ") + "   |   " + Start + "   |   " + End + '\n');
 
                 ResultSet rsA = psMA.getResultSet();
                 while (rsA.next()) {
-
                     contactReport.contactReport(
-
                             rsA.getString("Contact_Name"),
                             rsA.getString("Appointment_ID"),
                             rsA.getString("Title"),
@@ -247,9 +275,7 @@ public class ScheduleScreen implements Initializable {
                             rsA.getString("Description"),
                             rsA.getTimestamp("Start"),
                             rsA.getTimestamp("End")
-
                     );
-
                 }
             }
             catch (Exception e) {
@@ -257,11 +283,7 @@ public class ScheduleScreen implements Initializable {
                 System.out.println("Error on Building Data");
             }
         }
-
-
-
         else if(locationRadio.isSelected()){
-
         try{
             textArea.clear();
             String report = "SELECT appointments.Location, appointments.Title, contacts.Contact_Name, customers.Customer_Name " +
@@ -274,10 +296,11 @@ public class ScheduleScreen implements Initializable {
             textArea.setText("Location  " + "|" + "Appointment Title   " + "|" + "Contact Name" + "|" + "Customer Name" + '\n');
             psMA.execute();
 
-
-
+            /**
+             * lambda11: Takes the output of the location report and passes it to the text area.  This lambda
+             * uses the LocalReport interface.
+             */
             LocationReport locationReport = (location, appointmentTitle, contactName, customerName) -> textArea.appendText( (location = location + "    " ) + "   |   "  +  (appointmentTitle = appointmentTitle + "    ") + "   |   " + (contactName = contactName + "    ") + "   |   " + (customerName = customerName + "    ")  + '\n');
-
             ResultSet rsA = psMA.getResultSet();
             while (rsA.next()) {
                 String customerName = null;
@@ -287,7 +310,6 @@ public class ScheduleScreen implements Initializable {
                         rsA.getString("Contact_Name"),
                         rsA.getString("Customer_Name")
                 );
-
             }
         }
         catch (Exception e) {
@@ -295,20 +317,18 @@ public class ScheduleScreen implements Initializable {
             System.out.println("Error on Building Data");
         }
     }
-
-
-
         else{
             //make a message directing the selection of a redio button here//this should never be seen as the radio buttons are part of a toggle group
         }
-
 }
 
-
-
+    /**
+     This is the initialize method.  This method imports the contents of the database appointment table into the
+     appointment table view.
+     @param resourceBundle Store texts and components that are locale sensitive.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
             appointmentIDColumn.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
             titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
             descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -323,4 +343,4 @@ public class ScheduleScreen implements Initializable {
 
     }
 }
-//Delete Fully Works
+

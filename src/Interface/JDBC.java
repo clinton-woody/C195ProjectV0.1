@@ -1,16 +1,11 @@
 package Interface;
 
-/*
-This class should be finished under the current design plan.  Need to comment all lines and make format consistent.
- */
-
 import java.sql.Connection;
 import java.sql.DriverManager;
-
+/**
+ This is the JDBC class.  This controls the connection with the database.
+ */
 public abstract class JDBC {
-    /*
-
-     */
 
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -22,11 +17,12 @@ public abstract class JDBC {
     private static String password = "Passw0rd!"; // Password
     public static Connection conn;  // Connection Interface
 
+    /**
+     *This is the openConnection method.  This method brokers the interface between the program and the database and
+     *returns connection as conn.
+     * @return Returns connection as conn.
+     */
     public static Connection openConnection() {
-        /*
-
-         */
-
         try {
             Class.forName(driver); // Locate Driver
             conn = DriverManager.getConnection(jdbcUrl, userName, password); // Reference Connection object
@@ -39,11 +35,10 @@ public abstract class JDBC {
         return conn;//had to change this from return null to return connection so that setStatement() would work
     }
 
+    /**
+     *This is the closeConnection method.  This method closes the conn connection.
+     */
     public static void closeConnection() {
-        /*
-
-         */
-
         try {
             conn.close();
             System.out.println("Connection closed!");
@@ -53,5 +48,4 @@ public abstract class JDBC {
             System.out.println("Error:" + e.getMessage());
         }
     }
-
 }

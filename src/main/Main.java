@@ -1,10 +1,6 @@
-//THIS CLASS IS COMPLETED and documented
-
 package main;
 
-/*
-USED IMPORT STATEMENTS
- */
+//USED IMPORT STATEMENTS
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.DateTimeConverter;
 import model.DateTimeHandler;
-
 import java.sql.*;
 import java.text.ParseException;
 import java.time.ZoneId;
@@ -34,7 +29,6 @@ public class Main extends Application {
         public void start(Stage stage) throws Exception {
         //TimeZone.setDefault(TimeZone.getTimeZone("CST"));     //Used to switch timezone for testing purposes
         //Local.setDefault(new Locale("fr"));     //Used to switch locale for testing purposes
-        //System.out.println(java.util.TimeZone.getDefault().getID());
         Parent root = FXMLLoader.load(getClass().getResource( "/view/LoginScreen.fxml"));
         stage.setTitle("C195");
         stage.setScene(new Scene(root,  240,  255));
@@ -45,12 +39,8 @@ public class Main extends Application {
     @param args Contains the commands initiating the C195ProjectV0.1 program.
  */
     public static void main(String[] args) throws SQLException, ParseException {
-        //Locale.setDefault(new Locale("fr"));//Only used to test language detection.
         Interface.JDBC.openConnection();
         launch(args);
-        //DateTimeConverter.currentWeekParser();
         Interface.JDBC.closeConnection();
     }
 }
-
-//THIS CLASS IS COMPLETED and documented

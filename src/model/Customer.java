@@ -12,7 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ This is the Customer class
+ */
 public class Customer {
 
     //Variables
@@ -308,73 +310,3 @@ public class Customer {
     }
 }
 
-/*
-    public static boolean hasAppointment() throws SQLException {//this should be in appointment
-        try{
-            String hasAppointment = "SELECT Appointment_ID FROM appointments " +
-                                    "WHERE Customer_ID = ?";
-            DBQuery.setPreparedStatement(Interface.JDBC.conn, hasAppointment);
-            PreparedStatement psHA = DBQuery.getPreparedStatement();
-            //System.out.println(CustomerScreen.deleteCandidateId);
-            psHA.setInt(1, CustomerScreen.deleteCandidateId);
-            psHA.execute(); //Execute PreparedStatement
-            System.out.println("Just inserted query");
-            ResultSet rsHA = psHA.getResultSet();//This isn't working
-            while (rsHA.next()) {//Make this output a Customer then getID() from that Customer
-                while (rsHA.next()) {
-                    Customer customer = new Customer(
-                            rsHA.getInt("Customer_ID"),
-                            rsHA.getString("Customer_Name"),
-                            rsHA.getString("Address"),
-                            rsHA.getString("Postal_Code"),
-                            rsHA.getString("Phone"),
-                            rsHA.getString("Create_Date"),
-                            rsHA.getString("Created_By"),
-                            rsHA.getString("Last_Update"),
-                            rsHA.getString("Last_Updated_By"),
-                            rsHA.getInt("Division_ID"));
-                    int fromDB = customer.getCustomerID();
-                    haId = fromDB;
-                    System.out.println(fromDB);
-                    System.out.println(haId);
-                }
-
-            }
-            System.out.println(CustomerScreen.hasAppointmentVar);
-            if (haId != 0){
-                CustomerScreen.hasAppointmentVar = true;
-                System.out.println(CustomerScreen.hasAppointmentVar);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error on Building Data");
-        }
-        return hasAppointmentVar;
-    }
-*/
-
-/*
-    public static boolean hasAppointment() throws SQLException {
-        try{
-            String hasAppointment = "SELECT Appointment_ID FROM appointment " +
-                                    "WHERE Customer_ID = ?";
-            DBQuery.setPreparedStatement(Interface.JDBC.conn, hasAppointment);
-            PreparedStatement psHA = DBQuery.getPreparedStatement();
-            psHA.setInt(1, CustomerScreen.deleteCandidateId);
-            psHA.execute(); //Execute PreparedStatement
-            ResultSet rsHA = psHA.getResultSet();
-            while (rsHA.next()) {
-                Customer customer = new Customer(
-                        rsHA.getInt("Customer_ID"),
-                selectedCustomer = customer;
-
-
-        }
-        catch (Exception e) {
-             e.printStackTrace();
-             System.out.println("Error on Building Data");
-             return hasAppointment;
-    }
-    }
-    }
-    */

@@ -12,13 +12,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-
+/**
+ This is the Appointment class
+ */
 public class Appointment {
-
-    //Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID
-
-    //Variables
-
+    //CLASS VARIABLES
     public int appointmentID;
     public int customerId;
     public int userId;
@@ -38,8 +36,6 @@ public class Appointment {
 //    public static boolean selectedAppointmentDeletable = false;
     public static boolean appointmentUpdate = false;
 //    public static boolean canInsert = true;
-
-
     //DELETE Variables
 //    public static int haId = 0;
     public static boolean hasAppointmentResult = false;

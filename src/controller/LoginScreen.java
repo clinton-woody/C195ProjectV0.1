@@ -1,4 +1,3 @@
-//CURRENTLY WORKING
 package controller;
 
 /*
@@ -28,19 +27,16 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import model.*;
 import Interface.JDBC;
-/*
- UNUSED IMPORT STATEMENTS
- */
+//UNUSED IMPORT STATEMENTS
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+
 /**
-This is the LoginScreen class.
+This is the LoginScreen class.  This class is the controller of the Login Screen.
 */
 public class LoginScreen implements Initializable {
-    /*
-    USED CLASS VARIABLES
-    */
+    //CLASS VARIABLES
     @FXML
     public TextField textFieldLoginFormUser;
     @FXML
@@ -71,19 +67,17 @@ public class LoginScreen implements Initializable {
     FileWriter fw = null;
     BufferedWriter bw = null;
     PrintWriter pw = null;
-    /*
-    UNUSED CLASS VARIABLES
-     */
+    //UNUSED CLASS VARIABLES
     public static LocalDate convertedTime;
     public static LocalDate convertedTimePlus15;
     public static int timeUntilAppointment;
 
     /**
-      This is the toCustomerScreen method.  This class tests a user/password combination against the database and, if true,
-      launches the CustomerScreen.  If the user/password combination has a match in the database then the user id is tested
-      against the next appointment start time to see if an appointment starts within 15 minutes.  If so a message is
-      displayed stating this. Each time this method is initiated the login attempt is appended to the login_activity.txt file.
-
+      This is the toCustomerScreen method.  This class tests a user/password combination against the database and, if
+      true, launches the CustomerScreen.  If the user/password combination has a match in the database then the user id
+      is tested against the next appointment start time to see if an appointment starts within 15 minutes.  If so a
+      message is displayed stating this. Each time this method is initiated the login attempt is appended to the
+      login_activity.txt file.
       @param event This method is executed based on the action of pressing the login button
      */
     public void toCustomerScreen(ActionEvent event) throws IOException, SQLException, ParseException {
@@ -127,7 +121,8 @@ public class LoginScreen implements Initializable {
                                 scene = new Scene(root);
                                 stage.setScene(scene);
                                 stage.show();
-                            } else {
+                            }
+                            else {
                                 User.currentUser = userNameInput;
                                 String stringIDDateTime = " Identifiant de rendez-vous : " + stringID + " Date/Heure de rendez-vous: " + apptTime;
                                 model.Messages.messageOneFrench(stringIDDateTime);
@@ -164,12 +159,14 @@ public class LoginScreen implements Initializable {
                             pw.println(timestamp + " User: " + userNameInput + " successfully logged in.");
                             System.out.println("Data Successfully appended into file");
                             pw.flush();
-                        } finally {
+                        }
+                        finally {
                             try {
                                 pw.close();
                                 bw.close();
                                 fw.close();
-                            } catch (IOException io) {
+                            }
+                            catch (IOException io) {
                             }
                         }
                     }
@@ -181,11 +178,11 @@ public class LoginScreen implements Initializable {
                         stage.show();
                     }
 
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                 }
             }
             else {
-
                 System.out.println("Good to here");
                         FileWriter fw = null;
                         BufferedWriter bw = null;
@@ -198,26 +195,30 @@ public class LoginScreen implements Initializable {
                             pw.println(timestamp + " User: " + userNameInput + " unsuccessfully attempted to log in.");
                             System.out.println("Data Successfully appended into file");
                             pw.flush();
-                        } finally {
+                        }
+                        finally {
                             try {
                                 pw.close();
                                 bw.close();
                                 fw.close();
-                            } catch (IOException io) {
+                            }
+                            catch (IOException io) {
                             }
                         }
                 if (language == ENGLISH) {
                     model.Messages.errorOne();
-                } else {
+                }
+                else {
                     model.Messages.errorOneFrench();
                 }
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
         }
     }
+
     /**
      * This is the resetLoginScreen method.  It resets the LoginScreen to the original state.
-     *
      * @param event This method is executed based on the action of pressing the reset button
      * @throws IOException
      */
@@ -228,9 +229,9 @@ public class LoginScreen implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
     /**
      * This is the initialize method.  This method determines the starting condition of the Login
-     *
      * @param url
      * @param resourceBundle
      */
@@ -245,7 +246,8 @@ public class LoginScreen implements Initializable {
             buttonReset.setText("Réinitialiser");
             labelLocation.setText("Fuseau Horaire: " + java.time.ZoneId.systemDefault().toString());
             labelLanguage.setText("Langue: Français");
-        } else if (language == ENGLISH) {
+        }
+        else if (language == ENGLISH) {
             isFrench = false;
             labelForm.setText("LOGIN FORM");
             labelUser.setText("User:");
@@ -254,7 +256,8 @@ public class LoginScreen implements Initializable {
             buttonReset.setText("Reset");
             labelLocation.setText("Time Zone: " + java.time.ZoneId.systemDefault().toString());
             labelLanguage.setText("Language: English");
-        } else {
+        }
+        else {
             Messages.errorFive();
             labelForm.setText("LOGIN FORM");
             labelUser.setText("User:");

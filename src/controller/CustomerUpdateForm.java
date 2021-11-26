@@ -16,7 +16,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -26,15 +25,13 @@ import java.util.stream.Stream; //CanDelete?
 import java.util.List; //CanDelete?
 import java.util.Optional; //CanDelete?
 import java.util.OptionalInt;import static java.lang.Integer.parseInt; //CanDelete?
-
 import javafx.beans.value.ObservableListValue; //CanDelete?
+
 /**
- This is the CustomerUpdateForm class
+ This is the CustomerUpdateForm class  This class is the controller for the Customer Update Form.
  */
 public class CustomerUpdateForm implements Initializable {
-    /*
-    VARIABLES
-     */
+    //CLASS VARIABLES
     private Stage stage;
     private Scene scene;
     private Parent root;
@@ -73,12 +70,14 @@ public class CustomerUpdateForm implements Initializable {
     public static boolean canInsert = false;
     public static int dbDivisionInt;
 
-    /*
-    METHODS
+    /**
+     This is the submitButton method.  If in new customer configuration, initiating this button inserts a new customer
+     into the customer table.  If in the update customer configuration, initiating this button updates the selected
+     customer information that is changed within this form.
+     @param event This method is executed based on the action of pressing the report button.
      */
     public void submitButton(ActionEvent event) throws IOException, SQLException { //A
         if (Customer.customerUpdate == true) { //AA
-
                 dbName = textFieldCustomerName.getText(); //AAA
                 dbAddress = textFieldAddress.getText(); //AAA
                 dbPostalCode = textFieldPostalCode.getText(); //AAA
@@ -98,7 +97,8 @@ public class CustomerUpdateForm implements Initializable {
                                 psCU.setString(1, dbName); //AAC
                                 psCU.setInt(2, updateCustomerId); //AAC
                                 psCU.execute(); //AAC
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                                 e.printStackTrace(); //AAC
                                 System.out.println("Check your SQL statement or variables");
                             }
@@ -120,7 +120,8 @@ public class CustomerUpdateForm implements Initializable {
                                 psCU.setString(1, dbAddress); //AAD
                                 psCU.setInt(2, updateCustomerId); //AAD
                                 psCU.execute(); //AAD
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                                 e.printStackTrace(); //AAD
                                 System.out.println("Check your SQL statement or variables");
                             }
@@ -143,7 +144,8 @@ public class CustomerUpdateForm implements Initializable {
                                 psCU.setString(1, dbPostalCode); //AAE
                                 psCU.setInt(2, updateCustomerId); //AAE
                                 psCU.execute(); //AAE
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                                 e.printStackTrace(); //AAE
                                 System.out.println("Check your SQL statement or variables");
                             }
@@ -165,7 +167,8 @@ public class CustomerUpdateForm implements Initializable {
                                 psCU.setString(1, dbPhone); //AAF
                                 psCU.setInt(2, updateCustomerId); //AAF
                                 psCU.execute(); //AAF
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                                 e.printStackTrace(); //AAF
                                 System.out.println("Check your SQL statement or variables");
                             }
@@ -188,7 +191,8 @@ public class CustomerUpdateForm implements Initializable {
                                 psCU.setInt(2, updateCustomerId); //AAG
                                 psCU.execute(); //AAG
                                 dbDivisionInt = 0;
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e) {
                                 e.printStackTrace(); //AAG
                                 System.out.println("Check your SQL statement or variables"); //AAG
                             }
@@ -230,7 +234,6 @@ public class CustomerUpdateForm implements Initializable {
             dbPhone = textFieldPhoneNumber.getText();
             canInsert = false;
             canInsert = Customer.canInsert();
-
             if (canInsert == true){
                 Customer.insertCustomer();
                 selectedDivision = null;
@@ -245,11 +248,14 @@ public class CustomerUpdateForm implements Initializable {
             else
             {
                 Messages.errorSix();
-
             }
         }
     }
-
+    /**
+     This is the resetButton method.  This method resets the customer form to the state it was in when initially
+     changed from the customer screen to the customer update form.
+     @param event This method is executed based on the action of pressing the reset button.
+     */
     public void resetButton(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource( "/view/CustomerUpdateForm.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -258,6 +264,10 @@ public class CustomerUpdateForm implements Initializable {
         stage.show();
     }
 
+    /**
+     This is the cancelButton method.  This method changes from the customer update form to the customer screen
+     @param event This method is executed based on the action of pressing the cancel button.
+     */
     public void cancelButton(ActionEvent event) throws IOException {
         Customer.customerUpdate = false;
         root = FXMLLoader.load(getClass().getResource("/view/CustomerScreen.fxml"));
@@ -267,15 +277,27 @@ public class CustomerUpdateForm implements Initializable {
         stage.show();
     }
 
-    /*
-    INITIALIZE
+    /**
+     This is the initialize method.  This method builds the combo boxes and other user input mechanisims.  If the update
+     button was pressed to launch this form then the selected customer information is set into the proper combo boxes
+     and text fields.
+     @param resourceBundle Store texts and components that are locale sensitive.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        /**
+         * lambda1: If the selected country changes this lambda takes the last country and next country.  The lambda
+         * then creates the variable selectedID from the next country.
+         */
         comboBoxCountry.setItems(Country.getAllCountries());
         comboBoxCountry.valueProperty().addListener((ChangeListener<Country>) (observableValue, lastCountry, currentCountry) -> {
             selectedID = currentCountry.getId();
             selectedDivision = null;
+            /**
+             * lambda2: If the selected FirstLevelDivision changes this lambda takes the last FirstLevelDivision and
+             * next FirstLevelDivision.  The lambda then creates the variable selectedDivision from the next
+             * FirstLevelDivision.
+             */
             comboBoxFirstLevelDivision.setItems(FirstLevelDivision.getAllDivision()); //Works to here
             comboBoxFirstLevelDivision.valueProperty().addListener((ChangeListener<FirstLevelDivision>) (observableValue1, firstLevelDivision, t1) -> {
                 dbDivisionInt = t1.getId();//this goes null when the country changes
