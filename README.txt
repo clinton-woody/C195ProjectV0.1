@@ -148,4 +148,8 @@ Lambda Locations (these are alse specified in javadoc)
         - File: AppointmentUpdateForm2 (lines: 419, 425,431, 437, 444, 451, 458, 464), CustomerUpdateForm (274, 278)
         - Purpose: Listen for a change to the selected object in a list and get a field from the newly selected object.
 
-    //check javadocs (slide bar/private members)
+Important Locations:
+	- Javadoc:
+		- C195ProjectV0.1\javadoc
+	- Readme:
+		- C195ProjectV0.1\README.txt
