@@ -6,5 +6,4 @@ import java.sql.Timestamp;
  */
 public interface LocationReport {
     public void locationReport(String Location, String Title, String Contact_Name, String Customer_Name);
-
 }

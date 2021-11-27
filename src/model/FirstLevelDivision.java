@@ -6,13 +6,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 /**
  This is the FirstLevelDivision class.  This class creates the parameters for firstLevelDivision.
  */
 public class FirstLevelDivision {
-
-
-    //Variables
+    //CLASS VARIABLES
     public int id;
     public String name;
     public static int countryId;
@@ -81,13 +80,12 @@ public class FirstLevelDivision {
                         rsD.getString("Division"));
                 allFirstLevelDivision.add(nextFirstLevelDivision);
             }
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error on Building Data");
             return null;
         }
-
         return allFirstLevelDivision;
     }
 
@@ -98,11 +96,9 @@ public class FirstLevelDivision {
      */
     public static ObservableList<FirstLevelDivision> divisionParser(){
         ObservableList<FirstLevelDivision> parsedDivision = FXCollections.observableArrayList();
-
             try{
                 String divisionCountryConversion = "SELECT Division_ID, Division FROM first_level_divisions " +
                         "WHERE Division_ID = ?";
-
                 DBQuery.setPreparedStatement(Interface.JDBC.conn, divisionCountryConversion);
                 PreparedStatement psD2 = DBQuery.getPreparedStatement();
                 psD2.setInt(1, CustomerUpdateForm.selectedDivisionId);
@@ -114,15 +110,12 @@ public class FirstLevelDivision {
                             rsD2.getString("Division"));
                     parsedDivision.add(division);
                 }
-
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Error on Building Data");
                 return null;
             }
-
-
-
         return parsedDivision;
     }
 
@@ -132,8 +125,6 @@ public class FirstLevelDivision {
      * @return Returns the country id matching the query as an int.
      */
     public static int getCountryID(){//This works
-
-
         try{
             String getCountryID = "SELECT Country_ID FROM first_level_divisions " +
                     "WHERE Division_ID = ?";
@@ -150,12 +141,11 @@ public class FirstLevelDivision {
             }
             System.out.println(CustomerUpdateForm.selectedDivisionId);
             System.out.println(countryId); //Works to here
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error on Building Data");
         }
-
         System.out.println(countryId); //Works to here
         return countryId;
     }
@@ -167,7 +157,6 @@ public class FirstLevelDivision {
      */
     public static ObservableList<Country> divisionToCountry(){
         ObservableList<Country> selectedCountry = FXCollections.observableArrayList();
-
         try{
             String divisionCountryConversion = "SELECT first_level_divisions.Country_ID, countries.Country " +
                                                "FROM first_level_divisions " +
@@ -195,6 +184,10 @@ public class FirstLevelDivision {
         return selectedCountry;
     }
 
+    /**
+     * This is the toString method.  This method overrides the normat toString method.
+     * @return Returns a String.
+     */
     public String toString(){
         return id+" "+name;
     }

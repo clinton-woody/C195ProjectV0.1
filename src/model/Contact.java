@@ -113,8 +113,11 @@ public class Contact {
         this.id = newId;
     }
 
+    /**
+     * This is the toString method.  This method overrides the normat toString method.
+     * @return Returns a String.
+     */
     public String toString(){
         return id+" "+name;
     }
-
 }

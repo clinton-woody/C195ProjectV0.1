@@ -80,7 +80,6 @@ public class DateTimeConverter {
         int firstDayOfMonthModifier = currentDayOfMonth - 1;
         long currentDayOfMonthLong = firstDayOfMonthModifier;
         System.out.println(currentDayOfMonthLong);
-
         firstDay = currentDay.minusDays(firstDayOfMonthModifier);
         if (currentMonth == 1 || currentMonth == 3 ||currentMonth == 5 || currentMonth == 7 || currentMonth == 8 ){
             afterLastDay = firstDay.plusDays(31);
@@ -91,7 +90,6 @@ public class DateTimeConverter {
         }else{
             afterLastDay = firstDay.plusDays(28);
         }
-
         afterLastDayString = afterLastDay.format(formatter) + ZEROTIME;
         firstDayString = firstDay.format(formatter) + ZEROTIME;
         firstDayTS =  Timestamp.valueOf(firstDayString);
@@ -111,7 +109,6 @@ public class DateTimeConverter {
     public static int getDayNumberOld(LocalDateTime date) {
         Calendar cal = Calendar.getInstance();
         return cal.get(Calendar.DAY_OF_WEEK);
-
     }
 
     /**
@@ -121,7 +118,6 @@ public class DateTimeConverter {
      */
     public static ZonedDateTime easternDateTime()//provides eastern time at tile method is called
     {
-
         ZoneId etZoneId = ZoneId.of("America/New_York");
         ZonedDateTime easternDateTime = ZonedDateTime.now().withZoneSameInstant(etZoneId);
         return easternDateTime;
@@ -136,7 +132,6 @@ public class DateTimeConverter {
      */
     public static Timestamp easternDateTimeStamp()//COMPLETE AND WORKING WITH CUSTOMER UPDATE FORM NEW
     {
-
         ZoneId etZoneId = ZoneId.of("America/New_York");
         ZonedDateTime easternDateTime = ZonedDateTime.now().withZoneSameInstant(etZoneId);
         Timestamp timestamp = Timestamp.valueOf(easternDateTime.toLocalDateTime());
@@ -154,7 +149,6 @@ public class DateTimeConverter {
      */
     public static boolean within15Min(String inputDate)
     {
-
         boolean within15Minutes = false;
         ZonedDateTime easternDateTime = DateTimeConverter.easternDateTime();
         String stringInputTime = inputDate;
@@ -165,7 +159,6 @@ public class DateTimeConverter {
         int x = Integer.parseInt(newStringEasternTime);
         int y = x + 15;
         int z = 0;
-
         if (w + 59 < 75)
         {
             z = w + 59;
@@ -174,7 +167,6 @@ public class DateTimeConverter {
         {
             z = 100;
         }
-
         for (x = x; x <= y; x++)
         {
             if (x == w || w == z)
@@ -186,11 +178,8 @@ public class DateTimeConverter {
 //            System.out.println(y);//test only
 //            System.out.println(within15Minutes);//test only
         }
-
         return within15Minutes;
-
     }
-
 /*  #check. This is commented out during javadoc commenting.
     public static ZonedDateTime testOnly()//provides eastern time at tile method is called
     {
@@ -203,7 +192,5 @@ public class DateTimeConverter {
         return e10;
     }
 */
-
-
 }
 

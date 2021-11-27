@@ -11,9 +11,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 /**
- This is the DateTimeHandler class
+ This is the DateTimeHandler class.  This class has methods that check the validity of appointmnet times and replaces
+ the DateTimeConverter.within15Min method with within15.
  */
 public class DateTimeHandler {
+    //CLASS VARIABLES
     public static Timestamp eastCandidateStart;
     public static Timestamp eastCandidateEnd;
     public static DateTimeFormatter HMFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -23,7 +25,12 @@ public class DateTimeHandler {
     public static boolean startEndMismatch = false;
     public static boolean eastTimeValid = false;//local to eastern time; eastern is before 0800 or eastern is after 2200; make a static variable for 0800 and 2200 timestamp as datetime
 
-
+    /**
+     * This is the within15 method.  This method takes an appointment start time as apptTime and checks to see if it is
+     * within 15 minutes of current local time.
+     * @param apptTime Takes Timestamp apptTime.
+     * @return
+     */
     public static boolean within15(Timestamp apptTime) {
         LocalDateTime now = LocalDateTime.now();
         //System.out.println(now);
@@ -44,13 +51,22 @@ public class DateTimeHandler {
 
     }
 
+    /**
+     * This is the validTime method.  This method takes a start time, end time, customer id, and appointment id and
+     * calls the checkOverlap method to test the provided times for validity against every applicable appointment in
+     * the database.
+     * @param candidateStart Takes Timestamp candidateStart
+     * @param candidateEnd Takes Timestamp candidateEnd
+     * @param customerId Takes int customerId
+     * @param appointmentId Takes String appointmentId
+     * @return
+     */
     public static boolean validTime(Timestamp candidateStart, Timestamp candidateEnd, int customerId, String appointmentId) {
         System.out.println("validTime triggered");//works
         System.out.println(customerId);//back as 0 on new
         System.out.println(appointmentId);//is null on new
         overlap = false;
         validTime = true;
-
         try {
             String validTimeQuery = "SELECT Start, End " +
                                     "FROM appointments " +
@@ -64,7 +80,6 @@ public class DateTimeHandler {
             psVT.execute();
             ResultSet rsVT = psVT.getResultSet();
             while (rsVT.next()) {
-
                     Timestamp apptEnd;
                     Timestamp apptStart;
                     apptStart = rsVT.getTimestamp("Start");
@@ -73,14 +88,21 @@ public class DateTimeHandler {
                     System.out.println("just before isvalid call;");
                     boolean isValid = overlapChecker(apptStart, apptEnd, candidateStart, candidateEnd);
                     validTime = isValid;//if isValid == false, valid time == false
-
-
             }
         }catch (SQLException e){
         }
         return validTime;
     }
 
+    /**
+     * This is the overlapChecker method.  This method is called by the validTime method to check provided apptStart
+     * and apptEnd against provided candidateStart and candidateEnd times to see if the times overlap each other.
+     * @param apptStart Takes Timestamp apptStart
+     * @param apptEnd Takes Timestamp apptEnd
+     * @param candidateStart Takes Timestamp candidateStart
+     * @param candidateEnd Takes Timestamp candidateEnd
+     * @return Returns overlap boolean.
+     */
     public static boolean overlapChecker(Timestamp apptStart, Timestamp apptEnd, Timestamp candidateStart, Timestamp candidateEnd){//#not triggering on new
         System.out.println("overlapChecker triggered");//not on new
         LocalDateTime aStart = apptStart.toLocalDateTime();
@@ -101,9 +123,7 @@ public class DateTimeHandler {
                 /*
                 //If cStart is =< aStart && cEnd => aStart
                 If cStart is => astart && cStart=< aEnd
-
                  */
-
         }
         /*
         if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd)) ||
@@ -119,6 +139,13 @@ public class DateTimeHandler {
         return validTime;
     }
 
+    /**
+     * This is the startEndMismatch method.  This method checks to ensure that the proposed start time is before the
+     * proposed end time.
+     * @param candidateStart Takes Timestamp candidateStart.
+     * @param candidateEnd Takes Timestamp candidateEnd.
+     * @return Returns startEndMismatch boolean.
+     */
     public static boolean startEndMismatch (Timestamp candidateStart, Timestamp candidateEnd){
         startEndMismatch = false;
         LocalDateTime cStart = candidateStart.toLocalDateTime();
@@ -128,9 +155,16 @@ public class DateTimeHandler {
         }
         return startEndMismatch;
     }
-/* Maybe ZoneOffset*/
-    public static boolean eastTimeValid(String dateString, Timestamp candidateStart, Timestamp candidateEnd){
 
+    /**
+     * This is the eastTimeValid method.  This method checks to ensure that the start time proposed is not before 0800
+     * and proposed end time is not after 2200.
+     * @param dateString Takes String dateString.
+     * @param candidateStart Takes Timestamp candidateStart.
+     * @param candidateEnd Takes Timestamp candidateEnd.
+     * @return eastTimeValid boolean
+     */
+    public static boolean eastTimeValid(String dateString, Timestamp candidateStart, Timestamp candidateEnd){
         eastTimeValid = true;
         ZoneId etZoneId = ZoneId.of("America/New_York");
         ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
@@ -156,6 +190,9 @@ public class DateTimeHandler {
         return eastTimeValid;
     }
 
+    /**
+     * This is the eastCandidateStart method.  This method converts a start local time to eastern time.
+     */
     public static void eastCandidateStart(){
         ZoneId etZoneId = ZoneId.of("America/New_York");
         ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
@@ -168,6 +205,9 @@ public class DateTimeHandler {
         AppointmentUpdateForm2.candidateStart = eastCandidateStart;
     }
 
+    /**
+     * This is the eastCandidateEnd method.  This method converts a local time to eastern time.
+     */
     public static void eastCandidateEnd(){
         ZoneId etZoneId = ZoneId.of("America/New_York");
         ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
@@ -180,6 +220,9 @@ public class DateTimeHandler {
         AppointmentUpdateForm2.candidateEnd = eastCandidateEnd;
     }
 
+    /**
+     * This is the eastCandidateEnd method.  This method converts a local time to eastern time.
+     */
     public static void selectedDateStart(){
         ZoneId etZoneId = ZoneId.of("America/New_York");
         ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
@@ -189,6 +232,9 @@ public class DateTimeHandler {
         AppointmentUpdateForm2.selectedStart = z2Convert.toLocalDateTime();
     }
 
+    /**
+     * This is the eastCandidateEnd method.  This method converts a local time to eastern time.
+     */
     public static void selectedDateEnd(){
         ZoneId etZoneId = ZoneId.of("America/New_York");
         ZoneId ltZoneId = ZoneId.of(java.time.ZoneId.systemDefault().toString());
@@ -197,8 +243,4 @@ public class DateTimeHandler {
         ZonedDateTime z2Convert = zConvert.withZoneSameInstant(ltZoneId);
         AppointmentUpdateForm2.selectedEnd = z2Convert.toLocalDateTime();
     }
-
-
-
-
 }

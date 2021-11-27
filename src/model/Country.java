@@ -9,37 +9,58 @@ import java.sql.ResultSet;
  This is the Country class
  */
 public class Country {
-
-
-    //Variables
+    //CLASS VARIABLES
     public int id;
     public String name;
     public static int formId = 0;
 
+    /**
+     * This is the Country constructor.
+     * @param id country id
+     * @param name country name
+     */
     public Country(int id, String name) {
         setId(id);
         setName(name);
     }
 
-    //Getters
+    /**
+     * This is the getName method.  This is the getter for name.
+     * @return Returns name as a String.
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * This is the getId method.  This is the getter for id.
+     * @return Returns id as an int.
+     */
     public int getId(){
         return id;
     }
 
-    //Setters
+    /**
+     * This is the setName method.  This is the setter for name.
+     * @param newName Takes String newName.
+     */
     public void setName(String newName){
         this.name = newName;
     }
 
+    /**
+     * This is the setId method.  This is the setter for setId.
+     * @param newId Takes int newId.
+     */
     public void setId(int newId){
         this.id = newId;
     }
 
-    //Methods
+    /**
+     * This is the getAllCountries method.  This method sends a SELECT statement to the database that returns an
+     * ObservableList of countries.
+     * @return  Returns allCountries as an ObservableList.
+     */
     public static ObservableList<Country> getAllCountries(){
         ObservableList<Country> allCountries = FXCollections.observableArrayList();
         try{
@@ -64,6 +85,10 @@ public class Country {
         return allCountries;
     }
 
+    /**
+     * This is the toString method.  This method overrides the normat toString method.
+     * @return Returns a String.
+     */
     public String toString(){
         return id+" "+name;
     }
