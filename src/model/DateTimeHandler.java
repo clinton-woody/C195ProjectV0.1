@@ -62,11 +62,12 @@ public class DateTimeHandler {
      * @return
      */
     public static boolean validTime(Timestamp candidateStart, Timestamp candidateEnd, int customerId, String appointmentId) {
-        System.out.println("validTime triggered");//works
-        System.out.println(customerId);//back as 0 on new
-        System.out.println(appointmentId);//is null on new
         overlap = false;
         validTime = true;
+        System.out.println("valid time set to " + validTime + " before parsing through the validTime method." );
+        System.out.println("validTime triggered");//works
+        //System.out.println(customerId);//back as 0 on new
+        //System.out.println(appointmentId);//is null on new
         try {
             String validTimeQuery = "SELECT Start, End " +
                                     "FROM appointments " +
@@ -85,12 +86,13 @@ public class DateTimeHandler {
                     apptStart = rsVT.getTimestamp("Start");
                     apptEnd = rsVT.getTimestamp("End");
                     //System.out.println("Beginning Overlap: " + overlap);
-                    System.out.println("just before isvalid call;");
+                   //System.out.println("just before isvalid call;");
                     boolean isValid = overlapChecker(apptStart, apptEnd, candidateStart, candidateEnd);
                     validTime = isValid;//if isValid == false, valid time == false
             }
         }catch (SQLException e){
         }
+        System.out.println("valid time set to " + validTime + " after parsing through the validTime method." );
         return validTime;
     }
 
@@ -104,26 +106,31 @@ public class DateTimeHandler {
      * @return Returns overlap boolean.
      */
     public static boolean overlapChecker(Timestamp apptStart, Timestamp apptEnd, Timestamp candidateStart, Timestamp candidateEnd){//#not triggering on new
+        System.out.println("Overlap flag set to " + overlap + "before parsing through the overlap checker.");
         System.out.println("overlapChecker triggered");//not on new
         LocalDateTime aStart = apptStart.toLocalDateTime();
         LocalDateTime aEnd = apptEnd.toLocalDateTime();
         LocalDateTime cStart = candidateStart.toLocalDateTime();
         LocalDateTime cEnd = candidateEnd.toLocalDateTime();
-        System.out.println("aStart: " + aStart);
-        System.out.println("aEnd: " + aEnd);
-        System.out.println("cStart: " + cStart);
-        System.out.println("cEnd: " + cEnd);
+        //System.out.println("aStart: " + aStart);
+        //System.out.println("aEnd: " + aEnd);
+        //System.out.println("cStart: " + cStart);
+        //System.out.println("cEnd: " + cEnd);
         //Need to verify this works
-        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd))
-            ||
-            (cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd))
-            ||
-            (cStart.isEqual(aStart) || cStart.isBefore(aStart)) && (cEnd.isEqual(aEnd)) || cEnd.isAfter(aEnd)){
+        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd))){//overlap test 1
+            System.out.println("Overlap test 1 triggered detected an overlap.");
             overlap = true;
-                /*
-                //If cStart is =< aStart && cEnd => aStart
-                If cStart is => astart && cStart=< aEnd
-                 */
+        }
+        else if ((cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd))){//overlap test 2
+            System.out.println("Overlap test 2 triggered detected an overlap.");
+            overlap = true;
+        }
+        else if ((cStart.isEqual(aStart) || cStart.isBefore(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isAfter(aEnd))){//overlap test 3
+            System.out.println("Overlap test 3 triggered detected an overlap.");
+            overlap = true;
+        }
+        else{
+            overlap = false;
         }
         /*
         if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd)) ||
@@ -133,6 +140,7 @@ public class DateTimeHandler {
         } //Old just in case
         */
         if (overlap == true){
+            System.out.println("Overlap flag set to " + overlap + "after parsing through the overlap checker.");
             validTime = false;
         }
         //System.out.println("End Overlap: " + overlap);//Testing only
@@ -244,3 +252,17 @@ public class DateTimeHandler {
         AppointmentUpdateForm2.selectedEnd = z2Convert.toLocalDateTime();
     }
 }
+
+/*
+        if ((cStart.isEqual(aStart) || cStart.isAfter(aStart)) && (cStart.isEqual(aEnd) || cStart.isBefore(aEnd))
+            ||
+            (cEnd.isEqual(aStart) || cEnd.isAfter(aStart)) && (cEnd.isEqual(aEnd) || cEnd.isBefore(aEnd))
+            ||
+            (cStart.isEqual(aStart) || cStart.isBefore(aStart)) && (cEnd.isEqual(aEnd)) || cEnd.isAfter(aEnd)){
+            overlap = true;
+
+        }
+        else{
+            overlap = false;
+        }
+*/

@@ -27,7 +27,7 @@ public class Main extends Application {
  @param stage An instantiation of the Stage class required to use fxml files.
  */
         public void start(Stage stage) throws Exception {
-        //TimeZone.setDefault(TimeZone.getTimeZone("CST"));     //Used to switch timezone for testing purposes
+        TimeZone.setDefault(TimeZone.getTimeZone("CST"));     //Used to switch timezone for testing purposes
         //Local.setDefault(new Locale("fr"));     //Used to switch locale for testing purposes
         Parent root = FXMLLoader.load(getClass().getResource( "/view/LoginScreen.fxml"));
         stage.setTitle("C195");

@@ -173,7 +173,7 @@ public class AppointmentUpdateForm2 implements Initializable {
         if(canInsert == true) {
             if (isValid == true && startEndMismatch == false) {
                 if (update == true) {
-                    System.out.println(dbCustomerId + "" + customerId);
+                    //System.out.println(dbCustomerId + "" + customerId);
                     if (dbTitle != title) {
                         try {
                             String insertTitle = "UPDATE appointments " + //AAD
@@ -491,7 +491,7 @@ public class AppointmentUpdateForm2 implements Initializable {
             selectedEnd = selectedAppointment.getEnd().toLocalDateTime();
             DateTimeHandler.selectedDateStart();
             DateTimeHandler.selectedDateEnd();
-            System.out.println("IIIII" + selectedStart);
+            //System.out.println("IIIII" + selectedStart);
             date = LocalDate.parse(selectedStart.toString().substring(0, 4) + "-" + selectedAppointment.getStart().toString().substring(5,7) + "-" + selectedAppointment.getStart().toString().substring(8, 10));
             startHr = selectedStart.toString().substring(11, 13);
             startMn = selectedStart.toString().substring(14, 16);
