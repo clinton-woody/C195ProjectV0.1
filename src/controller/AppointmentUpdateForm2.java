@@ -242,7 +242,7 @@ public class AppointmentUpdateForm2 implements Initializable {
                         Customer.customerUpdated();
                         Appointment.appointmentUpdate = false;
                     }
-                    DateTimeHandler.eastCandidateStart();
+                    //DateTimeHandler.eastCandidateStart();
                     try {//update start date
                         String insertStart = "UPDATE appointments " +
                                 "SET Start = ? " +
@@ -255,7 +255,7 @@ public class AppointmentUpdateForm2 implements Initializable {
                     } catch (Exception e) {
 
                     }
-                    DateTimeHandler.eastCandidateEnd();
+                    //DateTimeHandler.eastCandidateEnd();
                     try {//update end date
                         String insertEnd = "UPDATE appointments " +
                                 "SET End = ? " +
@@ -336,8 +336,8 @@ public class AppointmentUpdateForm2 implements Initializable {
                     type = textFieldType.getText();
                     //System.out.println(candidateStart);
                     //System.out.println(candidateEnd);
-                    DateTimeHandler.eastCandidateStart();
-                    DateTimeHandler.eastCandidateEnd();
+                    //DateTimeHandler.eastCandidateStart();
+                    //DateTimeHandler.eastCandidateEnd();
                     if((newContactId * newUserId * newCustomerId) == 0){
                         Messages.errorSix();
                     }
@@ -487,10 +487,13 @@ public class AppointmentUpdateForm2 implements Initializable {
             title = selectedAppointment.getTitle();
             type = selectedAppointment.getType();
             location = selectedAppointment.getLocation();
+            //selectedStart = selectedAppointment.getStart().toLocalDateTime();
+            //selectedEnd = selectedAppointment.getEnd().toLocalDateTime();
             selectedStart = selectedAppointment.getStart().toLocalDateTime();
             selectedEnd = selectedAppointment.getEnd().toLocalDateTime();
-            DateTimeHandler.selectedDateStart();
-            DateTimeHandler.selectedDateEnd();
+
+            //DateTimeHandler.selectedDateStart();
+           // DateTimeHandler.selectedDateEnd();
             //System.out.println("IIIII" + selectedStart);
             date = LocalDate.parse(selectedStart.toString().substring(0, 4) + "-" + selectedAppointment.getStart().toString().substring(5,7) + "-" + selectedAppointment.getStart().toString().substring(8, 10));
             startHr = selectedStart.toString().substring(11, 13);
