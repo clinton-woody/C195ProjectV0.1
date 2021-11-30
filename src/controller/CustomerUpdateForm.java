@@ -281,6 +281,12 @@ public class CustomerUpdateForm implements Initializable {
      This is the initialize method.  This method builds the combo boxes and other user input mechanisims.  If the update
      button was pressed to launch this form then the selected customer information is set into the proper combo boxes
      and text fields.
+     lambda1: If the selected country changes this lambda takes the last country and next country.  The lambda
+        then creates the variable selectedID from the next country.
+     lambda2: If the selected FirstLevelDivision changes this lambda takes the last FirstLevelDivision and
+        next FirstLevelDivision.  The lambda then creates the variable selectedDivision from the next
+        FirstLevelDivision.
+
      @param resourceBundle Store texts and components that are locale sensitive.
      */
     @Override

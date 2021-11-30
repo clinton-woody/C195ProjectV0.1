@@ -392,6 +392,26 @@ public class AppointmentUpdateForm2 implements Initializable {
      This is the initialize method.  This method builds the combo boxes and other user input mechanisims.  If the update
      button was pressed to launch this form then the selected customer information is set into the proper combo boxes
      and text fields.
+     lambda3: If the selected contact changes this lambda takes the last contact and next contact.  The lambda
+        then creates the variable newContactId from the next FirstLevelDivision.
+     lambda4: If the selected user changes this lambda takes the last user and
+        next user.  The lambda then creates the variable newUserId from the next
+        user.
+     lambda5: If the selected customer changes this lambda takes the last customer and next customer.  The lambda
+        then creates the variable newCustomerId from the next customer.
+     lambda6: If the selected startHour changes this lambda takes the last startHour and next startHour.  The
+        lambda then creates the variable stichStartHr from the next startHour.
+     lambda7: If the selected start minute changes this lambda takes the last start minute and next start minute.
+        The lambda then creates the variable stichStartMn from the next startMinute.
+     lambda8: If the selected endHour changes this lambda takes the last endHour and next endHour.  The
+        lambda then creates the variable stichEndHr from the next endHour.
+     lambda9: If the selected end minute changes this lambda takes the last end minute and next end minute.
+        The lambda then creates the variable stichEndMn from the next endMinute.
+     lambda10: If the selected date changes this lambda takes the last date and next date.  The lambda then creates
+        the variable dateString from the next date.
+
+
+
      @param resourceBundle Store texts and components that are locale sensitive.
      */
     @Override
@@ -462,7 +482,7 @@ public class AppointmentUpdateForm2 implements Initializable {
         });
 
         /**
-         * lambda7: If the selected end minute changes this lambda takes the last end minute and next end minute.
+         * lambda9: If the selected end minute changes this lambda takes the last end minute and next end minute.
          * The lambda then creates the variable stichEndMn from the next endMinute.
          */
         comboBoxEndTimeMinute.setItems(endMinuteList);//805am to 1000pm, Create exception not allowing an appointment end time before the start time
@@ -473,7 +493,7 @@ public class AppointmentUpdateForm2 implements Initializable {
         });
 
         /**
-         * lambda8: If the selected date changes this lambda takes the last date and next date.  The lambda then creates
+         * lambda10: If the selected date changes this lambda takes the last date and next date.  The lambda then creates
          * the variable dateString from the next date.
          */
         datePickerDate.valueProperty().addListener((observableValue, localDate, t1) -> {

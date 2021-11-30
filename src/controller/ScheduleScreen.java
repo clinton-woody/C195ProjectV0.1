@@ -226,6 +226,10 @@ public class ScheduleScreen implements Initializable {
      toggled and print it in the text area.  If the customer radio button is toggled run the customer report.  If the
      appointment radio button is toggled run the appointment report.  If the location radio button is toggled run the
      location report.
+     lambda11: Takes the output of the contact report and passes it to the text area.  This lambda
+     uses the ContactReport interface.
+     lambda12: Takes the output of the location report and passes it to the text area.  This lambda
+     uses the LocalReport interface.
      @param event This method is executed based on the action of pressing the report button.
      */
     public void reportButton(ActionEvent event) throws SQLException {
@@ -372,7 +376,7 @@ public class ScheduleScreen implements Initializable {
                 psMA.execute();
 
                 /**
-                 * lambda10: Takes the output of the contact report and passes it to the text area.  This lambda
+                 * lambda11: Takes the output of the contact report and passes it to the text area.  This lambda
                  * uses the ContactReport interface.
                  */
                 ContactReport contactReport = (Contact_Name, Appointment_ID, Title, Type, Description, Start, End) -> textArea.appendText( (Contact_Name = Contact_Name + "                        ").substring(0, 20) + "   |   " + (Appointment_ID = Appointment_ID + "                         ").substring(0, 15) + "   |   " + (Title = Title + " ") + "   |   " +  (Type = Type + " ") + "   |   " +  (Description = Description + " ") + "   |   " + Start + "   |   " + End + '\n');
@@ -409,7 +413,7 @@ public class ScheduleScreen implements Initializable {
             psMA.execute();
 
             /**
-             * lambda11: Takes the output of the location report and passes it to the text area.  This lambda
+             * lambda12: Takes the output of the location report and passes it to the text area.  This lambda
              * uses the LocalReport interface.
              */
             LocationReport locationReport = (location, appointmentTitle, contactName, customerName) -> textArea.appendText( (location = location + "    " ) + "   |   "  +  (appointmentTitle = appointmentTitle + "    ") + "   |   " + (contactName = contactName + "    ") + "   |   " + (customerName = customerName + "    ")  + '\n');
