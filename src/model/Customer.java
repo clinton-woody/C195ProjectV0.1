@@ -224,17 +224,20 @@ public class Customer {
      * @return Returns boolean value for canInsert.
      */
     public static boolean canInsert(){
+        System.out.println("Works1");
         if (CustomerUpdateForm.dbName == null || CustomerUpdateForm.dbAddress == null || CustomerUpdateForm.dbPostalCode == null || CustomerUpdateForm.dbPhone == null || CustomerUpdateForm.dbDivisionInt == 0 || CustomerUpdateForm.selectedDivision == null) {
             canInsert = false;
             //System.out.println("Working");
         }
         else if (CustomerUpdateForm.dbName.isEmpty() || CustomerUpdateForm.dbAddress.isEmpty() || CustomerUpdateForm.dbPostalCode.isEmpty() || CustomerUpdateForm.dbPhone.isEmpty()) {
+            canInsert = false;
 
         }
         else{
             canInsert = true;
             //System.out.println("Working");
         }
+        System.out.println("Works1");
         return canInsert;
 
     }

@@ -79,6 +79,7 @@ public class DateTimeHandler {
             psVT.setInt(1, customerId);
             psVT.setString(2 ,appointmentId);
             psVT.execute();
+            System.out.println("valid time executed");
             ResultSet rsVT = psVT.getResultSet();
             while (rsVT.next()) {
                     Timestamp apptEnd;
@@ -87,6 +88,7 @@ public class DateTimeHandler {
                     apptEnd = rsVT.getTimestamp("End");
                     //System.out.println("Beginning Overlap: " + overlap);
                    //System.out.println("just before isvalid call;");
+
                     boolean isValid = overlapChecker(apptStart, apptEnd, candidateStart, candidateEnd);
                     validTime = isValid;//if isValid == false, valid time == false
             }
@@ -130,6 +132,7 @@ public class DateTimeHandler {
             overlap = true;
         }
         else{
+            System.out.println("No overlap detected.");
             overlap = false;
         }
         /*

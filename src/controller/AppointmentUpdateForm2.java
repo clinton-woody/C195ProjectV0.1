@@ -158,6 +158,7 @@ public class AppointmentUpdateForm2 implements Initializable {
         candidateStart = Timestamp.valueOf(parsedStartDateTime); //#error
         candidateEnd = Timestamp.valueOf(parsedEndDateTime);
         isValid = DateTimeHandler.validTime(candidateStart, candidateEnd, newCustomerId, appointmentId);//#need version for new and update because new doesn't have an appointment id
+        System.out.println("NEw Cust ID:" + newCustomerId);
         startEndMismatch = DateTimeHandler.startEndMismatch(candidateStart, candidateEnd);
         dbTitle = textFieldTitle.getText();
         dbDescription = textFieldDescription.getText();

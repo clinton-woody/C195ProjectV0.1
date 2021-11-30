@@ -79,6 +79,7 @@ public class CustomerUpdateForm implements Initializable {
     public void submitButton(ActionEvent event) throws IOException, SQLException { //A
         if (Customer.customerUpdate == true) { //AA
                 dbName = textFieldCustomerName.getText(); //AAA
+            System.out.println("is empty" + dbName.isEmpty());
                 dbAddress = textFieldAddress.getText(); //AAA
                 dbPostalCode = textFieldPostalCode.getText(); //AAA
                 dbPhone = textFieldPhoneNumber.getText(); //AAA
