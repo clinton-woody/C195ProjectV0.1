@@ -36,7 +36,7 @@ public class Customer {
     public static boolean canInsert = false;
    // public static boolean isValid;
     public static String empty = "";
-    public static List<Integer> customerIds = new ArrayList<>();
+    //public static List<Integer> customerIds = new ArrayList<>();
 
     /**
      * This is the customer constructor method.
@@ -252,6 +252,7 @@ public class Customer {
             psCI.execute(); //Execute PreparedStatement
             ResultSet rsCI = psCI.getResultSet();
             ObservableList<User> allUsers = FXCollections.observableArrayList();
+            List<Integer> customerIds = new ArrayList<>();
             while (rsCI.next()) {
                 int nextId = rsCI.getInt("Customer_ID");
                 customerIds.add(nextId);

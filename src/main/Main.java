@@ -6,10 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.Appointment;
 import model.DateTimeConverter;
 import model.DateTimeHandler;
+import model.Report;
+
 import java.sql.*;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -40,6 +44,12 @@ public class Main extends Application {
  */
     public static void main(String[] args) throws SQLException, ParseException {
         Interface.JDBC.openConnection();
+        //Report.listOfTypes();
+        //Report.listOfStart();
+        //Appointment.customerAppointmntReport();
+        //LocalDate date = java.time.LocalDate.now();
+        //System.out.println(date);
+        //System.out.println(Report.listOfStart());
         launch(args);
         Interface.JDBC.closeConnection();
     }

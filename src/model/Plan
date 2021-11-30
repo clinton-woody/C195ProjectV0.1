@@ -1,3 +1,210 @@
-Need to convert date pull from eastern to local
+package model;
 
-Need to fix update to eastern
+import Interface.DBQuery;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ This is the Report class.  This class creates the parameters for Report.
+ */
+public class Report {
+    public static String ZERO = " 00:00:00";
+    public static String m1 = "Jan";
+    public static String m2 = "Feb";
+    public static String m3 = "Mar";
+    public static String m4 = "Apr";
+    public static String m5 = "May";
+    public static String m6 = "Jun";
+    public static String m7 = "Jul";
+    public static String m8 = "Aug";
+    public static String m9 = "Sep";
+    public static String m10 = "Oct";
+    public static String m11 = "Nov";
+    public static String m12 = "Dec";
+
+
+    //public static String test = "2022-01-01";
+    //public static String test2 = test.substring(5, 7);//this is right
+    public String type;
+    public Timestamp start;
+
+    public Report(String type, Timestamp start){
+        setType(type);
+        setStart(start);
+    }
+    /*
+    SELECT Type, Start FROM appointments
+WHERE Start >= '2021-12-01 00:00:00' AND Start <'2022-01-01 00:00:00';
+     */
+
+    /**
+     * This is the listOfTypes method.  This method grabs every appointment type from the database in a list.
+     * @return Returns typesRaw as a list.
+     */
+    public static List listOfStart(){
+        List<String> startRaw = new ArrayList<>();
+        try{
+            String startCall = "SELECT Start FROM appointments";
+            DBQuery.setPreparedStatement(Interface.JDBC.conn, startCall);
+            PreparedStatement psCI = DBQuery.getPreparedStatement();
+            psCI.execute(); //Execute PreparedStatement
+            ResultSet rsCI = psCI.getResultSet();
+            while (rsCI.next()) {
+                String nextStart = rsCI.getTimestamp("Start").toString().substring(5, 7);
+                startRaw.add(nextStart);
+            }
+        }
+        catch(Exception e){
+        }
+        System.out.println(startRaw);
+        List startParsed = startParser(startRaw);
+        return startParsed;
+    }
+
+    public static List startParser(List startRaw){
+        List<String> startParsed = new ArrayList<>();
+        for (int i = 0; i < startRaw.size(); i++) {
+            Object element = startRaw.get(i);
+            if(!startParsed.contains(element)){
+                startParsed.add(element.toString());
+            }
+        }
+        System.out.println(startParsed);
+        return startParsed;
+    }
+
+
+    /**
+     * This is the listOfTypes method.  This method grabs every appointment type from the database in a list.
+     * @return Returns typesRaw as a list.
+     */
+    public static List listOfTypes(){
+        List<String> typesRaw = new ArrayList<>();
+        try{
+            String typeCall = "SELECT Type FROM appointments";
+            DBQuery.setPreparedStatement(Interface.JDBC.conn, typeCall);
+            PreparedStatement psCI = DBQuery.getPreparedStatement();
+            psCI.execute(); //Execute PreparedStatement
+            ResultSet rsCI = psCI.getResultSet();
+            while (rsCI.next()) {
+                String nextType = rsCI.getString("Type");
+                typesRaw.add(nextType);
+            }
+        }
+        catch(Exception e){
+        }
+        System.out.println(typesRaw);
+        List typesParsed = typesParser(typesRaw);
+        return typesParsed;
+    }
+
+    /**
+     * This is the typesParser method.  This method takes a list of types and creates a new list from that list without duplicates.
+     * @return Returns typesParsed as a list.
+     */
+
+    public static List typesParser(List typesRaw){
+        List<String> typesParsed = new ArrayList<>();
+        for (int i = 0; i < typesRaw.size(); i++) {
+            Object element = typesRaw.get(i);
+            if(!typesParsed.contains(element)){
+                typesParsed.add(element.toString());
+            }
+        }
+        System.out.println(typesParsed);
+        return typesParsed;
+    }
+
+    public static void reportGenerator(){
+        try {
+            List<String> months = Arrays.asList(m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12);
+            List<String> types = listOfTypes();
+            List<String> starts = listOfStart();
+
+            for (int i1 = 0; i1 < starts.size(); i1++) {
+                if(i1 < starts.size()){
+                    List<String> localStarts = starts;
+                    System.out.println(i1);
+                    int m = i1;
+                    int localInt = Integer.parseInt(localStarts.get(m));
+                    System.out.println("local int " + localInt);
+                    String reportMonth = months.get(localInt);
+                    System.out.println(reportMonth);
+                }
+
+            }
+        }
+        catch(Exception e){
+            System.out.println("This did not work");
+
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * This is the getType method.  This the getter method for type.
+     * @return Returns type as a String.
+     */
+    public String getType(){
+        return type;
+    }
+
+    /**
+     * This is the getStart method.  This is the getter method for start.
+     * @return Returns start as an Timestamp.
+     */
+    public Timestamp getStart(){
+        return start;
+    }
+
+    /**
+     * This is the setType method.  This is the setter method for type.
+     * @param newType Takes String newType
+     */
+    public void setType(String newType){
+        this.type = newType;
+    }
+
+    /**
+     * This is the setStart method.  This is the setter method for start.
+     * @param newStart Takes Timestamp newStart
+     */
+    public void setStart(Timestamp newStart){
+        this.start = newStart;
+    }
+
+    public static void antiStatic(){
+        reportGenerator();
+    }
+}

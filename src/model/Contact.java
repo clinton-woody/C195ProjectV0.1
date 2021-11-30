@@ -14,7 +14,7 @@ public class Contact {
     //CLASS Variables
     public String name;
     public int id;
-    public static List<Integer> contactIds = new ArrayList<>();
+    //public static List<Integer> contactIds = new ArrayList<>();
 
     /**
      * This is the Contact constructor method.
@@ -39,6 +39,7 @@ public class Contact {
             psCI.execute(); //Execute PreparedStatement
             ResultSet rsCI = psCI.getResultSet();
             ObservableList<Contact> allContacts = FXCollections.observableArrayList();
+            List<Integer> contactIds = new ArrayList<>();
             while (rsCI.next()) {
                 int nextId = rsCI.getInt("Contact_ID");
                 contactIds.add(nextId);

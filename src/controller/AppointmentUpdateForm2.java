@@ -69,6 +69,7 @@ public class AppointmentUpdateForm2 implements Initializable {
     public static boolean endFlag = false;
     public static boolean dateFlag = false;
     public static boolean update = false;
+    //public static boolean isValid = true;
     public static boolean isValid = true;
     public static boolean startEndMismatch = false;
     //INITIAL VARIABLES
@@ -504,11 +505,13 @@ public class AppointmentUpdateForm2 implements Initializable {
             userId = selectedAppointment.getUserId();
             customerId = selectedAppointment.getCustomerId();
             int customerIndex = Customer.getCustomerIds().indexOf(customerId);
+            System.out.println("The customer index is " + customerIndex);
             int userIndex = User.getUserIds().indexOf(userId);
             int contactIndex = Contact.getContactIds().indexOf(contactId);
-            comboBoxContact.getSelectionModel().select(contactIndex);
-            comboBoxCustomer.getSelectionModel().select(customerIndex);
-            comboBoxUser.getSelectionModel().select(userIndex);
+            comboBoxContact.getSelectionModel().select(contactIndex);//#fixed this by moving list in customer
+            comboBoxCustomer.getSelectionModel().select(customerIndex);//#fixed this by moving list in customer
+
+            comboBoxUser.getSelectionModel().select(userIndex);//#fixed this by moving list in customer
             textFieldAppointmentId.setText(appointmentId); //Appointment ID
             textFieldDescription.setText(description); //Description
             textFieldTitle.setText(title); //Title

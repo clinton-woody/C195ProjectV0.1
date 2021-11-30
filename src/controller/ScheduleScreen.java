@@ -17,12 +17,17 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
+import model.Report;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -54,7 +59,7 @@ public class ScheduleScreen implements Initializable {
     @FXML
     private RadioButton radioButtonMonth;//CanDelete?
     @FXML
-    private TextArea textArea;//CanDelete?
+    public TextArea textArea;//CanDelete?
     @FXML
     private RadioButton radioButtonWeek;//CanDelete?
     @FXML
@@ -81,6 +86,14 @@ public class ScheduleScreen implements Initializable {
     public static int updateAppointmentID;
     public static int deleteAppointmentID = 0;//CanDelete?
     public static String selectedType;
+    public static String activeMonth;
+    public static String activeType;
+    public static String activeMonthStart;
+    public static String activeMonthEnd;
+    public static String activeHRM;
+    public static int activeYear = 2021;
+    public static int nextYear = activeYear + 1;
+    public static int parsedYear;
 
     /**
      This is the customerButton method.  This method switches the program from the Schedule Screen to the Customer
@@ -219,34 +232,133 @@ public class ScheduleScreen implements Initializable {
         if (customerRadio.isSelected()){
             try{
                 textArea.clear();
-                String customerReport = "SELECT customers.Customer_Name, appointments.Type, appointments.Start " +
-                                        "FROM appointments " +
-                                        "INNER JOIN customers ON appointments.Customer_ID=customers.Customer_ID " +
-                                        "ORDER BY appointments.Type desc, appointments.Start desc";
-                DBQuery.setPreparedStatement(Interface.JDBC.conn, customerReport);
-                PreparedStatement psMA = DBQuery.getPreparedStatement();
-                textArea.setText("Customer Name  " + "|" + "Appointment Type   " + "|" + "Start Time" + '\n');
-                psMA.execute();
+                textArea.setText("MONTH  |  TYPE  |  APPOINTMENT QUANTITY" + '\n');
+                String ZERO = " 00:00:00";
+                List<String> firstStart = Arrays.asList("01-01", "02-01", "03-01", "04-01", "05-01", "06-01", "07-01", "08-01", "09-01", "10-01", "11-01", "12-01");
+                List<String> lastStart = Arrays.asList("02-01", "03-01", "04-01", "05-01", "06-01", "07-01", "08-01", "09-01", "10-01", "11-01", "12-01", "01-01");
+                List<String> months = Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+                List<String> typesRaw = new ArrayList<>();
+                List<String> typesParsed = new ArrayList<>();
+                List<String> startRaw = new ArrayList<>();
+                List<String> startParsed = new ArrayList<>();
+                List<String> monthParsed = new ArrayList<>();
 
-                /**
-                 * lambda9: Takes the output of the appointment report and passes it to the text area.  This lambda
-                 * uses the AppointmentReport interface.
-                 */
-                AppointmentReport appointmentReport = (customerName, appointmentType, appointmentStart) -> textArea.appendText( (customerName = customerName + "                    ").substring(0, 22) + "|" + (appointmentType = appointmentType + "                    ").substring(0, 24) + "|" + appointmentStart + '\n');
-                ResultSet rsA = psMA.getResultSet();
-                    while (rsA.next()) {
-                        String customerName = null;
-                        appointmentReport.appointmentReport(
-                         rsA.getString("Customer_Name"),
-                        rsA.getString("Type"),
-                        rsA.getTimestamp("Start")
-                        );
+                try{
+                    String typeCall = "SELECT Type FROM appointments";
+                    DBQuery.setPreparedStatement(Interface.JDBC.conn, typeCall);
+                    PreparedStatement psCT = DBQuery.getPreparedStatement();
+                    psCT.execute(); //Execute PreparedStatement
+                    ResultSet rsCT = psCT.getResultSet();
+                    while (rsCT.next()) {
+                        String nextType = rsCT.getString("Type");
+                        typesRaw.add(nextType);
                     }
+                    for (int i = 0; i < typesRaw.size(); i++) {
+                        Object element = typesRaw.get(i);
+                        if(!typesParsed.contains(element)){
+                            typesParsed.add(element.toString());
+                        }
+                    }
+                    String startCall = "SELECT Start FROM appointments";
+                    DBQuery.setPreparedStatement(Interface.JDBC.conn, startCall);
+                    PreparedStatement psCS = DBQuery.getPreparedStatement();
+                    psCS.execute(); //Execute PreparedStatement
+                    ResultSet rsCS = psCS.getResultSet();
+                    while (rsCS.next()) {
+                        String nextStart = rsCS.getTimestamp("Start").toString().substring(5, 7);
+                        startRaw.add(nextStart);
+                    }
+                    for (int i = 0; i < startRaw.size(); i++) {
+                        Object element = startRaw.get(i);
+                        if(!startParsed.contains(element)){
+                            startParsed.add(element.toString());
+                        }
+                    }
+                    for (int i1 = 0; i1 < startParsed.size(); i1++) {
+                        Object element1 = startParsed.get(i1);
+                        if(element1 != null){//basically a while not null
+
+                            String indexString = element1.toString();//object to string
+                            int index = Integer.valueOf(indexString)-1;//string to int for use as index
+                            String convertedMonth = months.get(index);
+                            LocalDate date = java.time.LocalDate.now();
+                            activeHRM = convertedMonth;
+                            activeMonthStart = firstStart.get(index);
+                            activeMonthEnd = lastStart.get(index);
+                            activeYear = Integer.parseInt(java.time.LocalDate.now().toString().substring(0, 4));//Works to here
+                            //int ams = Integer.valueOf(activeMonthEnd);
+                            int ams = Integer.valueOf(activeMonthStart.substring(0,2));
+                            System.out.println("ams: " + ams);
+                            int ame = Integer.valueOf(activeMonthEnd.substring(0,2));
+
+                            if (ams < ame){
+
+                                parsedYear = activeYear;
+
+                            }
+                            else{
+                                parsedYear = nextYear;
+                            }
+
+                            System.out.println("Parsed Year: " + parsedYear);
+
+
+                            System.out.println(activeMonthEnd);//null
+                            for (int i2 = 0; i2 < typesParsed.size(); i2++) {
+                                Object element2 = typesParsed.get(i2);
+                                activeType = element2.toString();
+                                try{
+                                    System.out.println("Works3");//not getting to here
+                                    String report = "SELECT COUNT(Type) AS total " +
+                                            "FROM appointments " +
+                                            "WHERE Start >+ ? " +
+                                            "AND Start < ? " +
+                                            "AND Type = ?";
+                                    DBQuery.setPreparedStatement(Interface.JDBC.conn, report);
+                                    PreparedStatement psR = DBQuery.getPreparedStatement();
+                                    psR.setString(1, activeYear + "-" + activeMonthStart + ZERO);
+                                    psR.setString(2, parsedYear + "-" + activeMonthEnd + ZERO);
+                                    psR.setString(3, activeType);
+                                    psR.execute();
+                                    ResultSet rsR = psR.getResultSet();
+                                    System.out.println("Works2");
+
+                                    while (rsR.next()) {
+                                        System.out.println("Works1");//works to here
+                                        int count = rsR.getInt("total");//try changing total to 1
+                                        System.out.println("count" + count);
+                                        if (count != 0){
+                                            textArea.appendText(activeHRM + "   |   " + activeType + "   |   " + count + '\n');
+                                        }
+
+
+                                    }
+
+
+                                }catch(Exception e) {
+                                }
+                            }
+
+                            System.out.println(convertedMonth);
+                            monthParsed.add(convertedMonth);//not needed
+                            //Works above here
+
+
+                        }
+                    }
+
+                    for (int i = 0; i < startParsed.size(); i++) {//The big bad iteration machine
+
+                    }
+
+                }
+                catch (Exception e){
+                }
             }
-            catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Error on Building Data");
+            catch(Exception e){
+
             }
+
         }
         else if(contactRadio.isSelected()){
             try{

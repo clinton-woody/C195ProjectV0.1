@@ -17,7 +17,7 @@ public class User {
     public int id;
     public String name;
     public static String currentUser;
-    public static List<Integer> userIds = new ArrayList<>();
+    //public static List<Integer> userIds = new ArrayList<>();
 
     /**
      *This is the user constructor method.
@@ -69,6 +69,7 @@ public class User {
             psUI.execute(); //Execute PreparedStatement
             ResultSet rsUI = psUI.getResultSet();
             ObservableList<User> allUsers = FXCollections.observableArrayList();
+            List<Integer> userIds = new ArrayList<>();
             while (rsUI.next()) {
                 int nextId = rsUI.getInt("User_ID");
                 userIds.add(nextId);
